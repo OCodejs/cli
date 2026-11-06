@@ -1356,6 +1356,65 @@ body{background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.025),transpa
 .library-card .library-links .btn{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:none!important;height:32px!important;min-height:32px!important;max-height:32px!important;padding:0 6px!important;margin:0!important;flex:none!important;font-size:10px!important;line-height:1!important;white-space:nowrap!important;border-radius:0!important}
 @media(max-width:768px){.library-card .library-links{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.library-card .library-links .btn{height:30px!important;min-height:30px!important;max-height:30px!important}}
 </style>
+<style>
+
+/* OCode.js CLI Hub — unified control sizing */
+:root{--ocode-control-height:40px;--ocode-control-width:40px}
+button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,.page-tile,
+.library-tabs button,.library-repo-actions button,.library-repo-actions .btn,.library-links .btn,
+.card-actions .btn,.marketplace-actions .btn,.catalog-retry,.catalog-error-link{
+  box-sizing:border-box!important;
+  height:var(--ocode-control-height)!important;
+  min-height:var(--ocode-control-height)!important;
+  max-height:var(--ocode-control-height)!important;
+  line-height:1!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+}
+button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,
+.page-tile,.library-tabs button,.library-repo-actions button,.catalog-retry,.catalog-error-link{
+  padding:0 12px!important;
+  white-space:nowrap;
+}
+.icon-button{
+  width:var(--ocode-control-width)!important;
+  min-width:var(--ocode-control-width)!important;
+  max-width:var(--ocode-control-width)!important;
+  height:var(--ocode-control-height)!important;
+  min-height:var(--ocode-control-height)!important;
+  max-height:var(--ocode-control-height)!important;
+  padding:0!important;
+}
+.card-actions,.library-links,.marketplace-actions,.library-repo-actions{
+  align-items:stretch!important;
+}
+.card-actions .btn,.library-links .btn,.marketplace-actions .btn,.library-repo-actions .btn{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+  flex:1 1 0!important;
+}
+.library-links{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+.library-links .btn{padding:0 6px!important;font-size:11px!important}
+@media(max-width:768px){
+  button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,
+  .page-tile,.library-tabs button,.library-repo-actions button,.library-repo-actions .btn,
+  .library-links .btn,.card-actions .btn,.marketplace-actions .btn,.catalog-retry,.catalog-error-link{
+    height:40px!important;min-height:40px!important;max-height:40px!important;
+  }
+  .icon-button{width:40px!important;min-width:40px!important;max-width:40px!important}
+}
+
+</style>
 </head>
 <body>
 <div class="layout">
