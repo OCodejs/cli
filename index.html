@@ -848,7 +848,7 @@ button,.btn,.icon-button,.shortcut,.submit-tool,.search-submit,.back,.filter-chi
 .library-source{tab-size:2}
 .library-readme{font-family:inherit;line-height:1.75}
 .library-repo-side .library-install code{font-size:11px}
-@media(max-width:560px){.library-card{grid-template-columns:minmax(0,1fr);grid-template-areas:"identity" "meta" "actions";gap:8px;padding:12px}.library-downloads{margin-left:44px}.library-links{margin-left:44px}.library-links .btn{flex:1;min-width:0}.library-repo-title h1{font-size:18px}.library-ocode-brand{align-items:flex-start;flex-direction:column}.library-repo-actions .btn{flex:1}.library-tabs{gap:2px}}
+@media(max-width:560px){.library-card{width:100%;min-width:0;max-width:100%;box-sizing:border-box;grid-template-columns:minmax(0,1fr);grid-template-areas:"identity" "meta" "actions";gap:8px;padding:12px}.library-brand,.library-downloads,.library-links{min-width:0;max-width:100%;box-sizing:border-box}.library-downloads{margin-left:44px}.library-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;margin:0!important;padding:0!important}.library-links .btn{width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;padding:0 6px!important}.library-repo-title h1{font-size:18px}.library-ocode-brand{align-items:flex-start;flex-direction:column}.library-repo-actions .btn{flex:1}.library-tabs{gap:2px}}
 
 /* React repository workspace: source browsing, branches and commit history */
 .library-repo-overview{display:flex;gap:14px;flex-wrap:wrap;padding:12px 14px;border:1px solid #26364f;background:#080d16;align-items:center}
@@ -1414,6 +1414,13 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
   .icon-button{width:40px!important;min-width:40px!important;max-width:40px!important}
 }
 
+</style>
+<style>/* OCode.js CLI Hub — mobile library overflow correction */
+@media(max-width:560px){
+ .library-card{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+ .library-links{width:100%!important;margin:0!important;padding:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+ .library-links .btn{width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}
+}
 </style>
 </head>
 <body>
