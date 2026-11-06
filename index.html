@@ -1426,6 +1426,47 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
  .page-tile strong{font-size:15px!important}
  .page-tile span{font-size:12px!important}
 }
+
+/* GitHub authentication surface */
+.auth-overlay[hidden],.auth-connected[hidden]{display:none!important}
+.auth-overlay{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.auth-dialog{width:min(100%,480px);max-height:min(90dvh,760px);overflow:auto;border:1px solid #46566c;background:#080b10;color:#f2f5fb;padding:24px;box-shadow:0 24px 90px rgba(0,0,0,.6)}
+.auth-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.auth-kicker{font-size:10px;letter-spacing:.16em;color:#91a0b4}
+.auth-head h2{margin:8px 0 5px;font-size:23px;letter-spacing:-.04em}
+.auth-head p,.auth-note{margin:0;color:#9ba8b9;font-size:12px;line-height:1.6}
+.auth-close{flex:0 0 36px;width:36px;height:36px;border:1px solid #354256;background:#0d131d;color:#fff;font-size:24px;line-height:1}
+.auth-status{margin:20px 0 14px;padding:10px 12px;border:1px solid #344155;background:#0c121c;color:#bac7d7;font-size:12px;line-height:1.5}
+.auth-status[data-state=ready]{border-color:#456c5d;color:#a5e6c8}
+.auth-status[data-state=error]{border-color:#81504b;color:#ffb5a9}
+.auth-button{width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dce3ed;background:#f3f5f8;color:#0b1018;font:700 12px var(--mono);cursor:pointer}
+.auth-button:disabled{opacity:.45;cursor:not-allowed}
+.auth-button-github{background:#f4f6f8;border-color:#f4f6f8;color:#090d13}
+.auth-button-github [data-lucide]{width:18px;height:18px}
+.auth-button-light{background:#e7edf5;border-color:#e7edf5;color:#0c1420}
+.auth-button-quiet{background:transparent;border-color:#354256;color:#c3cedc;font-weight:500}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:20px 0;color:#7f8da0;font-size:9px;letter-spacing:.08em}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:#293548}
+.auth-pat-form{display:grid;gap:9px}
+.auth-pat-form label{font-size:11px;color:#d1d9e4}
+.auth-pat-form input{width:100%;height:46px;border:1px solid #354256;background:#05080d;color:#fff;padding:0 12px;font:12px var(--mono);border-radius:0}
+.auth-note{margin-top:14px;font-size:11px}
+.auth-connected{display:grid;gap:14px}
+.auth-user{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #354256;background:#0b111a}
+.auth-avatar{width:42px;height:42px;display:grid;place-items:center;background:#111d2d;border:1px solid #526985;color:#dce8f8;font-weight:800}
+.auth-user strong,.auth-user small{display:block}
+.auth-user strong{font-size:13px}
+.auth-user small{margin-top:4px;color:#8f9caf;font-size:10px}
+.auth-actions{display:grid;gap:8px}
+.auth-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:14px;border-top:1px solid #263244;color:#718096;font-size:9px;letter-spacing:.04em}
+.auth-foot a{color:#c4d2e5;text-decoration:underline;text-underline-offset:3px}
+.auth-trigger .profile-label{font-size:10px}
+@media(max-width:480px){.auth-overlay{padding:10px;align-items:end}.auth-dialog{width:100%;max-height:88dvh;padding:18px}.auth-head h2{font-size:20px}.auth-foot{display:grid}}
+.light-preview .auth-dialog{background:#f7f9fd;color:#111827;border-color:#b8c5d7}
+.light-preview .auth-status,.light-preview .auth-user{background:#fff;color:#27364b;border-color:#c5d0df}
+.light-preview .auth-pat-form input{background:#fff;color:#111827;border-color:#b8c5d7}
+.light-preview .auth-head p,.light-preview .auth-note{color:#52627a}
+
 </style>
 
 </head>
@@ -1437,7 +1478,25 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
 <div class="side-card"><strong>OCode.js</strong><p>Open-source CLI hub for developers and AI agents.</p><span class="version">v1.0.0</span></div>
 </aside>
 <div class="drawer-scrim" id="drawer-scrim"></div>
-<header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button><span class="mbrand"><b>&gt;_</b>OCode.js<small>CLI HUB</small></span><button class="icon-button mobile-profile" id="open-profile" type="button" aria-label="Tôi" title="Tôi"><i data-lucide="user-round" aria-hidden="true"></i><span class="profile-label">Tôi</span></button><a class="submit-tool" href="https://github.com/zskbot/ocodejs-cli/issues/new?template=tool-submission.md" target="_blank" rel="noopener noreferrer">+ Gửi công cụ</a><button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng/tối">☾</button><button class="shortcut desktop-search" id="desktop-search" type="button">⌕ <span>Ctrl + K</span></button></header>
+<header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button><span class="mbrand"><b>&gt;_</b>OCode.js<small>CLI HUB</small></span><button class="icon-button mobile-profile auth-trigger" id="auth-trigger" type="button" aria-label="Đăng nhập OCode.js" title="Tài khoản"><i data-lucide="user-round" aria-hidden="true"></i><span class="profile-label" id="auth-trigger-label">Đăng nhập</span></button><a class="submit-tool" href="https://github.com/zskbot/ocodejs-cli/issues/new?template=tool-submission.md" target="_blank" rel="noopener noreferrer">+ Gửi công cụ</a><button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng/tối">☾</button><button class="shortcut desktop-search" id="desktop-search" type="button">⌕ <span>Ctrl + K</span></button></header>
+<section class="auth-overlay" id="auth-overlay" hidden aria-hidden="true">
+  <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="auth-head"><div><span class="auth-kicker">OCODE.JS ACCOUNT</span><h2 id="auth-title">Đăng nhập CLI Hub</h2><p>Liên kết GitHub để quản lý repository trong OCode.js.</p></div><button class="auth-close" id="auth-close" type="button" aria-label="Đóng">×</button></div>
+    <div class="auth-status" id="auth-status" role="status" aria-live="polite">Đang kiểm tra dịch vụ xác thực…</div>
+    <div class="auth-connected" id="auth-connected" hidden><div class="auth-user"><span class="auth-avatar" id="auth-avatar">GH</span><div><strong id="auth-user-name">GitHub user</strong><small id="auth-user-url">Connected account</small></div></div><div class="auth-actions"><button class="auth-button auth-button-light" id="auth-logout" type="button">Đăng xuất</button><button class="auth-button auth-button-quiet" id="auth-disconnect" type="button">Ngắt kết nối và xóa token</button></div></div>
+    <div id="auth-login-options">
+      <button class="auth-button auth-button-github" id="auth-github" type="button"><i data-lucide="github" aria-hidden="true"></i> Tiếp tục với GitHub</button>
+      <div class="auth-divider"><span>HOẶC DÙNG PERSONAL ACCESS TOKEN</span></div>
+      <form id="auth-pat-form" class="auth-pat-form">
+        <label for="auth-pat-token">GitHub Personal Access Token</label>
+        <input id="auth-pat-token" name="token" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="github_pat_…" required minlength="20" maxlength="500">
+        <button class="auth-button auth-button-light" id="auth-pat-submit" type="submit">Kết nối tài khoản</button>
+      </form>
+      <p class="auth-note">Token chỉ gửi qua HTTPS và được mã hóa ở backend. Không lưu token trong LocalStorage hoặc hiển thị lại sau khi kết nối. Chỉ cấp quyền tối thiểu cần thiết.</p>
+    </div>
+    <div class="auth-foot"><span>SECURE SESSION · HTTPONLY COOKIE · CSRF PROTECTION</span><a href="https://github.com/zskbot/ocodejs-cli#github-authentication-backend" target="_blank" rel="noopener noreferrer">Tài liệu bảo mật ↗</a></div>
+  </div>
+</section>
 <main class="content" id="app" aria-live="polite"><p>Loading catalog…</p></main>
 <footer><span>© 2026 OCode.js. Open-source developer tools.</span><span><a href="https://github.com/zskbot/ocodejs-cli">GitHub</a> | <a href="https://github.com/zskbot/ocodejs-cli#readme">Docs</a> | <a href="https://github.com/zskbot/ocodejs-cli/issues/new">Contribute</a> | <a href="https://github.com/zskbot/ocodejs-cli/blob/main/LICENSE">License</a></span></footer>
 </div>
@@ -1684,10 +1743,30 @@ document.addEventListener("change",e=>{if(e.target.matches("#library-branch-sele
 document.addEventListener("input",e=>{if(e.target.matches("#library-file-search"))renderLibraryFileFilter(e.target.value);if(e.target.matches("#library-source-search"))renderLibrarySourceSearch(e.target.value)});
 function closeDrawer(){document.body.classList.remove("drawer-open");$("#menu-toggle")?.setAttribute("aria-expanded","false")}
 $("#menu-toggle").addEventListener("click",()=>{const open=document.body.classList.toggle("drawer-open");$("#menu-toggle").setAttribute("aria-expanded",String(open))});
-$("#open-profile").addEventListener("click",()=>{closeDrawer();setPage("settings")});
 $("#desktop-search").addEventListener("click",()=>$("#search")?.focus());
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#search")?.focus()}if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||"")){e.preventDefault();$("#search")?.focus()}});
 $("#theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-preview");const l=document.body.classList.contains("light-preview");document.documentElement.style.colorScheme=l?"light":"dark";$("#theme-toggle").textContent=l?"☀":"☾";document.querySelector('meta[name=theme-color]').content=l?"#f7f9fd":"#05070d"});
+
+const OCODE_AUTH_API=String(window.OCODE_AUTH_API||"https://auth.ocodejs.dev").replace(/\/+$/,"");
+let ocodeAuthCsrf="";
+let ocodeAuthUser=null;
+function authStatus(message,state=""){const el=$("#auth-status");if(el){el.textContent=message;el.dataset.state=state}}
+function authSetConnected(user){ocodeAuthUser=user||null;const connected=Boolean(user);$("#auth-connected").hidden=!connected;$("#auth-login-options").hidden=connected;$("#auth-trigger-label").textContent=connected?(user.login||"Tài khoản"):"Đăng nhập";$("#auth-trigger").setAttribute("aria-label",connected?"Tài khoản GitHub "+user.login:"Đăng nhập OCode.js");if(connected){$("#auth-user-name").textContent=user.login||"GitHub user";$("#auth-user-url").textContent=user.html_url||("GitHub ID "+user.id);$("#auth-avatar").textContent=(user.login||"GH").slice(0,2).toUpperCase()}}
+function authOpen(){closeDrawer();$("#auth-overlay").hidden=false;$("#auth-overlay").setAttribute("aria-hidden","false");document.body.style.overflow="hidden";authRefresh()}
+function authClose(){const overlay=$("#auth-overlay");overlay.hidden=true;overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";$("#auth-trigger").focus()}
+async function authRequest(path,options={}){const response=await fetch(OCODE_AUTH_API+path,{...options,credentials:"include",headers:{Accept:"application/json",...(options.headers||{})}});let data={};try{data=await response.json()}catch{}if(!response.ok){const e=new Error(data.error||"auth_request_failed");e.status=response.status;throw e}return data}
+async function authRefresh(){authStatus("Đang kiểm tra dịch vụ xác thực…");$("#auth-github").disabled=true;$("#auth-pat-submit").disabled=true;try{const health=await fetch(OCODE_AUTH_API+"/health",{headers:{Accept:"application/json"},cache:"no-store"});if(!health.ok)throw new Error("Auth API HTTP "+health.status);const session=await authRequest("/auth/session");ocodeAuthCsrf=session.csrfToken||"";if(session.connected){let user=session.user||{};try{user=await authRequest("/api/github/user",{headers:{"X-Ocode-CSRF":ocodeAuthCsrf}})}catch{}authSetConnected({...session.user,...user});authStatus("GitHub đã kết nối an toàn.", "ready")}else{authSetConnected(null);authStatus("Dịch vụ xác thực sẵn sàng. Chọn GitHub hoặc PAT để tiếp tục.","ready")}$("#auth-github").disabled=false;$("#auth-pat-submit").disabled=false}catch(error){authSetConnected(null);authStatus("Chưa kết nối được auth API ("+error.message+"). Backend auth.ocodejs.dev cần được triển khai và cấu hình trước khi đăng nhập hoạt động.","error")}}
+$("#auth-trigger").addEventListener("click",authOpen);
+$("#auth-close").addEventListener("click",authClose);
+$("#auth-overlay").addEventListener("click",e=>{if(e.target.id==="auth-overlay")authClose()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#auth-overlay").hidden)authClose()});
+$("#auth-github").addEventListener("click",()=>{window.location.assign(OCODE_AUTH_API+"/auth/github")});
+$("#auth-pat-form").addEventListener("submit",async e=>{e.preventDefault();const input=$("#auth-pat-token"),button=$("#auth-pat-submit"),token=String(input.value||"").trim();if(!token)return;button.disabled=true;button.textContent="Đang xác thực…";authStatus("Đang xác minh token với GitHub…");try{const result=await authRequest("/auth/pat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token})});input.value="";ocodeAuthCsrf=result.csrfToken||"";authSetConnected(result.user);authStatus("Đã kết nối GitHub: "+result.user.login,"ready")}catch(error){input.value="";authStatus(error.status===401?"GitHub từ chối token. Kiểm tra token và quyền truy cập.":"Không thể kết nối GitHub ("+error.message+").","error")}finally{button.disabled=false;button.textContent="Kết nối tài khoản"}});
+$("#auth-logout").addEventListener("click",async()=>{try{await authRequest("/auth/logout",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";authSetConnected(null);authStatus("Đã đăng xuất khỏi phiên hiện tại.","ready")}catch(error){authStatus("Đăng xuất thất bại: "+error.message,"error")}});
+$("#auth-disconnect").addEventListener("click",async()=>{if(!window.confirm("Xóa credential GitHub đã lưu trên backend và đăng xuất?"))return;try{await authRequest("/auth/disconnect",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";authSetConnected(null);authStatus("Đã xóa credential đã lưu và đăng xuất.","ready")}catch(error){authStatus("Không thể ngắt kết nối: "+error.message,"error")}});
+if(new URLSearchParams(location.search).get("auth")==="connected"){history.replaceState(null,"",location.pathname+location.hash)}
+authRefresh();
+
 buildNavigation();$("#nav-search")?.addEventListener("input",buildNavigation);window.addEventListener("popstate",()=>{if(location.hash.startsWith("#library=")){renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);return}view=location.hash.startsWith("#page=")?location.hash.slice(6):"home";render()});
 const CATALOG_SOURCES=[
   new URL("tools.json",document.baseURI).href,
