@@ -208,7 +208,7 @@ test("Agents queue exposes search, status, and export controls", async () => {
 test("Agents route is a valid JavaScript line and the app states execution limits", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   assert.match(html, /if\(view==="agents"\)\{renderAgentQueue\(\);return\}/);
-  assert.equal(html.includes(String.raw`\n if(view==="agents")`), false);
+  assert.equal(html.includes("\\n if(view===\\"agents\\")"), false);
   assert.match(html, /no code is generated or run yet/);
 });
 
