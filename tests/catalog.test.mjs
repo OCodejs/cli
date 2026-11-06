@@ -72,9 +72,11 @@ test("the tool submission action points to the repository issue template", async
 
 test("the CLI Hub exposes 50 unique routes across 11 navigation groups", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
-  const match = html.match(/const pageDefinitions=(\\[[\\s\\S]*?\\])\\.map\\(\\(\\[id,title,group,description,status\\]\\)/);
-  assert.ok(match, "page definitions should be present");
-  const pages = JSON.parse(match[1]);
+  const marker = "const pageDefinitions=";
+  const start = html.indexOf(marker);
+  const end = html.indexOf(".map(([id,title,group,description,status])=>", start);
+  assert.ok(start >= 0 && end > start, "page definitions must remain a JSON-compatible route list");
+  const pages = JSON.parse(html.slice(start + marker.length, end));
   assert.equal(pages.length, 50);
   assert.equal(new Set(pages.map(([id]) => id)).size, 50);
   assert.equal(new Set(pages.map(([, , group]) => group)).size, 11);
@@ -206,7 +208,7 @@ test("Agents queue exposes search, status, and export controls", async () => {
 test("Agents route is a valid JavaScript line and the app states execution limits", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   assert.match(html, /if\(view==="agents"\)\{renderAgentQueue\(\);return\}/);
-  assert.doesNotMatch(html, /\\\\n if\(view==="agents"\)/);
+  assert.equal(html.includes(String.raw`\n if(view==="agents")`), false);
   assert.match(html, /no code is generated or run yet/);
 });
 
