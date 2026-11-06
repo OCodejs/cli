@@ -102,3 +102,9 @@ The **Marketplace** page links to the official Visual Studio Code Marketplace, G
 ## GitHub Authentication backend
 
 A separate Node.js service foundation for GitHub OAuth and secure PAT connection is in `auth-server/`. It uses PostgreSQL, AES-256-GCM encrypted credentials, opaque server-side sessions, HttpOnly cookies, CSRF validation, exact-origin CORS, rate limits, and generic error responses. See `auth-server/README.md` and `auth-server/.env.example` for setup. The example file contains placeholders only; never commit `.env` or real credentials. The service is not deployed and the public GitHub Pages UI is not yet connected to it. GitHub OAuth App setup, production secret configuration, database provisioning, and HTTPS backend hosting remain operator tasks.
+
+## Custom domain: ocodejs.dev
+
+The OCode.js CLI Hub is intended to use **https://ocodejs.dev/** as its canonical public URL. The repository publishes the `CNAME` file at the site root so GitHub Pages can associate the custom domain with this project. The `www.ocodejs.dev` hostname should resolve to the same Pages site and redirect to the apex domain. Keep the existing `app` and `mcp` subdomains on their separate services.
+
+DNS and Pages ownership must be verified before considering the custom domain live. Do not replace unrelated DNS records or the existing Worker bindings while configuring this domain.
