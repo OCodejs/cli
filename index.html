@@ -1576,16 +1576,18 @@ const CATALOG_SOURCES=[
   "https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"
 ];
 function renderCatalogError(errors){
-  const host=$("#app");if(!host)return;
-  host.innerHTML='<section class="catalog-error" role="alert"><h1>Catalog unavailable</h1><p>OCode.js CLI Hub không tải được danh mục công cụ. Kiểm tra kết nối rồi thử lại.</p><p class="catalog-error-detail">'+esc(errors[errors.length-1]||"Unknown network error")+'</p><button class="catalog-retry" id="catalog-retry" type="button">Try again ↻</button><a class="catalog-error-link" href="https://github.com/zskbot/ocodejs-cli/blob/main/tools.json" target="_blank" rel="noopener noreferrer">Open catalog source ↗</a></section>';
+  const host=$("#app");
+  if(!host)return;
+  host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog unavailable</h1><p>OCode.js CLI Hub không tải được danh mục công cụ. Kiểm tra kết nối rồi thử lại.</p><p class="catalog-error-detail">'+esc(errors[errors.length-1]||"Unknown network error")+'</p><button class="catalog-retry" id="catalog-retry" type="button">Try again ↻</button><p class="catalog-error-help">Nếu lỗi tiếp tục, mở repository để kiểm tra tệp tools.json.</p><a class="catalog-error-link" href="https://github.com/zskbot/ocodejs-cli/blob/main/tools.json" target="_blank" rel="noopener noreferrer">Open catalog source ↗</a></section>';
   $("#catalog-retry")?.addEventListener("click",loadCatalog,{once:true});
 }
 async function loadCatalog(){
   const host=$("#app");
-  if(host)host.innerHTML='<section class="catalog-loading" role="status" aria-live="polite"><strong>Loading catalog…</strong><p>Đang kết nối danh mục công cụ.</p></section>';
+  if(host)host.innerHTML='<section class="catalog-loading" role="status" aria-live="polite"><span class="catalog-spinner" aria-hidden="true"></span><strong>Loading catalog…</strong><p>Đang kết nối danh mục công cụ.</p></section>';
   const errors=[];
   for(const source of [...new Set(CATALOG_SOURCES)]){
-    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),12000);
     try{
       const response=await fetch(source+(source.includes("?")?"&":"?")+"v=20261106",{cache:"no-store",credentials:"omit",signal:controller.signal,headers:{Accept:"application/json"}});
       if(!response.ok)throw new Error("HTTP "+response.status+" · "+new URL(source).host);
