@@ -8,7 +8,7 @@ Mỗi mục có mô tả, ngôn ngữ, nhóm, lệnh cài đặt và liên kết
 
 ## Workspace trên trình duyệt
 
-CLI Hub có 50 trang điều hướng. Các chức năng Workspace hiện đã hoạt động ở mức local-first:
+CLI Hub có 51 trang điều hướng. Các chức năng Workspace hiện đã hoạt động ở mức local-first:
 
 - **Dashboard**: tổng hợp số project, công cụ và favorites; hiển thị hoạt động gần đây.
 - **Projects / New Project**: tạo, xem và xóa project metadata trong trình duyệt.
@@ -83,7 +83,7 @@ Khu vực **Community / Popular Libraries** gọi npm Downloads API cho từng p
 
 ## Expanded navigation
 
-The CLI Hub navigation contains 50 unique page routes across 11 groups: Workspace, Development, AI Agents, Tools, Developer Hub, System, Project Management, Code Quality, Testing & QA, Deploy & Infrastructure, and Community & Resources. The mobile hamburger drawer includes a searchable navigation field and a vertically scrollable page list. Newly added routes are UI foundations; external integrations, real builds, terminal execution, deployment and monitoring require their respective backends and are not represented as active services.
+The CLI Hub navigation contains 51 unique page routes across 11 groups: Workspace, Development, AI Agents, Tools, Developer Hub, System, Project Management, Code Quality, Testing & QA, Deploy & Infrastructure, and Community & Resources. The mobile hamburger drawer includes a searchable navigation field and a vertically scrollable page list. Newly added routes are UI foundations; external integrations, real builds, terminal execution, deployment and monitoring require their respective backends and are not represented as active services.
 
 
 ## Brand assets and iconography
