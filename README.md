@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/2d913c09-d73c-482c-9eca-5d842c61336c)
+
 # OCodeJS CLI Hub
 
 Danh mục tuyển chọn các công cụ terminal/TUI cho developer và AI agents. Website tĩnh được host bằng GitHub Pages; dữ liệu danh mục nằm trong `tools.json`.
