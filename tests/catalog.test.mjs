@@ -224,13 +224,17 @@ test("OCode.js keeps the pure-black surface and monochrome button systems", asyn
 
 test("catalog loading has bounded timeouts, fallback sources, and retry recovery", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
-  assert.match(html, /const CATALOG_SOURCES=\\[/);
-  assert.ok(html.includes('new URL("tools.json",document.baseURI).href'));
-  assert.ok(html.includes('"https://zskbot.github.io/ocodejs-cli/tools.json"'));
-  assert.ok(html.includes('"https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"'));
-  assert.match(html, /setTimeout\\(\\(\\)=>controller\\.abort\\(\\),12000\\)/);
-  assert.match(html, /finally\\{clearTimeout\\(timeout\\)\\}/);
-  assert.match(html, /function renderCatalogError\\(errors\\)/);
-  assert.match(html, /id="catalog-retry"/);
-  assert.match(html, /addEventListener\\("click",loadCatalog,\\{once:true\\}\\)/);
+  for (const required of [
+    "const CATALOG_SOURCES=[",
+    'new URL("tools.json",document.baseURI).href',
+    '"https://zskbot.github.io/ocodejs-cli/tools.json"',
+    '"https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"',
+    "setTimeout(()=>controller.abort(),12000)",
+    "finally{clearTimeout(timeout)}",
+    "function renderCatalogError(errors)",
+    'id="catalog-retry"',
+    'addEventListener("click",loadCatalog,{once:true})'
+  ]) {
+    assert.ok(html.includes(required), "catalog recovery contract missing: " + required);
+  }
 });
