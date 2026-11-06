@@ -1587,9 +1587,11 @@ async function loadCatalog(){
   const errors=[];
   for(const source of [...new Set(CATALOG_SOURCES)]){
     const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),12000);
+    let timeout;
     try{
-      const response=await fetch(source+(source.includes("?")?"&":"?")+"v=20261106",{cache:"no-store",credentials:"omit",signal:controller.signal,headers:{Accept:"application/json"}});
+      const request=fetch(source+(source.includes("?")?"&":"?")+"v=20261106",{cache:"no-store",credentials:"omit",signal:controller.signal,headers:{Accept:"application/json"}});
+      const deadline=new Promise((_,reject)=>{timeout=setTimeout(()=>{controller.abort();reject(new Error("Request timed out · "+new URL(source).host))},5000)});
+      const response=await Promise.race([request,deadline]);
       if(!response.ok)throw new Error("HTTP "+response.status+" · "+new URL(source).host);
       const data=await response.json();
       if(!Array.isArray(data)||!data.every(item=>item&&typeof item.id==="string"&&typeof item.name==="string"))throw new Error("Invalid catalog format · "+new URL(source).host);
