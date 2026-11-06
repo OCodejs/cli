@@ -1743,7 +1743,6 @@ document.addEventListener("change",e=>{if(e.target.matches("#library-branch-sele
 document.addEventListener("input",e=>{if(e.target.matches("#library-file-search"))renderLibraryFileFilter(e.target.value);if(e.target.matches("#library-source-search"))renderLibrarySourceSearch(e.target.value)});
 function closeDrawer(){document.body.classList.remove("drawer-open");$("#menu-toggle")?.setAttribute("aria-expanded","false")}
 $("#menu-toggle").addEventListener("click",()=>{const open=document.body.classList.toggle("drawer-open");$("#menu-toggle").setAttribute("aria-expanded",String(open))});
-$("#auth-trigger").addEventListener("click",authOpen);
 $("#desktop-search").addEventListener("click",()=>$("#search")?.focus());
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#search")?.focus()}if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||"")){e.preventDefault();$("#search")?.focus()}});
 $("#theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-preview");const l=document.body.classList.contains("light-preview");document.documentElement.style.colorScheme=l?"light":"dark";$("#theme-toggle").textContent=l?"☀":"☾";document.querySelector('meta[name=theme-color]').content=l?"#f7f9fd":"#05070d"});
@@ -1766,6 +1765,7 @@ $("#auth-pat-form").addEventListener("submit",async e=>{e.preventDefault();const
 $("#auth-logout").addEventListener("click",async()=>{try{await authRequest("/auth/logout",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";authSetConnected(null);authStatus("Đã đăng xuất khỏi phiên hiện tại.","ready")}catch(error){authStatus("Đăng xuất thất bại: "+error.message,"error")}});
 $("#auth-disconnect").addEventListener("click",async()=>{if(!window.confirm("Xóa credential GitHub đã lưu trên backend và đăng xuất?"))return;try{await authRequest("/auth/disconnect",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";authSetConnected(null);authStatus("Đã xóa credential đã lưu và đăng xuất.","ready")}catch(error){authStatus("Không thể ngắt kết nối: "+error.message,"error")}});
 if(new URLSearchParams(location.search).get("auth")==="connected"){history.replaceState(null,"",location.pathname+location.hash)}
+authRefresh();
 
 buildNavigation();$("#nav-search")?.addEventListener("input",buildNavigation);window.addEventListener("popstate",()=>{if(location.hash.startsWith("#library=")){renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);return}view=location.hash.startsWith("#page=")?location.hash.slice(6):"home";render()});
 const CATALOG_SOURCES=[
