@@ -101,7 +101,7 @@ The **Marketplace** page links to the official Visual Studio Code Marketplace, G
 
 ## GitHub Authentication backend
 
-A separate Node.js service foundation for GitHub OAuth and secure PAT connection is in `auth-server/`. It uses PostgreSQL, AES-256-GCM encrypted credentials, opaque server-side sessions, HttpOnly cookies, CSRF validation, exact-origin CORS, rate limits, and generic error responses. See `auth-server/README.md` and `auth-server/.env.example` for setup. The example file contains placeholders only; never commit `.env` or real credentials. The service is not deployed and the public GitHub Pages UI is not yet connected to it. GitHub OAuth App setup, production secret configuration, database provisioning, and HTTPS backend hosting remain operator tasks.
+The CLI Hub now includes a GitHub login dialog with OAuth redirect, PAT connection, session status, logout, and credential disconnect. The frontend calls the configurable `window.OCODE_AUTH_API` endpoint, defaulting to `https://auth.ocodejs.dev`; it sends credentials only over HTTPS and does not persist PAT values in browser storage. The separate Node.js service in `auth-server/` uses PostgreSQL, AES-256-GCM encrypted credentials, opaque server-side sessions, HttpOnly cookies, CSRF validation, exact-origin CORS, rate limits, and generic error responses. See `auth-server/README.md` and `auth-server/.env.example`. **The backend is not deployed yet**, so real login remains unavailable until an HTTPS auth service, PostgreSQL database, GitHub OAuth App, DNS, and production secrets are configured. Never commit `.env` or real credentials.
 
 ## Custom domain: ocodejs.dev
 
