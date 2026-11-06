@@ -1100,6 +1100,22 @@ footer a{color:#b5c7dd}
 .catalog-retry:hover{background:#000;color:#fff}
 .catalog-error-link{display:block;margin-top:14px;color:#fff;text-decoration:underline;text-underline-offset:4px}
 
+
+
+/* OCode.js Account Center — full-viewport responsive redesign */
+.auth-overlay{position:fixed;inset:0;z-index:120;display:block;padding:0;background:#050505;backdrop-filter:none;-webkit-backdrop-filter:none;overflow:auto}
+.auth-dialog{width:100%;min-height:100vh;min-height:100dvh;max-height:none;max-width:none;overflow:visible;border:0;background:#050505;color:#f5f5f5;padding:0;box-shadow:none;display:flex;flex-direction:column}
+.account-topbar{height:76px;flex:0 0 76px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,76px);border-bottom:1px solid #242424;background:#070707}
+.account-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}.account-brand-mark{font-size:29px;font-weight:900;letter-spacing:-4px;color:#fff}.account-brand strong,.account-brand small{display:block}.account-brand strong{font-size:16px;letter-spacing:-.5px}.account-brand small{margin-top:3px;color:#777;font-size:9px;letter-spacing:1.8px}
+.account-top-actions{display:flex;align-items:center;gap:22px}.account-secure-label{display:flex;align-items:center;gap:8px;color:#a9a9a9;font-size:9px;letter-spacing:1.2px}.account-secure-label svg{width:15px;color:#fff}.account-topbar .auth-close{width:42px;height:42px;flex-basis:42px;border:1px solid #333;background:#0b0b0b;color:#fff;font-size:25px}
+.account-main{width:min(1240px,100%);flex:1;margin:0 auto;padding:clamp(36px,6vh,76px) clamp(20px,5vw,76px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);align-items:center;gap:clamp(40px,8vw,120px)}
+.account-intro{position:relative;min-width:0}.account-eyebrow{color:#929292;font-size:10px;letter-spacing:2.2px}.account-orbit{position:relative;width:100px;height:100px;margin:28px 0 25px;display:grid;place-items:center;border:1px solid #383838;border-radius:50%;background:radial-gradient(circle,#1c1c1c 0,#090909 70%)}.account-orbit span{font-size:37px;font-weight:900;letter-spacing:-5px;color:#fff}.account-orbit i,.account-orbit b{position:absolute;inset:-9px;border:1px solid #252525;border-radius:50%}.account-orbit b{inset:12px;border-color:#555}
+.account-intro h1{margin:0;font-size:clamp(42px,5.2vw,70px);line-height:1.02;letter-spacing:-3.5px;font-weight:800}.account-intro h1 span{color:#777}.account-lead{max-width:540px;margin:22px 0 30px;color:#a2a2a2;font-size:14px;line-height:1.85}.account-benefits{display:grid;gap:18px;max-width:520px}.account-benefits>div{display:flex;align-items:center;gap:14px}.account-benefit-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid #303030;background:#0c0c0c;color:#e8e8e8}.account-benefit-icon svg{width:17px}.account-benefits strong,.account-benefits small{display:block}.account-benefits strong{font-size:12px;font-weight:650}.account-benefits small{margin-top:4px;color:#777;font-size:10px;line-height:1.5}.account-bottom-note{display:flex;align-items:center;gap:9px;margin-top:clamp(32px,7vh,72px);color:#777;font-size:9px;letter-spacing:1.2px}.account-live-dot{width:7px;height:7px;border-radius:50%;background:#eee;box-shadow:0 0 10px #fff6}
+.account-auth-column{width:100%;max-width:470px;justify-self:end}.account-auth-card{border:1px solid #333;background:#0a0a0a;padding:clamp(22px,3vw,36px)}.account-card-heading h2{margin:10px 0 7px;font-size:26px;letter-spacing:-1px}.account-card-heading p{margin:0;color:#888;font-size:12px;line-height:1.6}.auth-status{margin:22px 0 18px;padding:11px 13px;border:1px solid #303030;background:#101010;color:#aaa;font-size:11px;line-height:1.6}.auth-status[data-state=ready]{border-color:#4b4b4b;color:#ddd}.auth-status[data-state=error]{border-color:#8b5149;color:#ffb7aa}.auth-button{min-height:50px;font-size:11px;letter-spacing:.1px}.auth-button-github{justify-content:center;position:relative;background:#f4f4f4;border-color:#f4f4f4;color:#080808}.auth-button-github svg:last-child{position:absolute;right:15px;width:15px}.auth-button-light{background:#ededed;border-color:#ededed;color:#080808}.auth-button-quiet{min-height:44px;border-color:#363636;color:#aaa}.auth-divider{margin:24px 0;color:#777;font-size:9px;letter-spacing:1px}.auth-divider:before,.auth-divider:after{background:#292929}.auth-pat-form{gap:10px}.auth-pat-form label{color:#c8c8c8;font-size:10px}.auth-pat-form input{height:50px;background:#050505;border-color:#363636;color:#fff;font-size:12px}.auth-pat-form input:focus{border-color:#aaa;outline:1px solid #777}.auth-pat-form .auth-button{margin-top:3px;justify-content:space-between;padding:0 16px}.auth-pat-form .auth-button svg{width:16px}.auth-note{display:flex;align-items:flex-start;gap:8px;margin-top:15px;color:#777;font-size:10px;line-height:1.7}.auth-note svg{width:14px;flex:0 0 14px;margin-top:1px;color:#aaa}.auth-foot{margin-top:25px;padding-top:15px;border-color:#282828;align-items:center;font-size:8px;letter-spacing:.7px}.auth-foot span{display:flex;align-items:center;gap:7px}.auth-foot svg{width:12px}.auth-foot a{color:#aaa}.account-connected-heading{display:flex;align-items:center;gap:12px;margin-bottom:14px}.account-connected-check{width:34px;height:34px;display:grid;place-items:center;border:1px solid #555;color:#fff}.account-connected-check svg{width:16px}.account-connected-heading strong,.account-connected-heading small{display:block}.account-connected-heading strong{font-size:13px}.account-connected-heading small{margin-top:4px;color:#888;font-size:10px}.auth-user{position:relative;padding:16px;border-color:#383838;background:#101010}.auth-avatar{width:46px;height:46px;background:#1c1c1c;border-color:#555;color:#fff}.auth-connected-pill{margin-left:auto;padding:5px 7px;border:1px solid #555;color:#ddd;font-size:8px;letter-spacing:.8px}.auth-actions{margin-top:14px}.auth-actions .auth-button{justify-content:center;gap:9px}.auth-actions .auth-button svg{width:15px}.account-help{display:flex;justify-content:space-between;gap:12px;padding:14px 2px;color:#777;font-size:10px}.account-help a{color:#ccc}.account-help svg{width:12px;vertical-align:middle}
+@media(max-width:800px){.account-topbar{height:64px;flex-basis:64px;padding:0 18px}.account-secure-label{font-size:0;gap:0}.account-secure-label svg{width:18px}.account-main{display:flex;flex-direction:column;align-items:stretch;gap:28px;padding:34px 18px 30px}.account-intro{display:grid;grid-template-columns:1fr auto;column-gap:12px}.account-eyebrow{grid-column:1/-1}.account-orbit{grid-column:2;grid-row:2/4;width:66px;height:66px;margin:10px 4px 0}.account-orbit span{font-size:26px}.account-orbit i{inset:-6px}.account-orbit b{inset:8px}.account-intro h1{grid-column:1;grid-row:2;margin-top:18px;font-size:clamp(36px,10vw,50px);letter-spacing:-2px}.account-lead{grid-column:1/-1;margin:15px 0 18px;font-size:12px;line-height:1.7}.account-benefits{grid-column:1/-1;gap:12px}.account-benefit-icon{width:34px;height:34px;flex-basis:34px}.account-bottom-note{grid-column:1/-1;margin-top:22px;font-size:8px}.account-auth-column{max-width:none}.account-auth-card{padding:22px}.account-card-heading h2{font-size:23px}.account-help{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}}
+@media(max-width:380px){.account-intro h1{font-size:34px}.account-orbit{width:58px;height:58px}.account-main{padding-inline:14px}.account-auth-card{padding:18px}.account-connected-pill{display:none}}
+@media(prefers-reduced-motion:reduce){.account-orbit i{animation:none}}
+
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" defer></script>
 
@@ -1481,20 +1497,47 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
 <header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button><span class="mbrand"><b>&gt;_</b>OCode.js<small>CLI HUB</small></span><button class="icon-button mobile-profile auth-trigger" id="auth-trigger" type="button" aria-label="Đăng nhập OCode.js" title="Tài khoản"><i data-lucide="user-round" aria-hidden="true"></i><span class="profile-label" id="auth-trigger-label">Đăng nhập</span></button><a class="submit-tool" href="https://github.com/zskbot/ocodejs-cli/issues/new?template=tool-submission.md" target="_blank" rel="noopener noreferrer">+ Gửi công cụ</a><button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng/tối">☾</button><button class="shortcut desktop-search" id="desktop-search" type="button">⌕ <span>Ctrl + K</span></button></header>
 <section class="auth-overlay" id="auth-overlay" hidden aria-hidden="true">
   <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-    <div class="auth-head"><div><span class="auth-kicker">OCODE.JS ACCOUNT</span><h2 id="auth-title">Đăng nhập CLI Hub</h2><p>Liên kết GitHub để quản lý repository trong OCode.js.</p></div><button class="auth-close" id="auth-close" type="button" aria-label="Đóng">×</button></div>
-    <div class="auth-status" id="auth-status" role="status" aria-live="polite">Đang kiểm tra dịch vụ xác thực…</div>
-    <div class="auth-connected" id="auth-connected" hidden><div class="auth-user"><span class="auth-avatar" id="auth-avatar">GH</span><div><strong id="auth-user-name">GitHub user</strong><small id="auth-user-url">Connected account</small></div></div><div class="auth-actions"><button class="auth-button auth-button-light" id="auth-logout" type="button">Đăng xuất</button><button class="auth-button auth-button-quiet" id="auth-disconnect" type="button">Ngắt kết nối và xóa token</button></div></div>
-    <div id="auth-login-options">
-      <button class="auth-button auth-button-github" id="auth-github" type="button"><i data-lucide="github" aria-hidden="true"></i> Tiếp tục với GitHub</button>
-      <div class="auth-divider"><span>HOẶC DÙNG PERSONAL ACCESS TOKEN</span></div>
-      <form id="auth-pat-form" class="auth-pat-form">
-        <label for="auth-pat-token">GitHub Personal Access Token</label>
-        <input id="auth-pat-token" name="token" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="github_pat_…" required minlength="20" maxlength="500">
-        <button class="auth-button auth-button-light" id="auth-pat-submit" type="submit">Kết nối tài khoản</button>
-      </form>
-      <p class="auth-note">Token chỉ gửi qua HTTPS và được mã hóa ở backend. Không lưu token trong LocalStorage hoặc hiển thị lại sau khi kết nối. Chỉ cấp quyền tối thiểu cần thiết.</p>
+    <header class="account-topbar">
+      <a class="account-brand" href="#" aria-label="OCode.js CLI Hub"><span class="account-brand-mark">&gt;_</span><span><strong>OCode.js</strong><small>ACCOUNT CENTER</small></span></a>
+      <div class="account-top-actions"><span class="account-secure-label"><i data-lucide="shield-check" aria-hidden="true"></i> SECURE CONNECTION</span><button class="auth-close" id="auth-close" type="button" aria-label="Đóng trang tài khoản">×</button></div>
+    </header>
+    <div class="account-main">
+      <section class="account-intro">
+        <span class="account-eyebrow">YOUR DEVELOPER IDENTITY</span>
+        <div class="account-orbit" aria-hidden="true"><span>&gt;_</span><i></i><b></b></div>
+        <h1>One account.<br><span>Every workflow.</span></h1>
+        <p class="account-lead">Kết nối GitHub để quản lý repository, đồng bộ dự án và sử dụng các công cụ developer trong hệ sinh thái OCode.js.</p>
+        <div class="account-benefits">
+          <div><span class="account-benefit-icon"><i data-lucide="git-branch"></i></span><span><strong>GitHub workspace</strong><small>Truy cập danh tính và repository của bạn</small></span></div>
+          <div><span class="account-benefit-icon"><i data-lucide="lock-keyhole"></i></span><span><strong>Private by design</strong><small>Token được mã hóa ở backend, không lưu trong trình duyệt</small></span></div>
+          <div><span class="account-benefit-icon"><i data-lucide="zap"></i></span><span><strong>Built for developers</strong><small>Một điểm đăng nhập cho OCode.js CLI Hub</small></span></div>
+        </div>
+        <div class="account-bottom-note"><span class="account-live-dot"></span> OCODE.JS IDENTITY SERVICES <span>·</span> CLOUDFLARE EDGE</div>
+      </section>
+      <section class="account-auth-column">
+        <div class="account-auth-card">
+          <div class="account-card-heading"><span class="auth-kicker">OCODE.JS ACCOUNT</span><h2 id="auth-title">Đăng nhập tài khoản</h2><p>Tiếp tục bằng tài khoản GitHub của bạn.</p></div>
+          <div class="auth-status" id="auth-status" role="status" aria-live="polite">Đang kiểm tra dịch vụ xác thực…</div>
+          <div class="auth-connected" id="auth-connected" hidden>
+            <div class="account-connected-heading"><span class="account-connected-check"><i data-lucide="check"></i></span><div><strong>Account connected</strong><small>Phiên GitHub của bạn đang hoạt động</small></div></div>
+            <div class="auth-user"><span class="auth-avatar" id="auth-avatar">GH</span><div><strong id="auth-user-name">GitHub user</strong><small id="auth-user-url">Connected account</small></div><span class="account-connected-pill">CONNECTED</span></div>
+            <div class="auth-actions"><button class="auth-button auth-button-light" id="auth-logout" type="button"><i data-lucide="log-out"></i> Đăng xuất</button><button class="auth-button auth-button-quiet" id="auth-disconnect" type="button">Ngắt kết nối và xóa token</button></div>
+          </div>
+          <div id="auth-login-options">
+            <button class="auth-button auth-button-github" id="auth-github" type="button"><i data-lucide="github" aria-hidden="true"></i> Continue with GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+            <div class="auth-divider"><span>OR CONNECT WITH A TOKEN</span></div>
+            <form id="auth-pat-form" class="auth-pat-form">
+              <label for="auth-pat-token">GitHub Personal Access Token</label>
+              <input id="auth-pat-token" name="token" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="github_pat_…" required minlength="20" maxlength="500">
+              <button class="auth-button auth-button-light" id="auth-pat-submit" type="submit">Connect account <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+            </form>
+            <p class="auth-note"><i data-lucide="shield-check" aria-hidden="true"></i> Token chỉ được gửi qua HTTPS và mã hóa ở backend. OCode.js không lưu token trong LocalStorage hoặc hiển thị lại sau khi kết nối.</p>
+          </div>
+          <div class="auth-foot"><span><i data-lucide="lock" aria-hidden="true"></i> HTTPONLY SESSION · CSRF PROTECTED</span><a href="https://github.com/zskbot/ocodejs-cli#github-authentication-backend" target="_blank" rel="noopener noreferrer">Security details ↗</a></div>
+        </div>
+        <div class="account-help"><span>Need help?</span><a href="https://github.com/zskbot/ocodejs-cli/issues" target="_blank" rel="noopener noreferrer">Visit support <i data-lucide="arrow-up-right"></i></a></div>
+      </section>
     </div>
-    <div class="auth-foot"><span>SECURE SESSION · HTTPONLY COOKIE · CSRF PROTECTION</span><a href="https://github.com/zskbot/ocodejs-cli#github-authentication-backend" target="_blank" rel="noopener noreferrer">Tài liệu bảo mật ↗</a></div>
   </div>
 </section>
 <main class="content" id="app" aria-live="polite"><p>Loading catalog…</p></main>
