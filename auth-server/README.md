@@ -54,4 +54,4 @@ The frontend and API are separate origins but share the same registrable domain,
 5. Use a dedicated OAuth App, least privilege, encrypted database backups, monitoring without secrets, and a key-rotation procedure.
 6. Changing TOKEN_ENCRYPTION_KEY directly makes existing credentials unreadable; rotate with a decrypt/re-encrypt migration.
 
-This commit adds the backend foundation and secret template. The public Pages UI is not yet wired to these endpoints, and no production service or OAuth app has been configured.
+The repository contains the backend foundation and secret template plus a GitHub Pages login interface. No production auth service, database, DNS record, or OAuth App has been configured yet; real login remains disabled until those dependencies are deployed and verified.
