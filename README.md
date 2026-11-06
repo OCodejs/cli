@@ -8,14 +8,14 @@ Mỗi mục có mô tả, ngôn ngữ, nhóm, lệnh cài đặt và liên kết
 
 ## Workspace trên trình duyệt
 
-CLI Hub có 25 trang điều hướng. Các chức năng Workspace hiện đã hoạt động ở mức local-first:
+CLI Hub có 51 trang điều hướng. Các chức năng Workspace hiện đã hoạt động ở mức local-first:
 
 - **Dashboard**: tổng hợp số project, công cụ và favorites; hiển thị hoạt động gần đây.
 - **Projects / New Project**: tạo, xem và xóa project metadata trong trình duyệt.
 - **Environments**: hiển thị trạng thái các runtime và tích hợp đã cấu hình.
 - **Activity & Logs**: ghi nhận thao tác project trong browser-local activity log.
 
-Project và activity được lưu bằng `localStorage` trên thiết bị/trình duyệt hiện tại. Dữ liệu không tự đồng bộ giữa thiết bị, không phải server audit log và có thể mất khi người dùng xóa dữ liệu trình duyệt. Tạo project hiện chỉ lưu metadata; chưa sinh source code, chạy terminal, kết nối database, cấp credentials hoặc deploy ứng dụng.
+Prompt của Agents, project metadata và activity được lưu bằng `localStorage` trên thiết bị/trình duyệt hiện tại. Dữ liệu không tự đồng bộ giữa thiết bị, không phải server audit log và có thể mất khi người dùng xóa dữ liệu trình duyệt. Tạo project hiện chỉ lưu metadata; chưa sinh source code, chạy terminal, kết nối database, cấp credentials hoặc deploy ứng dụng.
 
 ## Cấu trúc
 
@@ -83,7 +83,7 @@ Khu vực **Community / Popular Libraries** gọi npm Downloads API cho từng p
 
 ## Expanded navigation
 
-The CLI Hub navigation contains 50 unique page routes across 11 groups: Workspace, Development, AI Agents, Tools, Developer Hub, System, Project Management, Code Quality, Testing & QA, Deploy & Infrastructure, and Community & Resources. The mobile hamburger drawer includes a searchable navigation field and a vertically scrollable page list. Newly added routes are UI foundations; external integrations, real builds, terminal execution, deployment and monitoring require their respective backends and are not represented as active services.
+The CLI Hub navigation contains 51 unique page routes across 11 groups: Workspace, Development, AI Agents, Tools, Developer Hub, System, Project Management, Code Quality, Testing & QA, Deploy & Infrastructure, and Community & Resources. The mobile hamburger drawer includes a searchable navigation field and a vertically scrollable page list. Newly added routes are UI foundations; external integrations, real builds, terminal execution, deployment and monitoring require their respective backends and are not represented as active services.
 
 
 ## Brand assets and iconography
