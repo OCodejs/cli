@@ -583,7 +583,7 @@ h1 span{color:#bbb}
 .home-hero-copy{padding:clamp(20px,4vw,38px);align-self:center}.home-hero-copy h1{font-size:clamp(32px,5vw,58px);line-height:1.06}.home-hero-copy h1 span{color:var(--cyan)}.home-hero-copy .subtitle{max-width:52ch;line-height:1.7}
 
 .home-intro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 24px}.home-intro-grid .page-panel{margin:0}.home-intro-grid h2{margin:8px 0;font-size:18px}.home-intro-grid p,.community-note{color:var(--muted);font-size:12px;line-height:1.7}.community-section{margin:28px 0}.community-section .section-head{align-items:end}.community-section .section-head>div{display:grid;gap:4px}.community-section .section-head h2{font-size:clamp(17px,2vw,22px);color:var(--fg);letter-spacing:0;text-transform:none}.community-note{margin:0 0 14px}.library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.library-card{min-width:0;border:1px solid var(--line-strong);background:linear-gradient(145deg,#0b1321,#070b13);padding:14px;display:flex;flex-direction:column;gap:10px}.library-card-top{display:flex;justify-content:space-between;align-items:center}.library-rank{color:var(--cyan);font-size:12px;font-weight:800}.library-category,.library-package{color:var(--muted);font-size:10px}.library-brand{display:flex;align-items:center;gap:12px;min-width:0}.library-brand img{width:42px;height:42px;object-fit:contain;padding:7px;background:#111c2e;border:1px solid var(--line-strong);flex:0 0 42px}.library-brand h3{margin:0;font-size:15px}.library-package{display:block;margin-top:3px}.library-card>p{margin:0;min-height:38px;color:var(--muted);font-size:11px;line-height:1.6}.library-downloads{display:flex;align-items:baseline;gap:8px;border-top:1px solid var(--line);padding-top:9px}.library-downloads strong{font-size:18px;color:var(--green);font-variant-numeric:tabular-nums}.library-downloads span{font-size:10px;color:var(--muted)}.library-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}.library-links .btn{font-size:10px;min-height:32px;padding:5px 8px}.library-source{margin-top:12px;color:var(--muted);font-size:10px}.library-source a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}.home-tools-section{margin-top:32px}
-@media(max-width:768px){.home-hero{grid-template-columns:1fr;gap:0}.home-hero-copy{padding:20px}.home-hero-media{min-height:170px;max-height:190px}.home-hero-media img{min-height:170px;max-height:190px}.home-intro-grid{grid-template-columns:1fr;gap:10px}.library-grid{grid-template-columns:1fr}.library-card{padding:13px}.library-card>p{min-height:0}.community-section .section-head{align-items:flex-start;flex-direction:column}.community-section .section-head .result-count{white-space:normal}.library-links .btn{flex:1 1 auto}.home-hero-copy h1{font-size:34px}}
+@media(max-width:768px){.home-hero{grid-template-columns:1fr;gap:0}.home-hero-copy{padding:20px}.home-intro-grid{grid-template-columns:1fr;gap:10px}.library-grid{grid-template-columns:1fr}.library-card{padding:13px}.library-card>p{min-height:0}.community-section .section-head{align-items:flex-start;flex-direction:column}.community-section .section-head .result-count{white-space:normal}.library-links .btn{flex:1 1 auto}.home-hero-copy h1{font-size:34px}}
 
 /* ===== Documentation-inspired monochrome visual system ===== */
 :root{
@@ -643,8 +643,6 @@ footer{background:#08090b;border-color:#303438;color:#969ca2}
 .page-actions .btn{min-height:42px}
 .home-hero{background:#0b0d0f;border-color:#34393e}
 .home-hero-copy h1 span{color:#c9cdd1}
-.home-hero-media{background:#050607}
-.home-hero-media span{background:#090a0c;border-color:#4a5056;color:#e0e3e6}
 .home-intro-grid .page-panel{background:#0d0f11;border-color:#34393e}
 .library-card{background:#0d0f11;border-color:#34393e}
 .library-brand img{background:#f1f2f3;border:1px solid #555b61;padding:7px;filter:grayscale(1)}
@@ -665,8 +663,6 @@ footer{background:#08090b;border-color:#303438;color:#969ca2}
  .home-hero{border-color:#383d42}
  .home-hero-copy{padding:22px 18px}
  .home-hero-copy h1{font-size:clamp(34px,9vw,46px);line-height:1.1}
- .home-hero-media{min-height:180px;max-height:210px}
- .home-hero-media img{min-height:180px;max-height:210px}
  .page-panel,.page-tile,.card,.library-card,.detail-panel{border-color:#34393e;background:#0d0f11}
  .card-actions .btn,.btn,.back,.icon-button,.submit-tool{border-radius:0!important}
  .card-actions .btn{font-size:12px}
@@ -709,10 +705,7 @@ button,a,input,select,[role="button"],.btn,.icon-button,.submit-tool,.back{touch
 .nav-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px}
 .nav-icon svg{width:16px;height:16px;stroke:currentColor}
 .nav a.active .nav-icon,.nav a:hover .nav-icon{color:#fff}
-.home-hero-media img{opacity:1!important;filter:saturate(1.25) contrast(1.05)}
-.home-hero-media:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#05070d30,transparent 45%,#6655ff22)}
-.home-hero-media span{z-index:1;color:#fff;border-color:#6877a5}
-@media(prefers-reduced-motion:reduce){.home-hero-media img{filter:none}}
+@media(prefers-reduced-motion:reduce){}
 
 /* Official marketplace discovery cards */
 .marketplace-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0}
@@ -1230,14 +1223,6 @@ footer a{color:#b5c7dd}
     border-color:#454545!important;
     color:#f2f2f2!important;
   }
-  .home-hero,.home-hero-copy,.home-hero-media,.home-intro-grid .page-panel,
-  .community-section,.library-repo-title,.library-file-toolbar{
-    background:#080808!important;
-    background-image:none!important;
-    border-color:#303030!important;
-  }
-  .home-hero-media:after{background:#000!important;opacity:.12}
-  .home-hero-media span{background:#000!important;color:#fff!important;border-color:#555!important}
   .tool-card,.tool-card:nth-child(n){
     background:#080808!important;
     background-image:none!important;
@@ -1338,7 +1323,6 @@ body{background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.025),transpa
 .sidebar,.topbar,footer{background:rgba(3,3,3,.985)!important}
 .home-hero,.card,.detail-panel,.page-panel,.page-tile,.library-card,.stat,.side-card{background:#070707!important;border-color:#292929!important}
 .home-hero{background:linear-gradient(110deg,#080808,#030303)!important}
-.home-hero-media{background:#020202!important}
 .searchbox,.filter,.search-submit,.btn,.back,.command,.code-canvas,.filter-panel{background-color:#050505!important}
 .nav a:hover,.nav a.active,.page-tile:hover{background:#141414!important}
 .topbar,.sidebar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
