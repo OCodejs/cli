@@ -1,9 +1,16 @@
-blank_issues_enabled:  on:env name: ocodejs-cli
-  
-contact_links:
-  - name: GitHub Community Support
-    url: https://github.com/orgs/community/discussions
-    about: Please ask and answer questions here.
-  - name: GitHub Security Bug Bounty
-    url: https://bounty.github.com/
-    about: Please report security vulnerabilities here.
+# Retired template: GitHub Pages is deployed only by static.yml.
+name: Disabled legacy workflow
+
+on:
+  push:
+    branches: ["__disabled_legacy_workflow__"]
+
+permissions:
+  contents: read
+
+jobs:
+  retired:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain retirement
+        run: echo "This legacy workflow is intentionally disabled. See static.yml."
