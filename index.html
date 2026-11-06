@@ -1747,7 +1747,7 @@ $("#desktop-search").addEventListener("click",()=>$("#search")?.focus());
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#search")?.focus()}if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||"")){e.preventDefault();$("#search")?.focus()}});
 $("#theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-preview");const l=document.body.classList.contains("light-preview");document.documentElement.style.colorScheme=l?"light":"dark";$("#theme-toggle").textContent=l?"☀":"☾";document.querySelector('meta[name=theme-color]').content=l?"#f7f9fd":"#05070d"});
 
-const OCODE_AUTH_API=String(window.OCODE_AUTH_API||"https://auth.ocodejs.dev").replace(/\\/+$/,"");
+const OCODE_AUTH_API=String(window.OCODE_AUTH_API||"https://auth.ocodejs.dev").replace(/\/+$/,"");
 let ocodeAuthCsrf="";
 let ocodeAuthUser=null;
 function authStatus(message,state=""){const el=$("#auth-status");if(el){el.textContent=message;el.dataset.state=state}}
