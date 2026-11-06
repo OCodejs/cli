@@ -136,7 +136,7 @@ test("community ranking uses npm last-month downloads and labels its scope", asy
 });
 
 
-test("navigation exposes 50 unique pages across 11 groups", async () => {
+test("navigation exposes 51 unique pages across 11 groups", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const match = html.match(/const pageDefinitions=(\[[\s\S]*?\])\.map\(\(\[id,title,group,description,status\]\)/);
   assert.ok(match, "page definitions should be present");
@@ -219,4 +219,22 @@ test("OCode.js keeps the pure-black surface and monochrome button systems", asyn
   assert.match(html, /--bg:#000000!important/);
   assert.match(html, /background:#ffffff!important/);
   assert.match(html, /background:#000000!important/);
+});
+
+
+test("catalog loading has bounded timeouts, fallback sources, and retry recovery", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  for (const required of [
+    "const CATALOG_SOURCES=[",
+    'new URL("tools.json",document.baseURI).href',
+    '"https://zskbot.github.io/ocodejs-cli/tools.json"',
+    '"https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"',
+    "setTimeout(()=>controller.abort(),12000)",
+    "finally{clearTimeout(timeout)}",
+    "function renderCatalogError(errors)",
+    'id="catalog-retry"',
+    'addEventListener("click",loadCatalog,{once:true})'
+  ]) {
+    assert.ok(html.includes(required), "catalog recovery contract missing: " + required);
+  }
 });
