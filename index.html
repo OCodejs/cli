@@ -1444,6 +1444,24 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
 }
 </style>
 
+<style id="ocode-pet-styles">
+#ocode-pet{position:fixed;z-index:25;left:0;top:0;width:clamp(76px,10vw,116px);aspect-ratio:1/1.18;pointer-events:none;opacity:0;transform:translate3d(68vw,42vh,0);will-change:transform;filter:drop-shadow(0 8px 12px #0008);transition:opacity .45s ease}
+#ocode-pet.is-visible{opacity:1}#ocode-pet.is-docked{transition:transform 4.8s cubic-bezier(.2,.72,.2,1),opacity .45s ease}
+#ocode-pet svg{display:block;width:100%;height:100%;overflow:visible}
+#ocode-pet .pet-body{transform-origin:50% 80%;animation:ocode-pet-bob 1.05s ease-in-out infinite}
+#ocode-pet .pet-leg{transform-box:fill-box;transform-origin:50% 10%;animation:ocode-pet-step .52s ease-in-out infinite alternate}
+#ocode-pet .pet-leg.back{animation-delay:-.52s}
+#ocode-pet.is-resting .pet-body{animation:ocode-pet-breathe 2.2s ease-in-out infinite}
+#ocode-pet.is-reacting .pet-body{animation:ocode-pet-boop .52s ease-out 2}
+#ocode-pet.is-reacting .pet-eye{transform-box:fill-box;transform-origin:center;animation:ocode-pet-blink .52s ease-in-out 2}
+@keyframes ocode-pet-bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-4px) rotate(1deg)}}
+@keyframes ocode-pet-step{from{transform:rotate(-15deg) translateY(-1px)}to{transform:rotate(16deg) translateY(2px)}}
+@keyframes ocode-pet-breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.015)}}
+@keyframes ocode-pet-boop{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-9px) scale(1.07,.94)}70%{transform:translateY(1px) scale(.97,1.04)}}
+@keyframes ocode-pet-blink{0%,100%{transform:scaleY(1)}45%{transform:scaleY(.12)}}
+@media(max-width:768px){#ocode-pet{width:82px}}
+@media(prefers-reduced-motion:reduce){#ocode-pet,#ocode-pet *{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 <div class="layout">
@@ -1457,6 +1475,22 @@ button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-tog
 <main class="content" id="app" aria-live="polite"><p>Loading catalog…</p></main>
 <footer><span>© 2026 OCode.js. Open-source developer tools.</span><span><a href="https://github.com/zskbot/ocodejs-cli">GitHub</a> | <a href="https://github.com/zskbot/ocodejs-cli#readme">Docs</a> | <a href="https://github.com/zskbot/ocodejs-cli/issues/new">Contribute</a> | <a href="https://github.com/zskbot/ocodejs-cli/blob/main/LICENSE">License</a></span></footer>
 </div>
+<div id="ocode-pet" aria-hidden="true"><svg viewBox="0 0 160 190" role="presentation">
+<ellipse cx="82" cy="178" rx="43" ry="7" fill="#9aa6b8" opacity=".25"/><g class="pet-body">
+<g class="pet-leg back"><path d="M91 143Q119 142 124 160L121 174Q114 182 101 174L82 158Z" fill="#ffbd91" stroke="#54291f" stroke-width="4" stroke-linejoin="round"/><path d="M99 166q10 7 20 2" fill="none" stroke="#e88f70" stroke-width="3" stroke-linecap="round"/></g>
+<g class="pet-leg"><path d="M51 143Q39 151 37 168Q38 181 56 181L76 178Q84 174 80 163L72 145Z" fill="#ffc49b" stroke="#54291f" stroke-width="4" stroke-linejoin="round"/><path d="M46 168q10-7 21-2" fill="none" stroke="#fff0d9" stroke-width="4" stroke-linecap="round"/></g>
+<path d="M31 84Q13 90 15 116L27 143Q34 151 47 143L57 119M111 87Q143 87 146 112L135 143Q128 151 115 143L105 117" fill="#15171b" stroke="#08090b" stroke-width="5" stroke-linejoin="round"/>
+<path d="M31 88Q29 62 48 56L111 56Q132 64 130 91L119 142Q81 154 42 141Z" fill="#17191d" stroke="#08090b" stroke-width="5" stroke-linejoin="round"/>
+<path d="M47 120Q80 112 114 120L111 139Q80 147 49 138Z" fill="#202329" stroke="#090a0c" stroke-width="3"/>
+<path d="M53 91Q43 72 31 77Q19 81 23 95Q29 109 49 110M107 91Q118 72 131 77Q143 81 139 95Q133 109 111 110" fill="#17191d" stroke="#08090b" stroke-width="5" stroke-linejoin="round"/>
+<path d="M64 96v12M96 96v12" stroke="#090a0c" stroke-width="4" stroke-linecap="round"/>
+<path d="M80 7C47 7 24 31 24 63C24 92 48 111 80 111C112 111 136 92 136 63C136 31 113 7 80 7Z" fill="#ffbd91" stroke="#54291f" stroke-width="5"/>
+<path d="M30 57Q33 17 75 13Q47 25 42 55" fill="#ffd2ae" opacity=".65"/>
+<ellipse cx="58" cy="60" rx="10" ry="17" fill="#160f10" class="pet-eye"/><ellipse cx="102" cy="60" rx="10" ry="17" fill="#160f10" class="pet-eye"/>
+<ellipse cx="60" cy="54" rx="3.5" ry="5" fill="#fff"/><ellipse cx="104" cy="54" rx="3.5" ry="5" fill="#fff"/>
+<ellipse cx="45" cy="80" rx="9" ry="4.5" fill="#f48c87" opacity=".55"/><ellipse cx="115" cy="80" rx="9" ry="4.5" fill="#f48c87" opacity=".55"/>
+<path d="M73 80q7 8 14 0" fill="none" stroke="#54291f" stroke-width="2.8" stroke-linecap="round"/><path d="M43 28q9-12 18-12" fill="none" stroke="#fff2df" stroke-width="5" stroke-linecap="round" opacity=".9"/><path d="M111 31l3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#fff"/>
+</g></svg></div>
 <script>
 "use strict";
 let catalogBootWatchdog;
@@ -1743,6 +1777,7 @@ async function loadCatalog(){
   console.error("OCode.js catalog loading failed:",errors);renderCatalogError(errors);
 }
 loadCatalog();
+(()=>{const pet=document.getElementById("ocode-pet");if(!pet)return;const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;let x=innerWidth*.68,y=innerHeight*.42,tx=x,ty=y,raf=0,lastMove=0;const size=()=>({w:pet.getBoundingClientRect().width||82,h:pet.getBoundingClientRect().height||98});const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const place=(px,py)=>{const s=size();x=clamp(px,8,innerWidth-s.w-8);y=clamp(py,8,innerHeight-s.h-8);pet.style.transform="translate3d("+x+"px,"+y+"px,0)"};const dock=()=>{const s=size(),bottom=innerWidth<=768?Math.max(82,parseFloat(getComputedStyle(document.body).paddingBottom)||0):18;place(innerWidth-s.w-18,innerHeight-s.h-bottom);pet.classList.add("is-resting")};const react=()=>{pet.classList.remove("is-reacting");void pet.offsetWidth;pet.classList.add("is-reacting");setTimeout(()=>pet.classList.remove("is-reacting"),1100)};const tick=()=>{place(x+(tx-x)*.18,y+(ty-y)*.18);if(Math.abs(tx-x)+Math.abs(ty-y)>1)raf=requestAnimationFrame(tick);else{raf=0;if(performance.now()-lastMove>850)pet.classList.add("is-resting")}};const move=e=>{if(!pet.classList.contains("is-docked"))return;const s=size();tx=e.clientX-s.w*.5;ty=e.clientY-s.h*.55;lastMove=performance.now();pet.classList.remove("is-resting");if(!raf)raf=requestAnimationFrame(tick)};setTimeout(()=>{pet.classList.add("is-visible","is-docked");dock();if(reduce)pet.classList.add("is-resting");setTimeout(()=>pet.classList.remove("is-docked"),5000)},700);document.addEventListener("pointermove",move,{passive:true});document.addEventListener("pointerdown",e=>{if(e.pointerType==="touch"){move(e);react()}else{const s=size();if(Math.hypot(e.clientX-(x+s.w/2),e.clientY-(y+s.h/2))<90)react()}},{passive:true});addEventListener("resize",()=>{if(pet.classList.contains("is-docked"))dock()},{passive:true})})();
 </script>
 </body>
 </html>
