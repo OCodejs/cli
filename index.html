@@ -1344,6 +1344,26 @@ footer a{color:#b5c7dd}
 </div>
 <script>
 "use strict";
+let catalogBootWatchdog;
+function showCatalogBootFailure(message){
+  const host=document.querySelector("#app");
+  if(!host)return;
+  const detail=String(message||"Application initialization did not complete").slice(0,500);
+  host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog startup failed</h1><p>OCode.js CLI Hub stopped before the catalog finished loading.</p><p class="catalog-error-detail"></p><button class="catalog-retry" type="button" id="catalog-boot-retry">Reload page ↻</button><p class="catalog-error-help">Diagnostic: '+detail.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+'</p></section>';
+  document.querySelector("#catalog-boot-retry")?.addEventListener("click",()=>location.reload(),{once:true});
+}
+window.addEventListener("error",event=>{
+  const host=document.querySelector("#app");
+  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure(event.message||"JavaScript runtime error");
+});
+window.addEventListener("unhandledrejection",event=>{
+  const host=document.querySelector("#app");
+  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure(event.reason?.message||event.reason||"Unhandled promise rejection");
+});
+catalogBootWatchdog=setTimeout(()=>{
+  const host=document.querySelector("#app");
+  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure("Startup watchdog: application did not reach catalog loading within 20 seconds");
+},20000);
 const $=s=>document.querySelector(s);
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let tools=[],query="",category="",language="",view="home",favorites=new Set();
@@ -1513,7 +1533,7 @@ function card(t){const brand=toolBrandStyle[t.id]||{icon:"terminal",color:"#cbd5
 function refreshIcons(){if(window.lucide&&typeof window.lucide.createIcons==="function")window.lucide.createIcons({attrs:{"stroke-width":1.7}})}
 document.addEventListener("DOMContentLoaded",refreshIcons,{once:true});
 const routeLucideIcons={home:"house",dashboard:"layout-dashboard",projects:"folder-kanban","new-project":"folder-plus",environments:"layers",editor:"code",files:"folder-tree",terminal:"terminal",preview:"monitor",build:"hammer",agents:"bot","agent-tasks":"list-checks",chat:"messages-square",prompts:"message-square-code",models:"brain",tools:"wrench","tool-details":"file-code",favorites:"star",integrations:"plug",github:"github",marketplace:"store",api:"braces",docs:"book-open",activity:"activity",settings:"settings",about:"info","project-settings":"sliders-horizontal","project-templates":"copy",dependencies:"package",scripts:"scroll-text","workspace-import":"folder-input","code-review":"git-pull-request",lint:"scan-check","type-check":"file-check","security":"shield-check",accessibility:"accessibility", "unit-tests":"flask-conical","integration-tests":"workflow","e2e-tests":"mouse-pointer-click","test-reports":"clipboard-list",performance:"gauge",deployments:"rocket",hosting:"server",domains:"globe", "environment-vars":"key-round",monitoring:"chart-no-axes-combined",releases:"tag",changelog:"history",roadmap:"map",community:"users",examples:"code-2"};
-function render(){if(view!=="tools"&&view!=="favorites"){renderWorkspace();refreshIcons();return}renderCatalog();refreshIcons()}
+function render(){clearTimeout(catalogBootWatchdog);if(view!=="tools"&&view!=="favorites"){renderWorkspace();refreshIcons();return}renderCatalog();refreshIcons()}
 function renderKeepFocus(){const pos=$("#search")?.selectionStart;render();const input=$("#search");input?.focus({preventScroll:true});if(pos!==undefined)input?.setSelectionRange(pos,pos)}
 function detail(id){const t=tools.find(x=>x.id===id);if(!t)return;$("#app").innerHTML=`<div class="detail"><button class="back" id="back" type="button">← Back to tools</button><h2>${esc(t.name)}</h2><p>${esc(t.description)}</p><p class="meta">${esc(t.language)} · ${esc(t.category)}</p><div class="detail-panel"><strong>INSTALL COMMAND</strong><div class="code-canvas"><button class="copy-code" data-copy="${esc(t.install)}" type="button">Copy code</button><pre class="command">${esc(t.install)}</pre></div></div><div class="detail-panel"><strong>UPSTREAM REPOSITORY</strong><p><a href="${esc(t.repo)}" target="_blank" rel="noopener noreferrer">${esc(t.repo)} ↗</a></p></div></div>`;$("#back").addEventListener("click",render);window.scrollTo(0,0)}
 
@@ -1576,6 +1596,7 @@ const CATALOG_SOURCES=[
   "https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"
 ];
 function renderCatalogError(errors){
+  clearTimeout(catalogBootWatchdog);
   const host=$("#app");
   if(!host)return;
   host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog unavailable</h1><p>OCode.js CLI Hub không tải được danh mục công cụ. Kiểm tra kết nối rồi thử lại.</p><p class="catalog-error-detail">'+esc(errors[errors.length-1]||"Unknown network error")+'</p><button class="catalog-retry" id="catalog-retry" type="button">Try again ↻</button><p class="catalog-error-help">Nếu lỗi tiếp tục, mở repository để kiểm tra tệp tools.json.</p><a class="catalog-error-link" href="https://github.com/zskbot/ocodejs-cli/blob/main/tools.json" target="_blank" rel="noopener noreferrer">Open catalog source ↗</a></section>';
