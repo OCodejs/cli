@@ -4,13 +4,14 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
 import { pool, migrate } from './db.js';
-import { decryptSecret, encryptSecret, encryptionKey, randomToken, sha256 } from './crypto.js';
+import { decryptSecret, encryptSecret, encryptionKey, keyedHash, randomToken, sha256 } from './crypto.js';
 
 const required = ['APP_ORIGIN','GITHUB_CLIENT_ID','GITHUB_CLIENT_SECRET','TOKEN_ENCRYPTION_KEY','SESSION_SECRET','DATABASE_URL'];
 for (const name of required) if (!process.env[name]) throw new Error(name + ' is required');
 const APP_ORIGIN = new URL(process.env.APP_ORIGIN).origin;
 const API_ORIGIN = process.env.PUBLIC_API_URL ? new URL(process.env.PUBLIC_API_URL).origin : '';
 const KEY = encryptionKey(process.env.TOKEN_ENCRYPTION_KEY);
+const sessionHash = value => keyedHash(value, process.env.SESSION_SECRET);
 const TTL = Math.max(1, Number(process.env.SESSION_TTL_HOURS || 168)) * 3600000;
 const COOKIE = 'ocode_session';
 const STATE_COOKIE = 'ocode_oauth_state';
@@ -48,13 +49,13 @@ function setSession(res,id) { res.cookie(COOKIE,id,{...cookieOptions,maxAge:TTL}
 function clearSession(res) { res.clearCookie(COOKIE,cookieOptions); }
 async function createSession(githubId) {
   const id = randomToken(), csrf = randomToken(), expires = new Date(Date.now()+TTL);
-  await pool.query('INSERT INTO auth_sessions(id_hash,github_id,csrf_hash,expires_at) VALUES($1,$2,$3,$4)',[sha256(id),githubId,sha256(csrf),expires]);
+  await pool.query('INSERT INTO auth_sessions(id_hash,github_id,csrf_hash,expires_at) VALUES($1,$2,$3,$4)',[sessionHash(id),githubId,sessionHash(csrf),expires]);
   return {id,csrf};
 }
 async function findSession(req) {
   const id = req.cookies && req.cookies[COOKIE];
   if (!id || id.length > 128) return null;
-  const r = await pool.query('SELECT s.id_hash,s.github_id,s.csrf_hash,s.expires_at,u.github_login,u.token_ciphertext,u.token_kind,u.scopes FROM auth_sessions s JOIN auth_users u ON u.github_id=s.github_id WHERE s.id_hash=$1 AND s.expires_at>NOW()',[sha256(id)]);
+  const r = await pool.query('SELECT s.id_hash,s.github_id,s.csrf_hash,s.expires_at,u.github_login,u.token_ciphertext,u.token_kind,u.scopes FROM auth_sessions s JOIN auth_users u ON u.github_id=s.github_id WHERE s.id_hash=$1 AND s.expires_at>NOW()',[sessionHash(id)]);
   return r.rows[0] || null;
 }
 async function requireSession(req,res,next) {
@@ -62,7 +63,7 @@ async function requireSession(req,res,next) {
     const session = await findSession(req);
     if (!session) return res.status(401).json({error:'not_authenticated'});
     const csrf = req.get('x-ocode-csrf');
-    if (!csrf || sha256(csrf) !== session.csrf_hash) return res.status(403).json({error:'csrf_check_failed'});
+    if (!csrf || sessionHash(csrf) !== session.csrf_hash) return res.status(403).json({error:'csrf_check_failed'});
     req.auth = session;
     next();
   } catch { next(new Error('session_lookup_failed')); }
@@ -82,7 +83,7 @@ async function saveCredential(user,token,kind,scopes) {
 const publicUser = row => ({id:String(row.github_id),login:row.github_login,method:row.token_kind,scopes:row.scopes || []});
 
 app.get('/health',(_req,res)=>res.json({ok:true,service:'ocodejs-auth'}));
-app.get('/auth/github',originGuard,async (_req,res,next)=>{
+app.get('/auth/github',async (_req,res,next)=>{
   try {
     const state = randomToken();
     await pool.query('INSERT INTO oauth_states(state_hash,expires_at) VALUES($1,$2)',[sha256(state),new Date(Date.now()+600000)]);
@@ -136,7 +137,7 @@ app.get('/auth/session',async (req,res,next)=>{
     const session=await findSession(req);
     if (!session) return res.json({connected:false});
     const csrf=randomToken();
-    await pool.query('UPDATE auth_sessions SET csrf_hash=$1 WHERE id_hash=$2',[sha256(csrf),session.id_hash]);
+    await pool.query('UPDATE auth_sessions SET csrf_hash=$1 WHERE id_hash=$2',[sessionHash(csrf),session.id_hash]);
     res.json({connected:true,user:publicUser(session),csrfToken:csrf});
   } catch { next(new Error('session_read_failed')); }
 });
