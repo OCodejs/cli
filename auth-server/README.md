@@ -36,10 +36,20 @@ Create a GitHub OAuth App with callback URL http://localhost:8787/auth/github/ca
 
 Browser calls must use credentials: include. POST logout/disconnect require X-Ocode-CSRF from the latest session response.
 
+## CLI Hub frontend configuration
+
+The static frontend uses `window.OCODE_AUTH_API`, defaulting to `https://auth.ocodejs.dev`. The production service must set `APP_ORIGIN=https://ocodejs.dev` and `PUBLIC_API_URL=https://auth.ocodejs.dev`. GitHub OAuth callback URL must be exactly:
+
+```text
+https://auth.ocodejs.dev/auth/github/callback
+```
+
+The frontend and API are separate origins but share the same registrable domain, allowing the secure HttpOnly cookie to be sent with `credentials: include`. Do not host the API on an unrelated domain if browser cookie-based sessions are required.
+
 ## Production deployment requirements
 1. Deploy auth-server as a separate Node service; GitHub Pages cannot run Node.
 2. Configure all variables from .env.example in the host secret/environment manager. Never put them in GitHub source or frontend build variables.
-3. Set NODE_ENV=production, HTTPS PUBLIC_API_URL, exact APP_ORIGIN, TLS PostgreSQL, and a unique 32-byte encryption key.
+3. Set `NODE_ENV=production`, `PUBLIC_API_URL=https://auth.ocodejs.dev`, `APP_ORIGIN=https://ocodejs.dev`, TLS PostgreSQL, and a unique 32-byte encryption key.
 4. Prefer a custom domain with frontend and API on the same registrable site. Third-party cookie restrictions can block github.io frontend + unrelated API domain.
 5. Use a dedicated OAuth App, least privilege, encrypted database backups, monitoring without secrets, and a key-rotation procedure.
 6. Changing TOKEN_ENCRYPTION_KEY directly makes existing credentials unreadable; rotate with a decrypt/re-encrypt migration.
