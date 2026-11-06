@@ -1329,6 +1329,28 @@ footer a{color:#b5c7dd}
 </style>
 
 <style id="ocode-agent-queue-filters">.agent-queue-filters{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:10px;margin:16px 0}.agent-queue-filters input,.agent-queue-filters select{min-height:44px;padding:0 12px;background:#050505!important;color:#fff!important;border:1px solid #454545!important}.agent-task-card[hidden]{display:none!important}@media(max-width:600px){.agent-queue-filters{grid-template-columns:1fr}}</style>
+<style id="ocode-cli-hub-final-polish">
+:root{--bg:#020202;--panel:#070707;--line:#171717;--line-strong:#292929;--fg:#f3f3f3;--muted:#929292}
+html,body{background:#020202!important;color:var(--fg)}
+body{background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.025),transparent 42%),#020202!important}
+.layout{background:linear-gradient(180deg,#070707,#020202)!important;border-color:#202020!important}
+.content{background:transparent!important}
+.sidebar,.topbar,footer{background:rgba(3,3,3,.985)!important}
+.home-hero,.card,.detail-panel,.page-panel,.page-tile,.library-card,.stat,.side-card{background:#070707!important;border-color:#292929!important}
+.home-hero{background:linear-gradient(110deg,#080808,#030303)!important}
+.home-hero-media{background:#020202!important}
+.searchbox,.filter,.search-submit,.btn,.back,.command,.code-canvas,.filter-panel{background-color:#050505!important}
+.nav a:hover,.nav a.active,.page-tile:hover{background:#141414!important}
+.topbar,.sidebar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.community-section .library-links{gap:6px;align-items:center}
+.community-section .library-links .btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto!important;width:auto;min-width:0;min-height:27px;height:27px;padding:3px 8px!important;font-size:10px!important;line-height:1.1;font-weight:650;letter-spacing:0;border-radius:0!important;white-space:nowrap}
+.community-section .library-links .library-open{background:#fff!important;color:#050505!important;border:1px solid #fff!important}
+.community-section .library-links .library-open:hover{background:#dedede!important;border-color:#dedede!important}
+.community-section .library-links .library-download{background:#090909!important;color:#eee!important;border:1px solid #555!important}
+.community-section .library-links .library-download:hover{background:#fff!important;color:#000!important;border-color:#fff!important}
+@media(max-width:768px){.community-section .library-links{gap:5px}.community-section .library-links .btn{min-height:26px;height:26px;padding:3px 7px!important;font-size:9px!important}}
+@media(prefers-reduced-motion:no-preference){.layout{animation:workspace-bg-in .45s ease-out both}@keyframes workspace-bg-in{from{opacity:.92}to{opacity:1}}}
+</style>
 </head>
 <body>
 <div class="layout">
@@ -1631,38 +1653,3 @@ loadCatalog();
 </script>
 </body>
 </html>
-
-/* ===== Ultra-dark workspace background ===== */
-:root{
- --bg:#020202;--panel:#070707;--line:#171717;--line-strong:#292929;
- --fg:#f3f3f3;--muted:#929292;
-}
-html,body{background:#020202!important;color:var(--fg)}
-body{
- background:
-  radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.035),transparent 42%),
-  radial-gradient(ellipse at 85% 75%,rgba(255,255,255,.018),transparent 38%),
-  #020202!important;
-}
-.layout{
- background:linear-gradient(180deg,rgba(7,7,7,.985),rgba(2,2,2,.995))!important;
- border-color:#202020!important;
-}
-.content{background:transparent}
-.sidebar,.topbar,footer{background:rgba(3,3,3,.985)!important}
-.home-hero,.card,.detail-panel,.page-panel,.page-tile,.library-card,.stat,.side-card{
- background:rgba(7,7,7,.96)!important;
- border-color:#292929!important;
-}
-.home-hero{background:linear-gradient(110deg,#080808,#030303)!important}
-.home-hero-media{background:#020202}
-.searchbox,.filter,.search-submit,.btn,.back,.command,.code-canvas,.filter-panel{
- background-color:#050505!important;
-}
-.nav a:hover,.nav a.active,.page-tile:hover{background:#141414!important}
-.topbar,.sidebar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-@media(prefers-reduced-motion:no-preference){
- .layout{animation:workspace-bg-in .45s ease-out both}
- @keyframes workspace-bg-in{from{opacity:.92}to{opacity:1}}
-}
-
