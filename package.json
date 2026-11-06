@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "auth:dev": "npm --prefix auth-server run dev",
+    "auth:start": "npm --prefix auth-server start",
+    "auth:test": "npm --prefix auth-server test"
   },
   "engines": {
     "node": ">=20"

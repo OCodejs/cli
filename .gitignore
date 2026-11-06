@@ -16,3 +16,15 @@ _site/
 # counterproductive to check this file into the repository.
 # Details at https://github.com/github/pages-gem/issues/768
 Gemfile.lock
+
+# Authentication secrets and local backend state
+.env
+.env.*
+!.env.example
+!auth-server/.env.example
+!auth-server/.env.example.README
+auth-server/.env
+auth-server/.dev.vars
+*.pem
+*.key
+secrets/

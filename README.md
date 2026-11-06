@@ -97,3 +97,8 @@ Community library cards load their brand marks from Simple Icons using the corre
 ## Marketplace hub
 
 The **Marketplace** page links to the official Visual Studio Code Marketplace, GitHub Marketplace, and Google Cloud Marketplace. Each provider card includes a direct catalog link and official documentation. These are outbound discovery links only; extension installation, account authorization, purchasing, and synchronization are not implemented until provider APIs and credentials are configured. Marketplace is also available from Home quick access.
+
+
+## GitHub Authentication backend
+
+A separate Node.js service foundation for GitHub OAuth and secure PAT connection is in `auth-server/`. It uses PostgreSQL, AES-256-GCM encrypted credentials, opaque server-side sessions, HttpOnly cookies, CSRF validation, exact-origin CORS, rate limits, and generic error responses. See `auth-server/README.md` and `auth-server/.env.example` for setup. The example file contains placeholders only; never commit `.env` or real credentials. The service is not deployed and the public GitHub Pages UI is not yet connected to it. GitHub OAuth App setup, production secret configuration, database provisioning, and HTTPS backend hosting remain operator tasks.
