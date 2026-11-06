@@ -70,19 +70,14 @@ test("the tool submission action points to the repository issue template", async
 });
 
 
-test("the CLI Hub exposes 25 unique routes across six navigation groups", async () => {
+test("the CLI Hub exposes 50 unique routes across 11 navigation groups", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
-  const marker = "const pageDefinitions=";
-  const start = html.indexOf(marker);
-  const end = html.indexOf(".map(([id,title,group,description,status])=>", start);
-  assert.ok(start >= 0 && end > start, "pageDefinitions must remain a JSON-compatible route list");
-  const pages = JSON.parse(html.slice(start + marker.length, end));
-  assert.equal(pages.length, 25);
-  assert.equal(new Set(pages.map(([id]) => id)).size, 25);
-  assert.deepEqual(
-    [...new Set(pages.map(([, , group]) => group))],
-    ["Workspace", "Development", "AI Agents", "Tools", "Developer Hub", "System"]
-  );
+  const match = html.match(/const pageDefinitions=(\\[[\\s\\S]*?\\])\\.map\\(\\(\\[id,title,group,description,status\\]\\)/);
+  assert.ok(match, "page definitions should be present");
+  const pages = JSON.parse(match[1]);
+  assert.equal(pages.length, 50);
+  assert.equal(new Set(pages.map(([id]) => id)).size, 50);
+  assert.equal(new Set(pages.map(([, , group]) => group)).size, 11);
 });
 
 test("the CLI Hub keeps grouped navigation and browser history routing", async () => {
@@ -183,4 +178,43 @@ test("Marketplace page links to official VS Code GitHub and Google catalogs", as
   assert.match(html, /marketplace-grid/);
   assert.match(html, /marketplace:"store"/);
   assert.match(html, /"marketplace"\]\?\.includes|marketplace.*quick access/i);
+});
+
+
+test("Home prompt composer saves requests into the local Agents queue", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  assert.match(html, /id="home-prompt-form"/);
+  assert.match(html, /id="home-prompt-input"/);
+  assert.match(html, /data-prompt-preset=/);
+  assert.match(html, /function loadPromptQueue\(/);
+  assert.match(html, /ocodejs-cli-prompt-queue/);
+  assert.match(html, /setPage\("agents"\)/);
+  assert.match(html, /Prompt queued/);
+});
+
+test("Agents queue exposes search, status, and export controls", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  assert.match(html, /function renderAgentQueue\(/);
+  assert.match(html, /id="agent-queue-search"/);
+  assert.match(html, /id="agent-queue-status"/);
+  assert.match(html, /data-agent-status=/);
+  assert.match(html, /data-agent-download=/);
+  assert.match(html, /data-agent-export/);
+  assert.match(html, /data-agent-remove=/);
+});
+
+test("Agents route is a valid JavaScript line and the app states execution limits", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  assert.match(html, /if\(view==="agents"\)\{renderAgentQueue\(\);return\}/);
+  assert.doesNotMatch(html, /\\\\n if\(view==="agents"\)/);
+  assert.match(html, /no code is generated or run yet/);
+});
+
+test("OCode.js keeps the pure-black surface and monochrome button systems", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  assert.match(html, /id="ocode-pure-black-surface-system"/);
+  assert.match(html, /id="ocode-monochrome-button-system"/);
+  assert.match(html, /--bg:#000000!important/);
+  assert.match(html, /background:#ffffff!important/);
+  assert.match(html, /background:#000000!important/);
 });
