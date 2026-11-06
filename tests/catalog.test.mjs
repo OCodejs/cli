@@ -70,15 +70,15 @@ test("the tool submission action points to the repository issue template", async
 });
 
 
-test("the CLI Hub exposes 50 unique routes across 11 navigation groups", async () => {
+test("the CLI Hub exposes 51 unique routes across 11 navigation groups", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const marker = "const pageDefinitions=";
   const start = html.indexOf(marker);
   const end = html.indexOf(".map(([id,title,group,description,status])=>", start);
   assert.ok(start >= 0 && end > start, "page definitions must remain a JSON-compatible route list");
   const pages = JSON.parse(html.slice(start + marker.length, end));
-  assert.equal(pages.length, 50);
-  assert.equal(new Set(pages.map(([id]) => id)).size, 50);
+  assert.equal(pages.length, 51);
+  assert.equal(new Set(pages.map(([id]) => id)).size, 51);
   assert.equal(new Set(pages.map(([, , group]) => group)).size, 11);
 });
 
