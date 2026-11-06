@@ -1354,15 +1354,15 @@ function showCatalogBootFailure(message){
 }
 window.addEventListener("error",event=>{
   const host=document.querySelector("#app");
-  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure(event.message||"JavaScript runtime error");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure(event.message||"JavaScript runtime error");
 });
 window.addEventListener("unhandledrejection",event=>{
   const host=document.querySelector("#app");
-  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure(event.reason?.message||event.reason||"Unhandled promise rejection");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure(event.reason?.message||event.reason||"Unhandled promise rejection");
 });
 catalogBootWatchdog=setTimeout(()=>{
   const host=document.querySelector("#app");
-  if(host&&host.querySelector(".catalog-loading"))showCatalogBootFailure("Startup watchdog: application did not reach catalog loading within 20 seconds");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure("Startup watchdog: application did not reach catalog loading within 20 seconds");
 },20000);
 const $=s=>document.querySelector(s);
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
