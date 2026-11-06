@@ -1096,6 +1096,22 @@ footer a{color:#b5c7dd}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* Catalog loading and recovery states */
+.catalog-loading,.catalog-error{max-width:680px;margin:clamp(36px,10vh,100px) auto;padding:32px;border:1px solid #383838;background:#080808;text-align:center}
+.catalog-loading strong{display:block;margin-top:18px;font-size:18px;color:#fff}
+.catalog-loading p,.catalog-error p{color:#aaa;font-size:13px}
+.catalog-spinner{display:inline-block;width:30px;height:30px;border:2px solid #444;border-top-color:#fff;border-radius:50%;animation:catalog-spin .8s linear infinite}
+@keyframes catalog-spin{to{transform:rotate(360deg)}}
+.catalog-error-mark{display:grid;place-items:center;width:42px;height:42px;margin:0 auto 16px;border:1px solid #888;color:#fff;font-size:24px;font-weight:800}
+.catalog-error h1{font-size:clamp(24px,4vw,34px);letter-spacing:-.5px}
+.catalog-error-detail{overflow-wrap:anywhere;padding:10px;border:1px solid #292929;background:#050505;font:12px var(--mono)}
+.catalog-retry{min-height:48px;margin:12px 0;padding:0 24px;border:1px solid #fff;border-radius:0;background:#fff;color:#000;font-weight:800}
+.catalog-retry:hover{background:#000;color:#fff}
+.catalog-error-help{margin-top:18px}
+.catalog-error-link{display:inline-block;margin-top:4px;color:#fff;text-decoration:underline;text-underline-offset:4px}
+@media(prefers-reduced-motion:reduce){.catalog-spinner{animation:none}}
+
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" defer></script>
 
@@ -1559,7 +1575,44 @@ $("#desktop-search").addEventListener("click",()=>$("#search")?.focus());
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#search")?.focus()}if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||"")){e.preventDefault();$("#search")?.focus()}});
 $("#theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-preview");const l=document.body.classList.contains("light-preview");document.documentElement.style.colorScheme=l?"light":"dark";$("#theme-toggle").textContent=l?"☀":"☾";document.querySelector('meta[name=theme-color]').content=l?"#f7f9fd":"#05070d"});
 buildNavigation();$("#nav-search")?.addEventListener("input",buildNavigation);window.addEventListener("popstate",()=>{if(location.hash.startsWith("#library=")){renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);return}view=location.hash.startsWith("#page=")?location.hash.slice(6):"home";render()});
-fetch("tools.json").then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(data=>{tools=data;const initial=location.hash.startsWith("#page=")?location.hash.slice(6):"home";view=pageDefinitions.some(p=>p.id===initial)?initial:"home";buildNavigation();if(location.hash.startsWith("#library="))renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);else render()}).catch(err=>{$("#app").innerHTML='<div class="empty">Unable to load tools.json. Open this page through GitHub Pages or a local static server.</div>';console.error(err)});
+const CATALOG_SOURCES=[
+  new URL("tools.json",document.baseURI).href,
+  "https://zskbot.github.io/ocodejs-cli/tools.json",
+  "https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"
+];
+function renderCatalogError(errors){
+  const host=$("#app");
+  if(!host)return;
+  host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog unavailable</h1><p>OCode.js CLI Hub không tải được danh mục công cụ. Kiểm tra kết nối rồi thử lại.</p><p class="catalog-error-detail">'+esc(errors[errors.length-1]||"Unknown network error")+'</p><button class="catalog-retry" id="catalog-retry" type="button">Try again ↻</button><p class="catalog-error-help">Nếu lỗi tiếp tục, mở repository để kiểm tra tệp tools.json.</p><a class="catalog-error-link" href="https://github.com/zskbot/ocodejs-cli/blob/main/tools.json" target="_blank" rel="noopener noreferrer">Open catalog source ↗</a></section>';
+  $("#catalog-retry")?.addEventListener("click",loadCatalog,{once:true});
+}
+async function loadCatalog(){
+  const host=$("#app");
+  if(host)host.innerHTML='<section class="catalog-loading" role="status" aria-live="polite"><span class="catalog-spinner" aria-hidden="true"></span><strong>Loading catalog…</strong><p>Đang kết nối danh mục công cụ.</p></section>';
+  const errors=[];
+  for(const source of [...new Set(CATALOG_SOURCES)]){
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),12000);
+    try{
+      const response=await fetch(source+(source.includes("?")?"&":"?")+"v=20261106",{cache:"no-store",credentials:"omit",signal:controller.signal,headers:{Accept:"application/json"}});
+      if(!response.ok)throw new Error("HTTP "+response.status+" · "+new URL(source).host);
+      const data=await response.json();
+      if(!Array.isArray(data)||!data.every(item=>item&&typeof item.id==="string"&&typeof item.name==="string"))throw new Error("Invalid catalog format · "+new URL(source).host);
+      tools=data;
+      const initial=location.hash.startsWith("#page=")?location.hash.slice(6):"home";
+      view=pageDefinitions.some(p=>p.id===initial)?initial:"home";
+      buildNavigation();
+      if(location.hash.startsWith("#library="))renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);
+      else render();
+      return;
+    }catch(error){
+      errors.push(error.name==="AbortError"?"Request timed out · "+new URL(source).host:error.message||String(error));
+    }finally{clearTimeout(timeout)}
+  }
+  console.error("OCode.js catalog loading failed:",errors);
+  renderCatalogError(errors);
+}
+loadCatalog();
 </script>
 </body>
 </html>
