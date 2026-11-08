@@ -200,6 +200,26 @@ test("Gmail/password registration requires confirmation and validates Turnstile 
   assert.ok(statements.some(x => x.sql.includes("INSERT INTO email_sessions")));
 });
 
+test("Gmail registration rate limit is scoped to normalized email, not shared IP", async (t) => {
+  const { env, statements } = fakeEnv();
+  mockFetch(t, async () => Response.json({ success: true, hostname: "zskbot.github.io", action: "register" }));
+  const response = await authWorker.fetch(new Request("https://auth.test/auth/register", {
+    method: "POST",
+    headers: { Origin: env.APP_ORIGIN, "CF-Connecting-IP": "203.0.113.10", "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: "Agent@Example.com",
+      password: "StrongPassword123!",
+      passwordConfirmation: "StrongPassword123!",
+      turnstileToken: "mock-valid-turnstile-token"
+    })
+  }), env);
+  assert.equal(response.status, 201);
+  const limitKeys = statements.filter(x => x.sql.includes("INSERT INTO auth_rate_limits")).map(x => x.args[0]);
+  const expectedEmailKey = Buffer.from(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("register-email:agent@example.com"))).toString("base64url");
+  assert.ok(limitKeys.includes(expectedEmailKey), "registration must consume a per-email quota");
+  assert.equal(new Set(limitKeys).size, 2, "IP-wide and email-specific quotas must be independent");
+});
+
 test("Gmail/password registration rejects an invalid Turnstile token without creating an account", async (t) => {
   const { env, statements } = fakeEnv();
   mockFetch(t, async () => Response.json({ success: false, "error-codes": ["invalid-input-response"] }));
