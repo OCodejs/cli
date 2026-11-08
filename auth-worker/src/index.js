@@ -1,6 +1,7 @@
 const COOKIE = "ocode_session";
 const STATE_COOKIE = "ocode_oauth_state";
 const SESSION_TTL = 7 * 24 * 60 * 60;
+const COOKIE_SECURITY_ATTRIBUTES = "HttpOnly; Secure; SameSite=Lax";
 const enc = new TextEncoder();
 const dec = new TextDecoder();
 
@@ -16,10 +17,10 @@ function cookies(request) {
   }));
 }
 function cookie(name, value, maxAge, path = "/", sameSite = "Lax") {
-  return name + "=" + encodeURIComponent(value) + "; Path=" + path + "; Max-Age=" + maxAge + "; HttpOnly; Secure; SameSite=" + sameSite;
+  return name + "=" + encodeURIComponent(value) + "; Path=" + path + "; Max-Age=" + maxAge + (sameSite === "Lax" ? "; " + COOKIE_SECURITY_ATTRIBUTES : "; HttpOnly; Secure; SameSite=" + sameSite);
 }
 function clearCookie(name, path = "/", sameSite = "Lax") {
-  return name + "=; Path=" + path + "; Max-Age=0; HttpOnly; Secure; SameSite=" + sameSite;
+  return name + "=; Path=" + path + "; Max-Age=0" + (sameSite === "Lax" ? "; " + COOKIE_SECURITY_ATTRIBUTES : "; HttpOnly; Secure; SameSite=" + sameSite);
 }
 function b64(bytes) {
   let binary = ""; for (const byte of new Uint8Array(bytes)) binary += String.fromCharCode(byte);
