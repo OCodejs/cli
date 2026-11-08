@@ -72,7 +72,7 @@ function corsHeaders(request, env) {
   const origin = request.headers.get("Origin");
   if (!origin) return {};
   if (origin !== env.APP_ORIGIN) return null;
-  return { "Access-Control-Allow-Origin": env.APP_ORIGIN, "Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Headers": "Content-Type, X-Ocode-CSRF", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Vary": "Origin" };
+  return { "Access-Control-Allow-Origin": env.APP_ORIGIN, "Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Headers": "Content-Type, X-Ocode-CSRF, Authorization", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Vary": "Origin" };
 }
 async function rateLimit(request, env, windowMs = 900000, maximum = 20) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
@@ -126,14 +126,19 @@ async function createEmailSession(email, env) {
   return { id, csrf };
 }
 async function findEmailSession(request, env) {
-  const id = cookies(request)[COOKIE];
+  const id = sessionCredential(request);
   if (!id || id.length > 128) return null;
   const row = await env.DB.prepare("SELECT s.id_hash, s.email, s.csrf_hash, s.expires_at, a.display_name FROM email_sessions s JOIN email_accounts a ON a.email=s.email WHERE s.id_hash=? AND s.expires_at>?").bind(await hmac(id, env.SESSION_SECRET), Date.now()).first();
   return row ? { ...row, auth_type: "email", github_id: "email:" + row.email, github_login: row.email, token_kind: "email", scopes: "[]" } : null;
 }
 
+function sessionCredential(request) {
+  const authorization = request.headers.get("Authorization") || "";
+  const bearer = authorization.match(/^Bearer ([A-Za-z0-9_-]{20,128})$/);
+  return bearer?.[1] || cookies(request)[COOKIE];
+}
 async function findSession(request, env) {
-  const id = cookies(request)[COOKIE];
+  const id = sessionCredential(request);
   if (!id || id.length > 128) return null;
   const github = await env.DB.prepare("SELECT s.id_hash, s.github_id, s.csrf_hash, s.expires_at, u.github_login, u.token_ciphertext, u.token_kind, u.scopes FROM auth_sessions s JOIN auth_users u ON u.github_id=s.github_id WHERE s.id_hash=? AND s.expires_at>?").bind(await hmac(id, env.SESSION_SECRET), Date.now()).first();
   if (github) return { ...github, auth_type: "github" };
@@ -194,7 +199,7 @@ async function handle(request, env) {
       oauthStage = "session_creation";
       const session = await createSession(profile.user.id, env);
       headers.append("Set-Cookie", cookie(COOKIE, session.id, SESSION_TTL, "/", "None"));
-      headers.set("Location", appUrl(env, "?auth=connected"));
+      headers.set("Location", appUrl(env, "?auth=connected#page=home&auth_session=" + encodeURIComponent(session.id)));
       return new Response(null, { status: 302, headers });
     } catch (error) {
       console.error("oauth_callback_failed", { stage: oauthStage, error: error instanceof Error ? error.message : "unknown_error" });
@@ -216,7 +221,7 @@ async function handle(request, env) {
       await env.DB.prepare("INSERT INTO email_accounts(email, display_name, password_hash, created_at, updated_at) VALUES(?, ?, ?, ?, ?)").bind(email, displayName, passwordHash, Date.now(), Date.now()).run();
     } catch { return json({ error: "email_already_registered" }, 409); }
     const session = await createEmailSession(email, env);
-    return json({ created: true, connected: true, user: { id: "email:" + email, login: email, email, name: displayName, method: "email" }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
+    return json({ created: true, connected: true, sessionToken: session.id, user: { id: "email:" + email, login: email, email, name: displayName, method: "email" }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
   }
   if (path === "/auth/login" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
@@ -228,7 +233,7 @@ async function handle(request, env) {
     const account = await env.DB.prepare("SELECT email, display_name, password_hash FROM email_accounts WHERE email=?").bind(email).first();
     if (!account || !(await verifyPassword(password, account.password_hash))) return json({ error: "invalid_credentials" }, 401);
     const session = await createEmailSession(email, env);
-    return json({ connected: true, user: { id: "email:" + email, login: email, email, name: account.display_name || "", method: "email" }, csrfToken: session.csrf }, 200, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
+    return json({ connected: true, sessionToken: session.id, user: { id: "email:" + email, login: email, email, name: account.display_name || "", method: "email" }, csrfToken: session.csrf }, 200, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
   }
   if (path === "/auth/pat" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
