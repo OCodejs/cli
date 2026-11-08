@@ -13,6 +13,7 @@ test("Cloudflare static Worker declares a Preview configuration", () => {
 
 test("Cloudflare static assets exclude server-side source and repository metadata", () => {
   for (const path of [
+    ".git/",
     ".github/",
     "ai-control-center/",
     "auth-server/",
