@@ -87,9 +87,9 @@ function corsHeaders(request, env) {
   if (origin !== env.APP_ORIGIN) return null;
   return { "Access-Control-Allow-Origin": env.APP_ORIGIN, "Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Headers": "Content-Type, X-Ocode-CSRF, Authorization", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Vary": "Origin" };
 }
-async function rateLimit(request, env, windowMs = 900000, maximum = 20) {
+async function rateLimit(request, env, windowMs = 900000, maximum = 20, identity = "") {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const key = await sha256(ip);
+  const key = await sha256(identity || ip);
   const window = Math.floor(Date.now() / windowMs);
   const row = await env.DB.prepare("INSERT INTO auth_rate_limits(key_hash, window_id, hits) VALUES(?, ?, 1) ON CONFLICT(key_hash) DO UPDATE SET window_id=excluded.window_id, hits=CASE WHEN auth_rate_limits.window_id=excluded.window_id THEN auth_rate_limits.hits+1 ELSE 1 END RETURNING hits").bind(key, window).first();
   return Number(row?.hits || 0) <= maximum;
@@ -245,7 +245,6 @@ async function handle(request, env) {
   }
   if (path === "/auth/register" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
-    if (!(await rateLimit(request, env, 900000, 5))) return json({ error: "rate_limit_exceeded" }, 429);
     const raw = await request.text(); if (raw.length > 4000) return json({ error: "request_too_large" }, 413);
     let body; try { body = JSON.parse(raw); } catch { return json({ error: "invalid_json" }, 400); }
     const email = normalizeEmail(body?.email), password = body?.password, passwordConfirmation = body?.passwordConfirmation, turnstileToken = body?.turnstileToken, displayName = String(body?.name || "").trim().slice(0, 80);
@@ -267,6 +266,8 @@ async function handle(request, env) {
       challenge = await response.json();
     } catch { return json({ error: "turnstile_failed" }, 403); }
     if (!challenge.success || challenge.hostname !== "zskbot.github.io" || challenge.action !== "register") return json({ error: "turnstile_failed" }, 403);
+    // Keep the shared IP-wide /auth limiter; scope the stricter registration quota to the normalized email.
+    if (!(await rateLimit(request, env, 900000, 5, "register-email:" + email))) return json({ error: "rate_limit_exceeded" }, 429);
     const passwordHash = await hashPassword(password);
     try {
       await env.DB.prepare("INSERT INTO email_accounts(email, display_name, password_hash, created_at, updated_at) VALUES(?, ?, ?, ?, ?)").bind(email, displayName, passwordHash, Date.now(), Date.now()).run();
