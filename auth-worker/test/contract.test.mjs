@@ -47,3 +47,26 @@ test("D1 migration creates only auth-owned tables and indexes", () => {
   assert.match(migration, /FOREIGN KEY\(github_id\) REFERENCES auth_users/);
   assert.match(migration, /auth_sessions_expiry_idx/);
 });
+
+test("GitHub OAuth Preview uses an explicit HTTPS callback override", () => {
+  assert.ok(worker.includes("env.GITHUB_REDIRECT_URI"));
+  assert.ok(worker.includes('callbackUrl.protocol !== "https:"'));
+});
+
+test("PAT authentication returns a Bearer-compatible session credential", () => {
+  const patRoute = worker.slice(worker.indexOf('path === "/auth/pat"'), worker.indexOf('path === "/auth/session"'));
+  assert.ok(patRoute.includes("sessionToken: session.id"));
+});
+
+test("Turnstile registration is verified server-side for the expected host and action", () => {
+  assert.ok(worker.includes("challenges.cloudflare.com/turnstile/v0/siteverify"));
+  assert.ok(worker.includes('challenge.hostname !== "zskbot.github.io"'));
+  assert.ok(worker.includes('challenge.action !== "register"'));
+});
+
+test("CORS preflight, CSRF logout, and Bearer sessions are implemented", () => {
+  assert.ok(worker.includes('if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors || {} });'));
+  assert.ok(worker.includes('"Access-Control-Allow-Headers": "Content-Type, X-Ocode-CSRF, Authorization"'));
+  assert.ok(worker.includes('if (!csrf || await hmac(csrf, env.SESSION_SECRET) !== session.csrf_hash)'));
+  assert.ok(worker.includes('const bearer = authorization.match(/^Bearer ([A-Za-z0-9_-]{20,128})$/)'));
+});
