@@ -94,7 +94,7 @@ describe("GitHub OAuth Worker", () => {
     expect(location.pathname).toBe("/login/oauth/authorize");
     expect(location.searchParams.get("client_id")).toBe("client-id");
     expect(location.searchParams.get("redirect_uri")).toBe("https://auth.example/auth/github/callback");
-    expect(location.searchParams.get("scope")).toBe("read:user");
+    expect(location.searchParams.get("scope")).toBe("read:user offline_access");
     expect(location.searchParams.get("state")).toBeTruthy();
     expect(response.headers.get("Set-Cookie")).toContain("ocode_oauth_state=");
     expect(db.executed[0].sql).toContain("INSERT INTO oauth_states");
@@ -176,5 +176,75 @@ describe("GitHub OAuth Worker", () => {
     const response = await worker.fetch(request("/api/github/user", { headers: { Cookie: `ocode_session=${sessionCookie}`, "X-Ocode-CSRF": sessionBody.csrfToken } }), env);
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ login: "octocat" });
+  });
+
+  it("refreshes an expired access token before calling GitHub and persists the rotated token", async () => {
+    const db = new FakeD1();
+    const env = makeEnv(db);
+    const start = await worker.fetch(request("/auth/github"), env);
+    const startUrl = new URL(start.headers.get("Location")!);
+    const state = startUrl.searchParams.get("state")!;
+    const stateCookie = start.headers.get("Set-Cookie")!.match(/ocode_oauth_state=([^;]+)/)![1];
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: "short-lived-token", refresh_token: "refresh-token-1", expires_in: 1, refresh_token_expires_in: 3600, scope: "read:user" })))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: 42, login: "octocat" }), { headers: { "X-OAuth-Scopes": "read:user" } }));
+    vi.stubGlobal("fetch", fetchMock);
+    await worker.fetch(request(`/auth/github/callback?code=code&state=${encodeURIComponent(state)}`, { headers: { Cookie: `ocode_oauth_state=${stateCookie}` } }), env);
+
+    const userInsert = db.executed.find(({ sql }) => sql.includes("INSERT INTO auth_users"))!;
+    const sessionInsert = db.executed.find(({ sql }) => sql.includes("INSERT INTO auth_sessions"))!;
+    db.session = {
+      id_hash: String(sessionInsert.args[0]),
+      github_id: "42",
+      csrf_hash: String(sessionInsert.args[2]),
+      expires_at: Date.now() + 60_000,
+      github_login: "octocat",
+      token_ciphertext: String(userInsert.args[2]),
+      refresh_token_ciphertext: String(userInsert.args[3]),
+      access_token_expires_at: Date.now() - 1,
+      refresh_token_expires_at: Date.now() + 3_600_000,
+      scopes: '["read:user"]',
+    };
+    const sessionCookie = "ocode_session=session-id";
+    const sessionResponse = await worker.fetch(request("/auth/session", { headers: { Cookie: sessionCookie } }), env);
+    const sessionBody = await sessionResponse.json() as { csrfToken: string };
+    db.session.id_hash = "session-hash";
+    db.session.csrf_hash = String(db.executed.findLast(({ sql }) => sql.includes("UPDATE auth_sessions SET csrf_hash"))!.args[0]);
+    db.session.token_ciphertext = String(userInsert.args[2]);
+
+    fetchMock
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: "rotated-access-token", refresh_token: "refresh-token-2", expires_in: 3600, refresh_token_expires_in: 7200 })))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: 42, login: "octocat", name: "The Octocat" })));
+    const response = await worker.fetch(request("/api/github/user", { headers: { Cookie: sessionCookie, "X-Ocode-CSRF": sessionBody.csrfToken } }), env);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ login: "octocat" });
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(fetchMock.mock.calls[2][0]).toBe("https://github.com/login/oauth/access_token");
+    expect(JSON.parse(String(fetchMock.mock.calls[2][1]?.body))).toMatchObject({ grant_type: "refresh_token", refresh_token: "refresh-token-1" });
+    expect(db.executed.some(({ sql }) => sql.includes("UPDATE auth_users SET token_ciphertext"))).toBe(true);
+  });
+
+  it("returns a server error when the refresh token is expired or refresh fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const db = new FakeD1();
+    const env = makeEnv(db);
+    db.session = {
+      id_hash: "session-hash",
+      github_id: "42",
+      csrf_hash: "placeholder",
+      expires_at: Date.now() + 60_000,
+      github_login: "octocat",
+      token_ciphertext: "invalid-ciphertext",
+      refresh_token_ciphertext: "invalid-refresh-ciphertext",
+      access_token_expires_at: Date.now() - 1,
+      refresh_token_expires_at: Date.now() - 1,
+      scopes: "[]",
+    };
+    const sessionResponse = await worker.fetch(request("/auth/session", { headers: { Cookie: "ocode_session=session-id" } }), env);
+    const sessionBody = await sessionResponse.json() as { csrfToken: string };
+    db.session.csrf_hash = String(db.executed.findLast(({ sql }) => sql.includes("UPDATE auth_sessions SET csrf_hash"))!.args[0]);
+    const response = await worker.fetch(request("/api/github/user", { headers: { Cookie: "ocode_session=session-id", "X-Ocode-CSRF": sessionBody.csrfToken } }), env);
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({ error: "github_token_refresh_failed" });
   });
 });
