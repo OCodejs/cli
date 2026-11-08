@@ -38,3 +38,12 @@ Cloudflare D1 is available on Free and Paid plans. Free-plan daily query limits 
 The CLI Hub also supports email-address accounts through `POST /auth/register` and `POST /auth/login`. Email addresses are normalized to lowercase. Passwords must be 12–128 characters and are stored only as PBKDF2-HMAC-SHA256 hashes (310,000 iterations, unique random salt); plaintext passwords are never stored or logged. Email account sessions use a separate D1 table and the same HttpOnly, Secure, SameSite=None session cookie and CSRF protection.
 
 Apply migration `migrations/0002_email_password.sql` before deploying this version. Email ownership verification and password-reset email delivery are not included in this first release; do not represent an email address as verified. Configure a transactional email provider and verification/reset flows before enabling account recovery or treating email ownership as verified.
+
+
+## Email/password and Safari session transport
+
+Apply `migrations/0003_email_auth.sql` to the existing `ocodejs-auth-db` D1 database before deploying this Worker version. It only creates the two email tables and their indexes; it does not alter existing GitHub auth tables or records.
+
+Email passwords are hashed with PBKDF2-HMAC-SHA256 (310,000 iterations and a unique 128-bit salt). Session identifiers are stored only as HMAC hashes in D1. The API supports an Authorization Bearer session credential in addition to the HttpOnly cookie. The frontend keeps the short-lived session credential in sessionStorage and sends it over HTTPS with CSRF protection; this avoids depending on third-party cookies for GitHub Pages on iOS Safari. OAuth returns the one-time session credential in the URL fragment, which is immediately moved to sessionStorage and removed from the address bar.
+
+Email ownership verification and password reset delivery are not implemented in this release. Do not treat an email as verified.
