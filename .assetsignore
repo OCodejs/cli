@@ -24,3 +24,13 @@ wrangler.jsonc
 .env.*
 *.pem
 *.key
+# Local state, credentials, logs, and backup artifacts.
+config.json
+.npmrc
+.pypirc
+*.log
+*.sqlite
+*.db
+*.dump
+*.bak
+.DS_Store
