@@ -259,3 +259,41 @@ test("iPhone Safari transport uses sessionStorage Bearer tokens without third-pa
   assert.ok(frontend.includes('headers.Authorization="Bearer "+token'));
   assert.ok(frontend.includes('credentials:"omit"'));
 });
+
+test("Preview OAuth does not fall back to Production GitHub credentials", async () => {
+  const { env } = fakeEnv({
+    GITHUB_CLIENT_ID: "production-client-id",
+    GITHUB_CLIENT_SECRET: "production-client-secret",
+    GITHUB_REDIRECT_URI: "https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback"
+  });
+  const health = await authWorker.fetch(new Request("https://preview.test/health"), env);
+  const healthBody = await health.json();
+  assert.equal(healthBody.oauthConfigured, false);
+  const start = await authWorker.fetch(new Request("https://preview.test/auth/github"), env);
+  assert.equal(start.status, 503);
+  assert.equal((await start.json()).error, "github_oauth_not_configured");
+});
+
+test("Gmail/password login verifies the PBKDF2 hash and creates a Bearer session", async () => {
+  const password = "StrongPassword123!";
+  const salt = new Uint8Array(16).fill(5);
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name:"PBKDF2", salt, iterations:310000, hash:"SHA-256" }, key, 256);
+  const saltText = Buffer.from(salt).toString("base64url");
+  const hashText = Buffer.from(bits).toString("base64url");
+  const passwordHash = "pbkdf2$310000$" + saltText + "$" + hashText;
+  const { env, statements } = fakeEnv({}, (sql) => sql.includes("SELECT email, display_name, password_hash FROM email_accounts")
+    ? { email:"login-preview@example.com", display_name:"Preview", password_hash:passwordHash }
+    : null);
+  const response = await authWorker.fetch(new Request("https://auth.test/auth/login", {
+    method:"POST",
+    headers:{ Origin:env.APP_ORIGIN, "Content-Type":"application/json" },
+    body:JSON.stringify({ email:"login-preview@example.com", password })
+  }), env);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.connected, true);
+  assert.ok(body.sessionToken);
+  assert.ok(body.csrfToken);
+  assert.ok(statements.some(x => x.sql.includes("INSERT INTO email_sessions")));
+});
