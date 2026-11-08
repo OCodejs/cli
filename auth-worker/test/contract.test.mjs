@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 const worker = await readFile(new URL("../src/index.js", import.meta.url), "utf8");
 const migration = await readFile(new URL("../migrations/0001_init.sql", import.meta.url), "utf8");
 const frontend = await readFile(new URL("../../index.html", import.meta.url), "utf8");
+const wranglerConfig = JSON.parse(await readFile(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
 import authWorker from "../src/index.js";
 
 test("Cloudflare auth Worker is valid JavaScript module syntax", () => {
@@ -55,6 +56,18 @@ test("GitHub OAuth Preview uses an explicit HTTPS callback override", () => {
   assert.ok(worker.includes("env.GITHUB_PREVIEW_CLIENT_ID"));
   assert.ok(worker.includes("env.GITHUB_PREVIEW_CLIENT_SECRET"));
   assert.ok(worker.includes('callbackUrl.protocol !== "https:"'));
+});
+
+test("Wrangler Preview uses an isolated D1 database and explicit staging callback", () => {
+  assert.ok(wranglerConfig.previews, "missing Wrangler previews configuration");
+  assert.equal(wranglerConfig.previews.vars.APP_ORIGIN, wranglerConfig.vars.APP_ORIGIN);
+  assert.match(wranglerConfig.previews.vars.GITHUB_REDIRECT_URI, /^https:\/\/.+\.workers\.dev\/auth\/github\/callback$/);
+  assert.equal(wranglerConfig.previews.d1_databases[0].binding, "DB");
+  assert.notEqual(
+    wranglerConfig.previews.d1_databases[0].database_id,
+    wranglerConfig.d1_databases[0].database_id,
+    "Preview must never bind to the Production D1 database"
+  );
 });
 
 test("PAT authentication returns a Bearer-compatible session credential", () => {
