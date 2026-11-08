@@ -213,9 +213,25 @@ async function handle(request, env) {
     if (!(await rateLimit(request, env, 900000, 5))) return json({ error: "rate_limit_exceeded" }, 429);
     const raw = await request.text(); if (raw.length > 4000) return json({ error: "request_too_large" }, 413);
     let body; try { body = JSON.parse(raw); } catch { return json({ error: "invalid_json" }, 400); }
-    const email = normalizeEmail(body?.email), password = body?.password, displayName = String(body?.name || "").trim().slice(0, 80);
+    const email = normalizeEmail(body?.email), password = body?.password, passwordConfirmation = body?.passwordConfirmation, turnstileToken = body?.turnstileToken, displayName = String(body?.name || "").trim().slice(0, 80);
     if (!validEmail(email)) return json({ error: "invalid_email" }, 400);
     if (typeof password !== "string" || password.length < 12 || password.length > 128) return json({ error: "password_policy" }, 400);
+    if (password !== passwordConfirmation) return json({ error: "password_mismatch" }, 400);
+    if (typeof turnstileToken !== "string" || !turnstileToken || turnstileToken.length > 2048) return json({ error: "turnstile_required" }, 400);
+    if (!env.TURNSTILE_SECRET_KEY) return json({ error: "turnstile_not_configured" }, 503);
+    const verification = new FormData();
+    verification.set("secret", env.TURNSTILE_SECRET_KEY);
+    verification.set("response", turnstileToken);
+    const remoteIp = request.headers.get("CF-Connecting-IP");
+    if (remoteIp) verification.set("remoteip", remoteIp);
+    verification.set("idempotency_key", crypto.randomUUID());
+    let challenge;
+    try {
+      const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: verification, signal: AbortSignal.timeout(10000) });
+      if (!response.ok) return json({ error: "turnstile_failed" }, 403);
+      challenge = await response.json();
+    } catch { return json({ error: "turnstile_failed" }, 403); }
+    if (!challenge.success || challenge.hostname !== "zskbot.github.io" || challenge.action !== "register") return json({ error: "turnstile_failed" }, 403);
     const passwordHash = await hashPassword(password);
     try {
       await env.DB.prepare("INSERT INTO email_accounts(email, display_name, password_hash, created_at, updated_at) VALUES(?, ?, ?, ?, ?)").bind(email, displayName, passwordHash, Date.now(), Date.now()).run();
