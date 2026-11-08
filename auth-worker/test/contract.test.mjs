@@ -52,6 +52,8 @@ test("D1 migration creates only auth-owned tables and indexes", () => {
 
 test("GitHub OAuth Preview uses an explicit HTTPS callback override", () => {
   assert.ok(worker.includes("env.GITHUB_REDIRECT_URI"));
+  assert.ok(worker.includes("env.GITHUB_PREVIEW_CLIENT_ID"));
+  assert.ok(worker.includes("env.GITHUB_PREVIEW_CLIENT_SECRET"));
   assert.ok(worker.includes('callbackUrl.protocol !== "https:"'));
 });
 
@@ -137,8 +139,8 @@ test("CORS rejects an untrusted origin", async () => {
 test("GitHub OAuth redirects to the explicit Preview callback and exchanges the code", async (t) => {
   const callback = "https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback";
   const { env } = fakeEnv({
-    GITHUB_CLIENT_ID: "preview-client-id",
-    GITHUB_CLIENT_SECRET: "preview-client-secret",
+    GITHUB_PREVIEW_CLIENT_ID: "preview-client-id",
+    GITHUB_PREVIEW_CLIENT_SECRET: "preview-client-secret",
     GITHUB_REDIRECT_URI: callback
   }, (sql, args) => sql.includes("DELETE FROM oauth_states") ? { state_hash: args[0] } : null);
   mockFetch(t, async (input, init = {}) => {
