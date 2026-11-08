@@ -142,7 +142,6 @@ async function findSession(request, env) {
 async function requireSession(request, env) {
   const session = await findSession(request, env);
   if (!session) return { error: json({ error: "not_authenticated" }, 401) };
-  if (session.auth_type !== "github") return { error: json({ error: "github_account_required" }, 403) };
   const csrf = request.headers.get("X-Ocode-CSRF");
   if (!csrf || await hmac(csrf, env.SESSION_SECRET) !== session.csrf_hash) return { error: json({ error: "csrf_check_failed" }, 403) };
   return { session };
@@ -252,7 +251,11 @@ async function handle(request, env) {
     const session = await findSession(request, env);
     if (!session) return json({ connected: false });
     const csrf = randomToken();
-    await env.DB.prepare("UPDATE auth_sessions SET csrf_hash=? WHERE id_hash=?").bind(await hmac(csrf, env.SESSION_SECRET), session.id_hash).run();
+    if (session.auth_type === "email") {
+      await env.DB.prepare("UPDATE email_sessions SET csrf_hash=? WHERE id_hash=?").bind(await hmac(csrf, env.SESSION_SECRET), session.id_hash).run();
+    } else {
+      await env.DB.prepare("UPDATE auth_sessions SET csrf_hash=? WHERE id_hash=?").bind(await hmac(csrf, env.SESSION_SECRET), session.id_hash).run();
+    }
     return json({ connected: true, user: publicUser(session), csrfToken: csrf });
   }
   if (path === "/auth/logout" && request.method === "POST") {
@@ -277,6 +280,7 @@ async function handle(request, env) {
   if (path === "/api/github/user" && request.method === "GET") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
+    if (auth.session.auth_type !== "github") return json({ error: "github_account_required" }, 403);
     try {
       const token = await decryptToken(auth.session.token_ciphertext, env);
       const profile = await githubProfile(token);
@@ -286,6 +290,7 @@ async function handle(request, env) {
   if (path === "/api/github/repos" && request.method === "GET") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
+    if (auth.session.auth_type !== "github") return json({ error: "github_account_required" }, 403);
     try {
       const token = await decryptToken(auth.session.token_ciphertext, env);
       const page = Math.min(10, Math.max(1, Number.parseInt(url.searchParams.get("page") || "1", 10) || 1));
