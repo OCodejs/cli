@@ -10,7 +10,7 @@ PIPELINE = [
 
 
 class Orchestrator:
-    """Builds a staged workflow; every stage waits for a human approval."""
+    """Creates an explicitly gated Planner → Coder → Tester → Reviewer pipeline."""
 
     def __init__(self, agent_profiles, repository):
         self.profiles = agent_profiles
@@ -18,6 +18,7 @@ class Orchestrator:
 
     def build_workflow(self, brief):
         tasks = []
+        previous_task_id = None
         for role, title in PIPELINE:
             profile = self.profiles.get(role)
             if not profile or not profile.get("command"):
@@ -32,5 +33,8 @@ class Orchestrator:
             )
             argv = [str(part).replace("{task}", prompt).replace("{repo}", self.repository)
                     for part in profile["command"]]
-            tasks.append(Task(title=title, role=role, prompt=prompt, command=argv))
+            task = Task(title=title, role=role, prompt=prompt, command=argv,
+                        depends_on=[previous_task_id] if previous_task_id else [])
+            tasks.append(task)
+            previous_task_id = task.id
         return tasks
