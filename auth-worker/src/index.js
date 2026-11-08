@@ -59,8 +59,11 @@ async function decryptToken(payload, env) {
   return dec.decode(plaintext);
 }
 function appUrl(env, query = "") {
-  const basePath = ("/" + String(env.APP_BASE_PATH || "").replace(/^\\/+|\\/+$/g, "") + "/").replace(/^\\/\\/$/, "/");
-  return env.APP_ORIGIN.replace(/\\/+$/, "") + (basePath === "//" ? "/" : basePath) + query;
+  const segments = String(env.APP_BASE_PATH || "").split("/").filter(Boolean);
+  const basePath = segments.length ? "/" + segments.join("/") + "/" : "/";
+  let origin = String(env.APP_ORIGIN || "");
+  while (origin.endsWith("/")) origin = origin.slice(0, -1);
+  return origin + basePath + query;
 }
 function originAllowed(request, env) {
   return request.headers.get("Origin") === env.APP_ORIGIN;
