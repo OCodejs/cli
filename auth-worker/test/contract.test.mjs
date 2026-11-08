@@ -147,6 +147,9 @@ test("GitHub OAuth redirects to the explicit Preview callback and exchanges the 
     const url = new URL(String(input));
     if (url.hostname === "github.com" && url.pathname === "/login/oauth/access_token") {
       assert.equal(init.method, "POST");
+      const exchangeBody = JSON.parse(init.body);
+      assert.equal(exchangeBody.redirect_uri, callback);
+      assert.equal(exchangeBody.code, "mock-code");
       return Response.json({ access_token: "mock-github-access-token" });
     }
     if (url.hostname === "api.github.com" && url.pathname === "/user") {
