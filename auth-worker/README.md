@@ -14,7 +14,7 @@ OAuth callback: `https://auth.ocodejs.dev/auth/github/callback`. After OAuth, th
 
 - GitHub tokens are encrypted using AES-256-GCM with a Worker secret key.
 - Session identifiers and CSRF tokens are HMAC-SHA256 hashed before storage.
-- Session cookie is Secure, HttpOnly, SameSite=Lax; the frontend and API share the `ocodejs.dev` site.
+- Session cookie is Secure, HttpOnly, SameSite=None for credentialed cross-site requests from `https://zskbot.github.io`; logout and disconnect clear it with matching attributes. Safari Intelligent Tracking Prevention and third-party-cookie restrictions may still block this architecture.
 - Strict exact-origin CORS and Origin checks for credential-changing endpoints.
 - OAuth state is random, single-use, expires after ten minutes, and is validated against an HttpOnly cookie.
 - Auth endpoints are rate-limited per source IP using a hashed key.

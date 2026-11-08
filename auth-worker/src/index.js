@@ -194,7 +194,7 @@ async function handle(request, env) {
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
     await env.DB.prepare("DELETE FROM auth_sessions WHERE github_id=?").bind(auth.session.github_id).run();
     await env.DB.prepare("DELETE FROM auth_users WHERE github_id=?").bind(auth.session.github_id).run();
-    return json({ disconnected: true, credentialsDeleted: true }, 200, { "Set-Cookie": clearCookie(COOKIE) });
+    return json({ disconnected: true, credentialsDeleted: true }, 200, { "Set-Cookie": clearCookie(COOKIE, "/", "None") });
   }
   if (path === "/api/github/user" && request.method === "GET") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
