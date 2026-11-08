@@ -47,3 +47,9 @@ Apply `migrations/0003_email_auth.sql` to the existing `ocodejs-auth-db` D1 data
 Email passwords are hashed with PBKDF2-HMAC-SHA256 (310,000 iterations and a unique 128-bit salt). Session identifiers are stored only as HMAC hashes in D1. The API supports an Authorization Bearer session credential in addition to the HttpOnly cookie. The frontend keeps the short-lived session credential in sessionStorage and sends it over HTTPS with CSRF protection; this avoids depending on third-party cookies for GitHub Pages on iOS Safari. OAuth returns the one-time session credential in the URL fragment, which is immediately moved to sessionStorage and removed from the address bar.
 
 Email ownership verification and password reset delivery are not implemented in this release. Do not treat an email as verified.
+
+## Preview OAuth isolation
+
+The staging Preview uses its own callback URL:
+`https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback`.
+Register a separate GitHub OAuth App with that exact callback URL and set its client ID and secret only in the Preview bindings. Do not reuse or replace the Production OAuth App credentials. Production continues to use `https://auth.ocodejs.dev/auth/github/callback`.
