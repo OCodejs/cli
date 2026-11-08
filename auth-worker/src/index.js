@@ -64,6 +64,13 @@ async function decryptToken(payload, env) {
   const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(iv) }, key, unb64(ciphertext));
   return dec.decode(plaintext);
 }
+function githubOAuthConfig(env, requestUrl) {
+  const callback = new URL(env.GITHUB_REDIRECT_URI || (requestUrl.origin + "/auth/github/callback"));
+  const preview = callback.hostname.endsWith(".workers.dev");
+  return preview
+    ? { clientId: env.GITHUB_PREVIEW_CLIENT_ID, clientSecret: env.GITHUB_PREVIEW_CLIENT_SECRET }
+    : { clientId: env.GITHUB_CLIENT_ID, clientSecret: env.GITHUB_CLIENT_SECRET };
+}
 function appUrl(env, query = "") {
   const segments = String(env.APP_BASE_PATH || "").split("/").filter(Boolean);
   const basePath = segments.length ? "/" + segments.join("/") + "/" : "/";
@@ -177,19 +184,23 @@ async function githubProfile(token) {
 async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
-  if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker", patConfigured: Boolean(env.DB && env.SESSION_SECRET && env.TOKEN_ENCRYPTION_KEY), oauthConfigured: Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET), emailPasswordConfigured: Boolean(env.DB && env.SESSION_SECRET) });
+  if (path === "/health" && request.method === "GET") {
+    const oauth = githubOAuthConfig(env, url);
+    return json({ ok: true, service: "ocodejs-auth-worker", patConfigured: Boolean(env.DB && env.SESSION_SECRET && env.TOKEN_ENCRYPTION_KEY), oauthConfigured: Boolean(oauth.clientId && oauth.clientSecret), emailPasswordConfigured: Boolean(env.DB && env.SESSION_SECRET) });
+  }
   if (request.method === "OPTIONS") return new Response(null, { status: 204 });
   if (path.startsWith("/auth/") && !(await rateLimit(request, env, 900000, 20))) return json({ error: "rate_limit_exceeded" }, 429);
   if (path.startsWith("/api/") && !(await rateLimit(request, env, 60000, 60))) return json({ error: "rate_limit_exceeded" }, 429);
   if (path === "/auth/github" && request.method === "GET") {
-    if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) return json({ error: "github_oauth_not_configured" }, 503);
+    const oauth = githubOAuthConfig(env, url);
+    if (!oauth.clientId || !oauth.clientSecret) return json({ error: "github_oauth_not_configured" }, 503);
     const state = randomToken();
     const stateCookieName = STATE_COOKIE + "_" + state;
     // Keep the authorization transaction alive long enough for mobile Safari
     // app switching, while retaining a strict, one-time server-side state.
     await env.DB.prepare("INSERT INTO oauth_states(state_hash, expires_at) VALUES(?, ?)").bind(await sha256(state), Date.now() + 900000).run();
     const authorize = new URL("https://github.com/login/oauth/authorize");
-    authorize.searchParams.set("client_id", env.GITHUB_CLIENT_ID);
+    authorize.searchParams.set("client_id", oauth.clientId);
     const callbackUrl = new URL(env.GITHUB_REDIRECT_URI || (url.origin + "/auth/github/callback"));
     if (callbackUrl.protocol !== "https:") return json({ error: "github_callback_misconfigured" }, 503);
     authorize.searchParams.set("redirect_uri", callbackUrl.toString());
@@ -212,7 +223,7 @@ async function handle(request, env) {
     if (!valid) return stateErrorPage("Yêu cầu đăng nhập đã được sử dụng hoặc hết hạn. Vì lý do bảo mật, mỗi yêu cầu chỉ được dùng một lần.");
     let oauthStage = "token_exchange";
     try {
-      const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }), signal: AbortSignal.timeout(12000) });
+      const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: githubOAuthConfig(env, url).clientId, client_secret: githubOAuthConfig(env, url).clientSecret, code }), signal: AbortSignal.timeout(12000) });
       const payload = await exchange.json();
       if (!exchange.ok || !payload.access_token) return new Response("GitHub OAuth exchange failed", { status: 400, headers });
       oauthStage = "github_profile";
