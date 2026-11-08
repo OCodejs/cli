@@ -5,12 +5,14 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "tsc --noEmit",
+    "test": "tsc --noEmit && vitest run",
+    "test:worker": "vitest run",
     "test:frontend": "tsc --project tsconfig.frontend.json"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "latest",
     "typescript": "latest",
+    "vitest": "^5.1.0",
     "wrangler": "4.158.0"
   }
 }
