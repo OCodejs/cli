@@ -1,9 +1,7 @@
 import json
 import logging
-import os
 import queue
 import threading
-import time
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from pathlib import Path
@@ -15,21 +13,16 @@ from core.runner import CommandRunner
 
 BASE = Path(__file__).resolve().parent
 CONFIG_PATH = BASE / "config.json"
-logging.basicConfig(
-    filename=BASE / "control-center.log",
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s",
-)
+logging.basicConfig(filename=BASE / "control-center.log", level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(message)s")
 
 
 def load_config():
     if CONFIG_PATH.exists():
         return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     return {
-        "repository": "zskbot/ocodejs-cli",
-        "project_dir": str(BASE.parent),
-        "refresh_seconds": 30,
-        "command_timeout_seconds": 1800,
+        "repository": "zskbot/ocodejs-cli", "project_dir": str(BASE.parent),
+        "refresh_seconds": 30, "command_timeout_seconds": 1800,
         "allowed_executables": ["python", "node", "npm", "npx", "git", "pytest", "codex", "claude", "gemini"],
         "agents": {},
     }
@@ -47,7 +40,6 @@ class ControlCenter(tk.Tk):
         self.tasks = []
         self.current_task = None
         self.runner = None
-        self.paused = False
         self._style()
         self._layout()
         self._refresh_prs()
@@ -75,7 +67,7 @@ class ControlCenter(tk.Tk):
         header.pack(fill="x")
         ttk.Label(header, text="AI LIVE CONTROL CENTER", style="Title.TLabel").pack(side="left")
         self.status = tk.StringVar(value="● READY")
-        ttk.Label(header, textvariable=self.status, foreground="#55d6a2").pack(side="right")
+        ttk.Label(header, textvariable=self.status).pack(side="right")
         ttk.Label(self, text=f"ORCHESTRATOR  /  {self.cfg['repository']}  /  LOCAL PC",
                   style="Muted.TLabel").pack(anchor="w", padx=18)
 
@@ -90,26 +82,23 @@ class ControlCenter(tk.Tk):
 
         body = ttk.Panedwindow(self, orient="horizontal")
         body.pack(fill="both", expand=True, padx=16, pady=(0, 16))
-        left = ttk.Frame(body, padding=10)
-        right = ttk.Frame(body, padding=10)
+        left, right = ttk.Frame(body, padding=10), ttk.Frame(body, padding=10)
         body.add(left, weight=3)
         body.add(right, weight=5)
-
-        ttk.Label(left, text="TASK QUEUE  ·  HUMAN APPROVAL REQUIRED").pack(anchor="w", pady=(0, 8))
+        ttk.Label(left, text="TASK QUEUE · HUMAN APPROVAL REQUIRED").pack(anchor="w", pady=(0, 8))
         self.task_tree = ttk.Treeview(left, columns=("role", "title", "status"), show="headings")
         for col, width in (("role", 90), ("title", 210), ("status", 130)):
             self.task_tree.heading(col, text=col.upper())
             self.task_tree.column(col, width=width, anchor="w")
         self.task_tree.pack(fill="both", expand=True)
         self.task_tree.bind("<<TreeviewSelect>>", self._select_task)
-
         task_buttons = ttk.Frame(left, padding=(0, 10))
         task_buttons.pack(fill="x")
         ttk.Button(task_buttons, text="Approve & run", command=self._approve_selected).pack(fill="x", pady=3)
         ttk.Button(task_buttons, text="Pause / Resume", command=self._pause_resume).pack(fill="x", pady=3)
         ttk.Button(task_buttons, text="Stop agent", command=self._stop).pack(fill="x", pady=3)
 
-        ttk.Label(right, text="LIVE TERMINAL  ·  STREAMED OUTPUT").pack(anchor="w", pady=(0, 8))
+        ttk.Label(right, text="LIVE TERMINAL · STREAMED OUTPUT").pack(anchor="w", pady=(0, 8))
         self.terminal = tk.Text(right, bg="#070c16", fg="#c9d7ef", insertbackground="white",
                                 font=("Cascadia Mono", 10), wrap="word", relief="flat")
         self.terminal.pack(fill="both", expand=True)
@@ -138,14 +127,13 @@ class ControlCenter(tk.Tk):
         if not brief:
             messagebox.showwarning("Task brief required", "Enter the outcome you want the agents to deliver.")
             return
-        orchestrator = Orchestrator(self.cfg.get("agents", {}), self.cfg["repository"])
-        new_tasks = orchestrator.build_workflow(brief)
-        if not new_tasks:
-            messagebox.showerror("Agents not configured", "Add agent CLI commands to ai-control-center/config.json. See config.example.json.")
+        tasks = Orchestrator(self.cfg.get("agents", {}), self.cfg["repository"]).build_workflow(brief)
+        if not tasks:
+            messagebox.showerror("Agents not configured", "Copy config.example.json to config.json and configure agent CLI commands.")
             return
-        self.tasks.extend(new_tasks)
+        self.tasks.extend(tasks)
         self._render_tasks()
-        self._log(f"[ORCHESTRATOR] Created {len(new_tasks)} staged tasks. Each task requires approval.")
+        self._log(f"[ORCHESTRATOR] Created {len(tasks)} staged tasks. Each requires approval.")
 
     def _render_tasks(self):
         for item in self.task_tree.get_children():
@@ -163,7 +151,7 @@ class ControlCenter(tk.Tk):
 
     def _approve_selected(self):
         if self.current_task and self.current_task.status == "running":
-            messagebox.showinfo("Agent busy", "Stop or wait for the current agent before starting another.")
+            messagebox.showinfo("Agent busy", "Wait for or stop the current agent first.")
             return
         selection = self.task_tree.selection()
         if not selection:
@@ -184,7 +172,7 @@ class ControlCenter(tk.Tk):
             return
         self.current_task = task
         self.runner = CommandRunner(self.cfg.get("allowed_executables", []),
-                                   self.cfg.get("command_timeout_seconds", 1800))
+                                    self.cfg.get("command_timeout_seconds", 1800))
         self.status.set(f"● RUNNING · {task.role.upper()}")
         self._render_tasks()
         self._log(f"[START] {task.role}: {task.title}")
@@ -215,15 +203,22 @@ class ControlCenter(tk.Tk):
                     self.runner = None
                     self.status.set("● READY")
                     self._render_tasks()
+                elif event[0] == "prs":
+                    for item in self.pr_tree.get_children():
+                        self.pr_tree.delete(item)
+                    for pr in event[1]:
+                        self.pr_tree.insert("", "end", values=(
+                            f"#{pr['number']}", pr.get("title", ""), pr.get("state", ""),
+                            str(pr.get("draft", False)), pr.get("html_url", "")))
+                    self._log(f"[GITHUB] Loaded {len(event[1])} open pull requests.")
+                elif event[0] == "prs_error":
+                    self._log(f"[GITHUB] {event[1]}")
         except queue.Empty:
             pass
         self.after(100, self._drain_events)
 
     def _pause_resume(self):
-        if not self.runner or not self.runner.process:
-            messagebox.showinfo("No active process", "There is no running agent to pause.")
-            return
-        messagebox.showinfo("Pause", "Portable CLI processes cannot be safely paused on every Windows setup. Use Stop, then resume by approving a new task.")
+        messagebox.showinfo("Pause / Resume", "Pausing arbitrary CLI processes is not portable on Windows. Stop the agent and re-approve a task to resume safely.")
 
     def _stop(self):
         if self.runner:
@@ -243,29 +238,14 @@ class ControlCenter(tk.Tk):
     def _refresh_prs(self):
         def worker():
             try:
-                client = GitHubClient(self.cfg["repository"])
-                prs = client.pull_requests("open")
+                prs = GitHubClient(self.cfg["repository"]).pull_requests("open")
                 self.events.put(("prs", prs))
             except Exception as exc:
                 self.events.put(("prs_error", str(exc)))
         threading.Thread(target=worker, daemon=True).start()
 
     def _tick(self):
-        try:
-            while True:
-                event = self.events.get_nowait()
-                if event[0] == "prs":
-                    for item in self.pr_tree.get_children():
-                        self.pr_tree.delete(item)
-                    for pr in event[1]:
-                        self.pr_tree.insert("", "end", values=(
-                            f"#{pr['number']}", pr.get("title", ""),
-                            pr.get("state", ""), str(pr.get("draft", False)),
-                            pr.get("html_url", "")))
-                elif event[0] == "prs_error":
-                    self._log(f"[GITHUB] {event[1]}")
-        except queue.Empty:
-            pass
+        self._refresh_prs()
         self.after(max(10, int(self.cfg.get("refresh_seconds", 30))) * 1000, self._tick)
 
     def _on_close(self):
