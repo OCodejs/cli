@@ -1877,7 +1877,8 @@ $("#auth-logout").addEventListener("click",async()=>{try{await authRequest("/aut
 $("#auth-disconnect").addEventListener("click",async()=>{if(!window.confirm("Ngắt kết nối và xóa credential GitHub đã lưu?"))return;try{await authRequest("/auth/disconnect",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";sessionStorage.removeItem("ocodejs_session_token");authSetConnected(null);authStatus("Đã ngắt kết nối GitHub.","ready")}catch(error){authStatus("Không thể ngắt kết nối: "+error.message,"error")}});
 const oauthHash=new URLSearchParams(location.hash.replace(/^#/, ""));
 const oauthSession=oauthHash.get("auth_session");
-if(oauthSession){sessionStorage.setItem("ocodejs_session_"+"to"+"ken",oauthSession);oauthHash.delete("auth_session");const cleanHash=oauthHash.toString();history.replaceState(null,"",location.pathname+location.search+(cleanHash?"#"+cleanHash:""))}
+if(oauthSession){sessionStorage.setItem("ocodejs_session_"+"to"+"ken",oauthSession);
+oauthHash.delete("auth_session");const cleanHash=oauthHash.toString();history.replaceState(null,"",location.pathname+location.search+(cleanHash?"#"+cleanHash:""))}
 if(new URLSearchParams(location.search).get("auth")==="connected"){history.replaceState(null,"",location.pathname+location.hash)}
 authRefresh();
 
