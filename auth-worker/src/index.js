@@ -190,7 +190,9 @@ async function handle(request, env) {
     await env.DB.prepare("INSERT INTO oauth_states(state_hash, expires_at) VALUES(?, ?)").bind(await sha256(state), Date.now() + 900000).run();
     const authorize = new URL("https://github.com/login/oauth/authorize");
     authorize.searchParams.set("client_id", env.GITHUB_CLIENT_ID);
-    authorize.searchParams.set("redirect_uri", url.origin + "/auth/github/callback");
+    const callbackUrl = new URL(env.GITHUB_REDIRECT_URI || (url.origin + "/auth/github/callback"));
+    if (callbackUrl.protocol !== "https:") return json({ error: "github_callback_misconfigured" }, 503);
+    authorize.searchParams.set("redirect_uri", callbackUrl.toString());
     authorize.searchParams.set("scope", "read:user");
     authorize.searchParams.set("state", state);
     return new Response(null, { status: 302, headers: { Location: authorize.toString(), "Set-Cookie": cookie(stateCookieName, state, 900, "/auth/github/callback"), "Cache-Control": "no-store" } });
@@ -284,7 +286,7 @@ async function handle(request, env) {
       const profile = await githubProfile(token);
       await saveCredential(profile.user, token, "pat", profile.scopes, env);
       const session = await createSession(profile.user.id, env);
-      return json({ connected: true, user: { id: profile.user.id, login: profile.user.login, method: "pat", scopes: profile.scopes }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
+      return json({ connected: true, sessionToken: session.id, user: { id: profile.user.id, login: profile.user.login, method: "pat", scopes: profile.scopes }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
     } catch (error) {
       if (error.message === "github_token_invalid") return json({ error: "github_token_invalid" }, 401);
       return json({ error: "pat_connection_failed" }, 502);
