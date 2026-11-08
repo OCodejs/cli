@@ -26,7 +26,12 @@ function b64(bytes) {
   return btoa(binary);
 }
 function unb64(value) {
-  return Uint8Array.from(atob(value), c => c.charCodeAt(0));
+  const input = String(value || "").trim();
+  if (/^[0-9a-fA-F]{64}$/.test(input)) {
+    return Uint8Array.from(input.match(/.{2}/g), pair => parseInt(pair, 16));
+  }
+  const normalized = input.replace(/-/g, "+").replace(/_/g, "/");
+  return Uint8Array.from(atob(normalized + "=".repeat((4 - normalized.length % 4) % 4)), c => c.charCodeAt(0));
 }
 function b64url(bytes) { return b64(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, ""); }
 function randomToken(bytes = 32) {
@@ -40,9 +45,10 @@ async function hmac(value, secret) {
   return b64url(await crypto.subtle.sign("HMAC", key, enc.encode(value)));
 }
 async function encryptionKey(value) {
-  if (!value) throw new Error("auth_not_configured");
-  const raw = unb64(value);
-  if (raw.byteLength !== 32) throw new Error("auth_not_configured");
+  if (!value) throw new Error("encryption_key_missing");
+  let raw;
+  try { raw = unb64(value); } catch { throw new Error("encryption_key_invalid_encoding"); }
+  if (raw.byteLength !== 32) throw new Error("encryption_key_invalid_length");
   return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["encrypt", "decrypt"]);
 }
 async function encryptToken(token, env) {
@@ -91,9 +97,16 @@ async function githubRequest(path, token, init = {}) {
   return { data: await response.json(), scopes: (response.headers.get("x-oauth-scopes") || "").split(",").map(x => x.trim()).filter(Boolean) };
 }
 async function saveCredential(user, token, kind, scopes, env) {
-  const encrypted = await encryptToken(token, env);
-  await env.DB.prepare("INSERT INTO auth_users(github_id, github_login, token_ciphertext, token_kind, scopes, updated_at) VALUES(?, ?, ?, ?, ?, ?) ON CONFLICT(github_id) DO UPDATE SET github_login=excluded.github_login, token_ciphertext=excluded.token_ciphertext, token_kind=excluded.token_kind, scopes=excluded.scopes, updated_at=excluded.updated_at")
-    .bind(String(user.id), user.login, encrypted, kind, JSON.stringify(scopes || []), Date.now()).run();
+  let step = "token_encryption";
+  try {
+    const encrypted = await encryptToken(token, env);
+    step = "d1_upsert";
+    await env.DB.prepare("INSERT INTO auth_users(github_id, github_login, token_ciphertext, token_kind, scopes, updated_at) VALUES(?, ?, ?, ?, ?, ?) ON CONFLICT(github_id) DO UPDATE SET github_login=excluded.github_login, token_ciphertext=excluded.token_ciphertext, token_kind=excluded.token_kind, scopes=excluded.scopes, updated_at=excluded.updated_at")
+      .bind(String(user.id), user.login, encrypted, kind, JSON.stringify(scopes || []), Date.now()).run();
+  } catch (error) {
+    console.error("oauth_credential_persist_failed", { step, name: error instanceof Error ? error.name : "Error", code: error instanceof Error ? error.message : "unknown_error" });
+    throw new Error("credential_" + step + "_failed");
+  }
 }
 async function createSession(githubId, env) {
   const id = randomToken(), csrf = randomToken(), expires = Date.now() + SESSION_TTL * 1000;
