@@ -3,14 +3,8 @@ name: AI Control Center tests
 on:
   pull_request:
     branches: [main]
-    paths:
-      - "ai-control-center/**"
-      - ".github/workflows/ai-control-center.yml"
   push:
     branches: [main]
-    paths:
-      - "ai-control-center/**"
-      - ".github/workflows/ai-control-center.yml"
   workflow_dispatch:
 
 permissions:
