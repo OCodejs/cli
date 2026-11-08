@@ -22,3 +22,10 @@ class GitHubClient:
         response = self.session.get(url, params={"state": state, "per_page": 30}, timeout=12)
         response.raise_for_status()
         return response.json()
+
+    def workflow_runs(self, per_page=10):
+        """Return recent GitHub Actions runs, including startup failures and conclusions."""
+        url = f"https://api.github.com/repos/{self.owner}/{self.repo}/actions/runs"
+        response = self.session.get(url, params={"per_page": per_page}, timeout=12)
+        response.raise_for_status()
+        return response.json().get("workflow_runs", [])
