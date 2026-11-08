@@ -15,11 +15,11 @@ function cookies(request) {
     const i = x.indexOf("="); return [x.slice(0, i), decodeURIComponent(x.slice(i + 1))];
   }));
 }
-function cookie(name, value, maxAge, path = "/") {
-  return name + "=" + encodeURIComponent(value) + "; Path=" + path + "; Max-Age=" + maxAge + "; HttpOnly; Secure; SameSite=Lax";
+function cookie(name, value, maxAge, path = "/", sameSite = "Lax") {
+  return name + "=" + encodeURIComponent(value) + "; Path=" + path + "; Max-Age=" + maxAge + "; HttpOnly; Secure; SameSite=" + sameSite;
 }
-function clearCookie(name, path = "/") {
-  return name + "=; Path=" + path + "; Max-Age=0; HttpOnly; Secure; SameSite=Lax";
+function clearCookie(name, path = "/", sameSite = "Lax") {
+  return name + "=; Path=" + path + "; Max-Age=0; HttpOnly; Secure; SameSite=" + sameSite;
 }
 function b64(bytes) {
   let binary = ""; for (const byte of new Uint8Array(bytes)) binary += String.fromCharCode(byte);
@@ -57,6 +57,10 @@ async function decryptToken(payload, env) {
   const key = await encryptionKey(env.TOKEN_ENCRYPTION_KEY);
   const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(iv) }, key, unb64(ciphertext));
   return dec.decode(plaintext);
+}
+function appUrl(env, query = "") {
+  const basePath = String(env.APP_BASE_PATH || "/").replace(/^\\/*/, "/").replace(/\\/*$/, "/");
+  return env.APP_ORIGIN.replace(/\\/+$/, "") + basePath + query;
 }
 function originAllowed(request, env) {
   return request.headers.get("Origin") === env.APP_ORIGIN;
@@ -136,7 +140,7 @@ async function handle(request, env) {
     const state = url.searchParams.get("state"), code = url.searchParams.get("code");
     const stateCookie = cookies(request)[STATE_COOKIE];
     const headers = new Headers({ "Set-Cookie": clearCookie(STATE_COOKIE, "/auth/github/callback"), "Cache-Control": "no-store" });
-    if (url.searchParams.has("error")) { headers.set("Location", env.APP_ORIGIN + "/?auth=cancelled"); return new Response(null, { status: 302, headers }); }
+    if (url.searchParams.has("error")) { headers.set("Location", appUrl(env, "?auth=cancelled")); return new Response(null, { status: 302, headers }); }
     if (!code || !state || !stateCookie || state !== stateCookie) return new Response("OAuth state validation failed", { status: 400, headers });
     const valid = await env.DB.prepare("DELETE FROM oauth_states WHERE state_hash=? AND expires_at>? RETURNING state_hash").bind(await sha256(state), Date.now()).first();
     if (!valid) return new Response("OAuth state expired or already used", { status: 400, headers });
@@ -147,8 +151,8 @@ async function handle(request, env) {
       const profile = await githubProfile(payload.access_token);
       await saveCredential(profile.user, payload.access_token, "oauth", profile.scopes, env);
       const session = await createSession(profile.user.id, env);
-      headers.append("Set-Cookie", cookie(COOKIE, session.id, SESSION_TTL));
-      headers.set("Location", env.APP_ORIGIN + "/?auth=connected");
+      headers.append("Set-Cookie", cookie(COOKIE, session.id, SESSION_TTL, "/", "None"));
+      headers.set("Location", appUrl(env, "?auth=connected"));
       return new Response(null, { status: 302, headers });
     } catch { return new Response("GitHub OAuth connection failed", { status: 502, headers }); }
   }
@@ -163,7 +167,7 @@ async function handle(request, env) {
       const profile = await githubProfile(token);
       await saveCredential(profile.user, token, "pat", profile.scopes, env);
       const session = await createSession(profile.user.id, env);
-      return json({ connected: true, user: { id: profile.user.id, login: profile.user.login, method: "pat", scopes: profile.scopes }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL) });
+      return json({ connected: true, user: { id: profile.user.id, login: profile.user.login, method: "pat", scopes: profile.scopes }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
     } catch (error) {
       if (error.message === "github_token_invalid") return json({ error: "github_token_invalid" }, 401);
       return json({ error: "pat_connection_failed" }, 502);
@@ -180,7 +184,7 @@ async function handle(request, env) {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
     await env.DB.prepare("DELETE FROM auth_sessions WHERE id_hash=?").bind(auth.session.id_hash).run();
-    return json({ disconnected: true }, 200, { "Set-Cookie": clearCookie(COOKIE) });
+    return json({ disconnected: true }, 200, { "Set-Cookie": clearCookie(COOKIE, "/", "None") });
   }
   if (path === "/auth/disconnect" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
