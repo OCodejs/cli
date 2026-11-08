@@ -87,6 +87,18 @@ npx wrangler dev --local
 
 Cập nhật `.dev.vars` và `wrangler.jsonc` để `GITHUB_REDIRECT_URI` khớp URL callback thực tế. Sau đó mở `http://localhost:8787/auth/github` hoặc URL mà Wrangler in ra.
 
+## Unit tests
+
+Unit test dùng Vitest và mock D1/fetch để không gọi GitHub hoặc Cloudflare thật:
+
+```bash
+npm test
+npm run test:worker
+npm run test:frontend
+```
+
+Bộ test kiểm tra health/CORS, tạo OAuth state và callback URL, từ chối state sai, đổi code lấy token, lưu credential/session, cấp CSRF token, chặn request thiếu CSRF và gọi GitHub user API sau khi session hợp lệ.
+
 ## Preview và production
 
 Nên tách OAuth App và D1 database cho preview. Có thể dùng Wrangler environment riêng, ví dụ:
