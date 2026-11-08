@@ -11,6 +11,7 @@ class Task:
     prompt: str
     command: list[str]
     id: str = field(default_factory=lambda: uuid.uuid4().hex[:8])
+    depends_on: list[str] = field(default_factory=list)
     status: str = "pending"
     created_at: str = field(default_factory=lambda: datetime.now().isoformat(timespec="seconds"))
     started_at: Optional[datetime] = None

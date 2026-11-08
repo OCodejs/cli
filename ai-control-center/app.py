@@ -7,8 +7,9 @@ from tkinter import ttk, messagebox, filedialog
 from pathlib import Path
 
 from core.github_client import GitHubClient
+from core.models import Task
 from core.orchestrator import Orchestrator
-from core.runner import CommandRunner
+from core.runner import CommandCancelled, CommandTimedOut, CommandRunner
 
 
 BASE = Path(__file__).resolve().parent
@@ -85,7 +86,7 @@ class ControlCenter(tk.Tk):
         left, right = ttk.Frame(body, padding=10), ttk.Frame(body, padding=10)
         body.add(left, weight=3)
         body.add(right, weight=5)
-        ttk.Label(left, text="TASK QUEUE · HUMAN APPROVAL REQUIRED").pack(anchor="w", pady=(0, 8))
+        ttk.Label(left, text="TASK QUEUE · APPROVAL + DEPENDENCY GATES").pack(anchor="w", pady=(0, 8))
         self.task_tree = ttk.Treeview(left, columns=("role", "title", "status"), show="headings")
         for col, width in (("role", 90), ("title", 210), ("status", 130)):
             self.task_tree.heading(col, text=col.upper())
@@ -95,7 +96,6 @@ class ControlCenter(tk.Tk):
         task_buttons = ttk.Frame(left, padding=(0, 10))
         task_buttons.pack(fill="x")
         ttk.Button(task_buttons, text="Approve & run", command=self._approve_selected).pack(fill="x", pady=3)
-        ttk.Button(task_buttons, text="Pause / Resume", command=self._pause_resume).pack(fill="x", pady=3)
         ttk.Button(task_buttons, text="Stop agent", command=self._stop).pack(fill="x", pady=3)
 
         ttk.Label(right, text="LIVE TERMINAL · STREAMED OUTPUT").pack(anchor="w", pady=(0, 8))
@@ -114,6 +114,13 @@ class ControlCenter(tk.Tk):
             self.pr_tree.heading(col, text=col.upper())
             self.pr_tree.column(col, width=width, anchor="w")
         self.pr_tree.pack(fill="x")
+        ttk.Label(bottom, text="GITHUB ACTIONS · RECENT CI RUNS").pack(anchor="w", pady=(10, 6))
+        self.ci_tree = ttk.Treeview(bottom, columns=("workflow", "event", "status", "branch", "url"),
+                                    show="headings", height=4)
+        for col, width in (("workflow", 280), ("event", 100), ("status", 120), ("branch", 220), ("url", 400)):
+            self.ci_tree.heading(col, text=col.upper())
+            self.ci_tree.column(col, width=width, anchor="w")
+        self.ci_tree.pack(fill="x")
 
     def _log(self, message):
         logging.info(message)
@@ -133,7 +140,7 @@ class ControlCenter(tk.Tk):
             return
         self.tasks.extend(tasks)
         self._render_tasks()
-        self._log(f"[ORCHESTRATOR] Created {len(tasks)} staged tasks. Each requires approval.")
+        self._log(f"[ORCHESTRATOR] Created {len(tasks)} dependent tasks. Each stage needs approval and predecessor success.")
 
     def _render_tasks(self):
         for item in self.task_tree.get_children():
@@ -160,9 +167,17 @@ class ControlCenter(tk.Tk):
         task = next((t for t in self.tasks if t.id == selection[0]), None)
         if not task or task.status != "pending":
             return
-        preview = "\n".join(task.command)
+        dependency_map = {item.id: item for item in self.tasks}
+        blocked = [dependency_map[dep] for dep in task.depends_on if dep in dependency_map
+                   and dependency_map[dep].status != "completed"]
+        if blocked:
+            messagebox.showwarning("Stage is blocked",
+                "Complete the previous stage successfully before approving this task:\n" +
+                "\n".join(f"{item.role}: {item.status}" for item in blocked))
+            return
         if not messagebox.askyesno("Approve agent execution",
-                f"Role: {task.role}\nTask: {task.title}\n\nExecutable arguments:\n{preview}\n\nRun this agent now?"):
+                f"Role: {task.role}\nTask: {task.title}\n\nExecutable arguments:\n" +
+                "\n".join(task.command) + "\n\nRun this agent now?"):
             return
         try:
             task.transition("awaiting_approval")
@@ -176,13 +191,17 @@ class ControlCenter(tk.Tk):
         self.status.set(f"● RUNNING · {task.role.upper()}")
         self._render_tasks()
         self._log(f"[START] {task.role}: {task.title}")
-        threading.Thread(target=self._run_task, args=(task,), daemon=True).start()
+        threading.Thread(target=self._run_task, args=(task, self.runner), daemon=True).start()
 
-    def _run_task(self, task):
+    def _run_task(self, task, runner):
         try:
-            code = self.runner.run(task.command, self.cfg["project_dir"],
-                                   lambda line: self.events.put(("line", line)))
+            code = runner.run(task.command, self.cfg["project_dir"],
+                              lambda line: self.events.put(("line", line)))
             self.events.put(("finished", task.id, code, None))
+        except CommandCancelled as exc:
+            self.events.put(("finished", task.id, -2, str(exc)))
+        except CommandTimedOut as exc:
+            self.events.put(("finished", task.id, -3, str(exc)))
         except Exception as exc:
             self.events.put(("finished", task.id, -1, str(exc)))
 
@@ -197,7 +216,9 @@ class ControlCenter(tk.Tk):
                     task = next((t for t in self.tasks if t.id == task_id), None)
                     if task and task.status == "running":
                         task.return_code = code
-                        task.transition("completed" if code == 0 and not error else "failed")
+                        next_status = "cancelled" if code == -2 else (
+                            "completed" if code == 0 and not error else "failed")
+                        task.transition(next_status)
                     self._log(f"[EXIT] task={task_id} code={code} {error or ''}")
                     self.current_task = None
                     self.runner = None
@@ -212,18 +233,26 @@ class ControlCenter(tk.Tk):
                             str(pr.get("draft", False)), pr.get("html_url", "")))
                     self._log(f"[GITHUB] Loaded {len(event[1])} open pull requests.")
                 elif event[0] == "prs_error":
-                    self._log(f"[GITHUB] {event[1]}")
+                    self._log(f"[GITHUB] PR refresh failed: {event[1]}")
+                elif event[0] == "ci":
+                    for item in self.ci_tree.get_children():
+                        self.ci_tree.delete(item)
+                    for run in event[1]:
+                        self.ci_tree.insert("", "end", values=(
+                            run.get("name", ""), run.get("event", ""),
+                            f"{run.get('status', '')}/{run.get('conclusion') or 'pending'}",
+                            run.get("head_branch", ""), run.get("html_url", "")))
+                    self._log(f"[GITHUB] Loaded {len(event[1])} recent workflow runs.")
+                elif event[0] == "ci_error":
+                    self._log(f"[GITHUB] CI refresh failed: {event[1]}")
         except queue.Empty:
             pass
         self.after(100, self._drain_events)
 
-    def _pause_resume(self):
-        messagebox.showinfo("Pause / Resume", "Pausing arbitrary CLI processes is not portable on Windows. Stop the agent and re-approve a task to resume safely.")
-
     def _stop(self):
         if self.runner:
-            self.runner.stop()
-            self._log("[STOP] Stop requested.")
+            self.runner.stop(reason="cancelled")
+            self._log("[STOP] Stop requested; child processes are terminated as a process tree.")
 
     def _choose_project(self):
         folder = filedialog.askdirectory(initialdir=self.cfg.get("project_dir", str(BASE.parent)))
@@ -238,10 +267,14 @@ class ControlCenter(tk.Tk):
     def _refresh_prs(self):
         def worker():
             try:
-                prs = GitHubClient(self.cfg["repository"]).pull_requests("open")
+                client = GitHubClient(self.cfg["repository"])
+                prs = client.pull_requests("open")
+                runs = client.workflow_runs(per_page=10)
                 self.events.put(("prs", prs))
+                self.events.put(("ci", runs))
             except Exception as exc:
                 self.events.put(("prs_error", str(exc)))
+                self.events.put(("ci_error", str(exc)))
         threading.Thread(target=worker, daemon=True).start()
 
     def _tick(self):
@@ -250,7 +283,7 @@ class ControlCenter(tk.Tk):
 
     def _on_close(self):
         if self.runner:
-            self.runner.stop()
+            self.runner.stop(reason="cancelled")
         self.destroy()
 
 
