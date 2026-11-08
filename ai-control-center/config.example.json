@@ -1,0 +1,25 @@
+{
+  "repository": "zskbot/ocodejs-cli",
+  "project_dir": "..",
+  "refresh_seconds": 30,
+  "command_timeout_seconds": 1800,
+  "allowed_executables": ["codex", "claude", "gemini", "python", "node", "npm", "npx", "git", "pytest", "uv"],
+  "agents": {
+    "planner": {
+      "label": "Planner",
+      "command": ["codex", "exec", "--sandbox", "read-only", "{task}"]
+    },
+    "coder": {
+      "label": "Coder",
+      "command": ["codex", "exec", "--sandbox", "workspace-write", "{task}"]
+    },
+    "tester": {
+      "label": "Tester",
+      "command": ["codex", "exec", "--sandbox", "workspace-write", "{task}"]
+    },
+    "reviewer": {
+      "label": "Reviewer",
+      "command": ["codex", "exec", "--sandbox", "read-only", "{task}"]
+    }
+  }
+}
