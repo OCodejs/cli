@@ -53,3 +53,5 @@ Email ownership verification and password reset delivery are not implemented in 
 The staging Preview uses its own callback URL:
 `https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback`.
 Register a separate GitHub OAuth App with that exact callback URL and set its client ID and secret only in the Preview bindings. Do not reuse or replace the Production OAuth App credentials. Production continues to use `https://auth.ocodejs.dev/auth/github/callback`.
+
+Preview credentials are deliberately separate from Production. On the staging Preview, set `GITHUB_PREVIEW_CLIENT_ID` as a Preview-only plain-text binding and `GITHUB_PREVIEW_CLIENT_SECRET` as a Preview-only secret. Do not copy the Production `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` into these Preview bindings. The Worker reports `oauthConfigured:false` and returns `503 github_oauth_not_configured` until both Preview-specific values exist.
