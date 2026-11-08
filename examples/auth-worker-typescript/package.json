@@ -1,0 +1,16 @@
+{
+  "name": "ocodejs-auth-ts-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "tsc --noEmit",
+    "test:frontend": "tsc --project tsconfig.frontend.json"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "typescript": "latest",
+    "wrangler": "4.158.0"
+  }
+}

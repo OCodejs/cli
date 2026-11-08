@@ -1,0 +1,6 @@
+# Copy to .dev.vars and fill with test credentials. Never commit .dev.vars.
+GITHUB_CLIENT_ID="replace-with-local-oauth-client-id"
+GITHUB_CLIENT_SECRET="replace-with-local-oauth-client-secret"
+SESSION_SECRET="replace-with-a-long-random-secret"
+TOKEN_ENCRYPTION_KEY="replace-with-base64-encoded-32-byte-key"
+SESSION_TTL_SECONDS="604800"

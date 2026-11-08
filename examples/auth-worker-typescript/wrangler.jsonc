@@ -1,0 +1,27 @@
+{
+  "$schema": "https://unpkg.com/wrangler@4.158.0/config-schema.json",
+  "name": "ocodejs-auth-ts-example",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-09",
+  "workers_dev": true,
+  "vars": {
+    "APP_ORIGIN": "https://zskbot.github.io",
+    "APP_BASE_PATH": "/ocodejs-cli/",
+    "GITHUB_REDIRECT_URI": "https://auth.example.com/auth/github/callback"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ocodejs-auth-ts-example",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  "secrets": {
+    "required": [
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "SESSION_SECRET",
+      "TOKEN_ENCRYPTION_KEY"
+    ]
+  }
+}
