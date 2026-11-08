@@ -176,7 +176,7 @@ export class WorkerAuthClient {
     const apiCode = payload.error ?? "";
     const retryAfter = Number(headers.get("Retry-After")) || undefined;
 
-    if (apiCode === "github_token_invalid" || apiCode === "github_user_request_failed") {
+    if (apiCode === "github_token_invalid" || apiCode === "github_user_request_failed" || apiCode === "github_token_refresh_failed") {
       this.setCsrfToken(null);
       return new WorkerAuthError("TOKEN_EXPIRED", "Token GitHub đã hết hạn hoặc bị thu hồi. Vui lòng đăng nhập lại.", status);
     }

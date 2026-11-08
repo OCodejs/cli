@@ -40,6 +40,7 @@ Khi đã sẵn sàng cho production:
 
 ```bash
 npx wrangler d1 execute ocodejs-auth-ts-example --remote --file=./migrations/0001_init.sql
+npx wrangler d1 execute ocodejs-auth-ts-example --remote --file=./migrations/0002_refresh_tokens.sql
 ```
 
 ## Tạo GitHub OAuth App
@@ -97,7 +98,9 @@ npm run test:worker
 npm run test:frontend
 ```
 
-Bộ test kiểm tra health/CORS, tạo OAuth state và callback URL, từ chối state sai, đổi code lấy token, lưu credential/session, cấp CSRF token, chặn request thiếu CSRF và gọi GitHub user API sau khi session hợp lệ.
+Bộ test kiểm tra health/CORS, tạo OAuth state và callback URL, từ chối state sai, đổi code lấy token, lưu credential/session, cấp CSRF token, chặn request thiếu CSRF, gọi GitHub user API sau khi session hợp lệ và refresh access token hết hạn.
+
+OAuth request dùng `read:user offline_access`. Khi GitHub trả về access token hết hạn, Worker dùng refresh token đã mã hóa để lấy token mới, cập nhật D1 và thử lại request GitHub một lần. Refresh token hết hạn hoặc refresh thất bại sẽ không lặp vô hạn.
 
 ## Preview và production
 
@@ -135,6 +138,21 @@ Các endpoint mẫu:
 - `GET /auth/session`: trả trạng thái session và CSRF token mới
 - `GET /api/github/user`: gọi GitHub API bằng token đã giải mã trong Worker
 - `POST /auth/logout`: cần header `Origin` đúng và `X-Ocode-CSRF`
+
+## GitHub Actions CI/CD
+
+File `.github/workflows/auth-worker-deploy.yml` chạy test trên mọi push vào `main` có thay đổi Worker, vì một Pull Request merge vào `main` sẽ tạo push event. Sau khi test thành công, job deploy chạy `npx wrangler deploy`.
+
+Trong **Settings → Environments → production**, tạo hai GitHub Actions secrets:
+
+```text
+CLOUDFLARE_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+```
+
+API token nên chỉ có quyền tối thiểu để deploy Worker và quản lý D1 trong đúng Cloudflare account. Các secret runtime của Worker như `GITHUB_CLIENT_SECRET`, `SESSION_SECRET` và `TOKEN_ENCRYPTION_KEY` phải được đặt trước trong Cloudflare bằng `wrangler secret put`; không truyền chúng qua GitHub Actions.
+
+Đổi `https://auth.example.com` trong workflow thành hostname production thật. Có thể chạy thủ công bằng `workflow_dispatch` để kiểm tra pipeline, nhưng production deploy vẫn chờ job test hoàn tất.
 
 ## Lưu ý
 
