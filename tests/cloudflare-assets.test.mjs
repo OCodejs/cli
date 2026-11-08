@@ -24,7 +24,16 @@ test("Cloudflare static assets exclude server-side source and repository metadat
     "node_modules/",
     "wrangler.jsonc",
     "package.json",
-    ".env"
+    ".env",
+    "config.json",
+    ".npmrc",
+    ".pypirc",
+    "*.log",
+    "*.sqlite",
+    "*.db",
+    "*.dump",
+    "*.bak",
+    ".DS_Store"
   ]) {
     assert.ok(ignoredAssets.split(/\r?\n/).includes(path), "missing asset exclusion " + path);
   }
