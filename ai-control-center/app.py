@@ -114,6 +114,13 @@ class ControlCenter(tk.Tk):
             self.pr_tree.heading(col, text=col.upper())
             self.pr_tree.column(col, width=width, anchor="w")
         self.pr_tree.pack(fill="x")
+        ttk.Label(bottom, text="GITHUB ACTIONS · RECENT CI RUNS").pack(anchor="w", pady=(10, 6))
+        self.ci_tree = ttk.Treeview(bottom, columns=("workflow", "event", "status", "branch", "url"),
+                                    show="headings", height=4)
+        for col, width in (("workflow", 280), ("event", 100), ("status", 120), ("branch", 220), ("url", 400)):
+            self.ci_tree.heading(col, text=col.upper())
+            self.ci_tree.column(col, width=width, anchor="w")
+        self.ci_tree.pack(fill="x")
 
     def _log(self, message):
         logging.info(message)
@@ -217,6 +224,27 @@ class ControlCenter(tk.Tk):
                     self.runner = None
                     self.status.set("● READY")
                     self._render_tasks()
+                elif event[0] == "prs":
+                    for item in self.pr_tree.get_children():
+                        self.pr_tree.delete(item)
+                    for pr in event[1]:
+                        self.pr_tree.insert("", "end", values=(
+                            f"#{pr['number']}", pr.get("title", ""), pr.get("state", ""),
+                            str(pr.get("draft", False)), pr.get("html_url", "")))
+                    self._log(f"[GITHUB] Loaded {len(event[1])} open pull requests.")
+                elif event[0] == "prs_error":
+                    self._log(f"[GITHUB] PR refresh failed: {event[1]}")
+                elif event[0] == "ci":
+                    for item in self.ci_tree.get_children():
+                        self.ci_tree.delete(item)
+                    for run in event[1]:
+                        self.ci_tree.insert("", "end", values=(
+                            run.get("name", ""), run.get("event", ""),
+                            f"{run.get('status', '')}/{run.get('conclusion') or 'pending'}",
+                            run.get("head_branch", ""), run.get("html_url", "")))
+                    self._log(f"[GITHUB] Loaded {len(event[1])} recent workflow runs.")
+                elif event[0] == "ci_error":
+                    self._log(f"[GITHUB] CI refresh failed: {event[1]}")
         except queue.Empty:
             pass
         self.after(100, self._drain_events)
@@ -239,10 +267,14 @@ class ControlCenter(tk.Tk):
     def _refresh_prs(self):
         def worker():
             try:
-                prs = GitHubClient(self.cfg["repository"]).pull_requests("open")
+                client = GitHubClient(self.cfg["repository"])
+                prs = client.pull_requests("open")
+                runs = client.workflow_runs(per_page=10)
                 self.events.put(("prs", prs))
+                self.events.put(("ci", runs))
             except Exception as exc:
                 self.events.put(("prs_error", str(exc)))
+                self.events.put(("ci_error", str(exc)))
         threading.Thread(target=worker, daemon=True).start()
 
     def _tick(self):
