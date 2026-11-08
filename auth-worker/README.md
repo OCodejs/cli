@@ -48,6 +48,12 @@ Email passwords are hashed with PBKDF2-HMAC-SHA256 (310,000 iterations and a uni
 
 Email ownership verification and password reset delivery are not implemented in this release. Do not treat an email as verified.
 
+## Cloudflare Workers Builds
+
+For the `ocodejs-auth` Preview build, configure the Workers Builds root directory as `/auth-worker`. The Wrangler configuration is in this directory; running `wrangler preview` from the repository root does not load `auth-worker/wrangler.jsonc` and fails with a missing `previews` block.
+
+Use `npm test` as the build command and `npx wrangler preview` as the Preview deploy command. Keep the Preview D1 binding pointed at `ocodejs-auth-preview-db`, never the Production database. Configure `GITHUB_PREVIEW_CLIENT_ID` and `GITHUB_PREVIEW_CLIENT_SECRET` only in the Preview environment; do not copy Production OAuth credentials.
+
 ## Preview OAuth isolation
 
 The staging Preview uses its own callback URL:
