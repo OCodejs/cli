@@ -100,20 +100,56 @@ async function createSession(githubId, env) {
   await env.DB.prepare("INSERT INTO auth_sessions(id_hash, github_id, csrf_hash, expires_at) VALUES(?, ?, ?, ?)").bind(await hmac(id, env.SESSION_SECRET), String(githubId), await hmac(csrf, env.SESSION_SECRET), expires).run();
   return { id, csrf };
 }
+
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+function validEmail(value) {
+  return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+async function hashPassword(password) {
+  const salt = new Uint8Array(16); crypto.getRandomValues(salt);
+  const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" }, key, 256);
+  return "pbkdf2$310000$" + b64url(salt) + "$" + b64url(bits);
+}
+async function verifyPassword(password, stored) {
+  const [scheme, rounds, saltText, hashText, extra] = String(stored || "").split("$");
+  if (scheme !== "pbkdf2" || rounds !== "310000" || !saltText || !hashText || extra) return false;
+  const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: unb64(saltText), iterations: 310000, hash: "SHA-256" }, key, 256);
+  return b64url(bits) === hashText;
+}
+async function createEmailSession(email, env) {
+  const id = randomToken(), csrf = randomToken(), expires = Date.now() + SESSION_TTL * 1000;
+  await env.DB.prepare("INSERT INTO email_sessions(id_hash, email, csrf_hash, expires_at) VALUES(?, ?, ?, ?)").bind(await hmac(id, env.SESSION_SECRET), email, await hmac(csrf, env.SESSION_SECRET), expires).run();
+  return { id, csrf };
+}
+async function findEmailSession(request, env) {
+  const id = cookies(request)[COOKIE];
+  if (!id || id.length > 128) return null;
+  const row = await env.DB.prepare("SELECT s.id_hash, s.email, s.csrf_hash, s.expires_at, a.display_name FROM email_sessions s JOIN email_accounts a ON a.email=s.email WHERE s.id_hash=? AND s.expires_at>?").bind(await hmac(id, env.SESSION_SECRET), Date.now()).first();
+  return row ? { ...row, auth_type: "email", github_id: "email:" + row.email, github_login: row.email, token_kind: "email", scopes: "[]" } : null;
+}
+
 async function findSession(request, env) {
   const id = cookies(request)[COOKIE];
   if (!id || id.length > 128) return null;
-  return env.DB.prepare("SELECT s.id_hash, s.github_id, s.csrf_hash, s.expires_at, u.github_login, u.token_ciphertext, u.token_kind, u.scopes FROM auth_sessions s JOIN auth_users u ON u.github_id=s.github_id WHERE s.id_hash=? AND s.expires_at>?").bind(await hmac(id, env.SESSION_SECRET), Date.now()).first();
+  const github = await env.DB.prepare("SELECT s.id_hash, s.github_id, s.csrf_hash, s.expires_at, u.github_login, u.token_ciphertext, u.token_kind, u.scopes FROM auth_sessions s JOIN auth_users u ON u.github_id=s.github_id WHERE s.id_hash=? AND s.expires_at>?").bind(await hmac(id, env.SESSION_SECRET), Date.now()).first();
+  if (github) return { ...github, auth_type: "github" };
+  return findEmailSession(request, env);
 }
 async function requireSession(request, env) {
   const session = await findSession(request, env);
   if (!session) return { error: json({ error: "not_authenticated" }, 401) };
+  if (session.auth_type !== "github") return { error: json({ error: "github_account_required" }, 403) };
   const csrf = request.headers.get("X-Ocode-CSRF");
   if (!csrf || await hmac(csrf, env.SESSION_SECRET) !== session.csrf_hash) return { error: json({ error: "csrf_check_failed" }, 403) };
   return { session };
 }
 function publicUser(row) {
   let scopes = []; try { scopes = JSON.parse(row.scopes || "[]"); } catch {}
+  if (row.auth_type === "email") return { id: "email:" + row.email, login: row.email, email: row.email, name: row.display_name || "", method: "email", scopes: [] };
   return { id: String(row.github_id), login: row.github_login, method: row.token_kind, scopes };
 }
 async function githubProfile(token) {
@@ -124,7 +160,7 @@ async function githubProfile(token) {
 async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
-  if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker", patConfigured: Boolean(env.DB && env.SESSION_SECRET && env.TOKEN_ENCRYPTION_KEY), oauthConfigured: Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) });
+  if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker", patConfigured: Boolean(env.DB && env.SESSION_SECRET && env.TOKEN_ENCRYPTION_KEY), oauthConfigured: Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET), emailPasswordConfigured: Boolean(env.DB && env.SESSION_SECRET) });
   if (request.method === "OPTIONS") return new Response(null, { status: 204 });
   if (path.startsWith("/auth/") && !(await rateLimit(request, env, 900000, 20))) return json({ error: "rate_limit_exceeded" }, 429);
   if (path.startsWith("/api/") && !(await rateLimit(request, env, 60000, 60))) return json({ error: "rate_limit_exceeded" }, 429);
@@ -147,17 +183,53 @@ async function handle(request, env) {
     if (!code || !state || !stateCookie || state !== stateCookie) return new Response("OAuth state validation failed", { status: 400, headers });
     const valid = await env.DB.prepare("DELETE FROM oauth_states WHERE state_hash=? AND expires_at>? RETURNING state_hash").bind(await sha256(state), Date.now()).first();
     if (!valid) return new Response("OAuth state expired or already used", { status: 400, headers });
+    let oauthStage = "token_exchange";
     try {
       const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }), signal: AbortSignal.timeout(12000) });
       const payload = await exchange.json();
       if (!exchange.ok || !payload.access_token) return new Response("GitHub OAuth exchange failed", { status: 400, headers });
+      oauthStage = "github_profile";
       const profile = await githubProfile(payload.access_token);
+      oauthStage = "credential_encryption_and_d1";
       await saveCredential(profile.user, payload.access_token, "oauth", profile.scopes, env);
+      oauthStage = "session_creation";
       const session = await createSession(profile.user.id, env);
       headers.append("Set-Cookie", cookie(COOKIE, session.id, SESSION_TTL, "/", "None"));
       headers.set("Location", appUrl(env, "?auth=connected"));
       return new Response(null, { status: 302, headers });
-    } catch { return new Response("GitHub OAuth connection failed", { status: 502, headers }); }
+    } catch (error) {
+      console.error("oauth_callback_failed", { stage: oauthStage, error: error instanceof Error ? error.message : "unknown_error" });
+      headers.delete("Set-Cookie");
+      headers.set("Content-Type", "text/html; charset=utf-8");
+      return new Response("<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>OCode.js sign-in error</title><main style=\"font:16px system-ui;max-width:34rem;margin:12vh auto;padding:24px;color:#eee;background:#111\"><h1>GitHub sign-in failed</h1><p>OCode.js could not complete GitHub authentication.</p><p>Diagnostic stage: <code>" + oauthStage + "</code></p><p><a style=\"color:#9abaff\" href=\"" + appUrl(env) + "\">Return to OCode.js</a></p></main>", { status: 502, headers });
+    }
+  }
+  if (path === "/auth/register" && request.method === "POST") {
+    if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
+    if (!(await rateLimit(request, env, 900000, 5))) return json({ error: "rate_limit_exceeded" }, 429);
+    const raw = await request.text(); if (raw.length > 4000) return json({ error: "request_too_large" }, 413);
+    let body; try { body = JSON.parse(raw); } catch { return json({ error: "invalid_json" }, 400); }
+    const email = normalizeEmail(body?.email), password = body?.password, displayName = String(body?.name || "").trim().slice(0, 80);
+    if (!validEmail(email)) return json({ error: "invalid_email" }, 400);
+    if (typeof password !== "string" || password.length < 12 || password.length > 128) return json({ error: "password_policy" }, 400);
+    const passwordHash = await hashPassword(password);
+    try {
+      await env.DB.prepare("INSERT INTO email_accounts(email, display_name, password_hash, created_at, updated_at) VALUES(?, ?, ?, ?, ?)").bind(email, displayName, passwordHash, Date.now(), Date.now()).run();
+    } catch { return json({ error: "email_already_registered" }, 409); }
+    const session = await createEmailSession(email, env);
+    return json({ created: true, connected: true, user: { id: "email:" + email, login: email, email, name: displayName, method: "email" }, csrfToken: session.csrf }, 201, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
+  }
+  if (path === "/auth/login" && request.method === "POST") {
+    if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
+    if (!(await rateLimit(request, env, 900000, 8))) return json({ error: "rate_limit_exceeded" }, 429);
+    const raw = await request.text(); if (raw.length > 4000) return json({ error: "request_too_large" }, 413);
+    let body; try { body = JSON.parse(raw); } catch { return json({ error: "invalid_json" }, 400); }
+    const email = normalizeEmail(body?.email), password = body?.password;
+    if (!validEmail(email) || typeof password !== "string" || password.length > 128) return json({ error: "invalid_credentials" }, 401);
+    const account = await env.DB.prepare("SELECT email, display_name, password_hash FROM email_accounts WHERE email=?").bind(email).first();
+    if (!account || !(await verifyPassword(password, account.password_hash))) return json({ error: "invalid_credentials" }, 401);
+    const session = await createEmailSession(email, env);
+    return json({ connected: true, user: { id: "email:" + email, login: email, email, name: account.display_name || "", method: "email" }, csrfToken: session.csrf }, 200, { "Set-Cookie": cookie(COOKIE, session.id, SESSION_TTL, "/", "None") });
   }
   if (path === "/auth/pat" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
@@ -187,13 +259,19 @@ async function handle(request, env) {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
     await env.DB.prepare("DELETE FROM auth_sessions WHERE id_hash=?").bind(auth.session.id_hash).run();
+    await env.DB.prepare("DELETE FROM email_sessions WHERE id_hash=?").bind(auth.session.id_hash).run();
     return json({ disconnected: true }, 200, { "Set-Cookie": clearCookie(COOKIE, "/", "None") });
   }
   if (path === "/auth/disconnect" && request.method === "POST") {
     if (!originAllowed(request, env)) return json({ error: "origin_not_allowed" }, 403);
     const auth = await requireSession(request, env); if (auth.error) return auth.error;
-    await env.DB.prepare("DELETE FROM auth_sessions WHERE github_id=?").bind(auth.session.github_id).run();
-    await env.DB.prepare("DELETE FROM auth_users WHERE github_id=?").bind(auth.session.github_id).run();
+    if (auth.session.auth_type === "email") {
+      await env.DB.prepare("DELETE FROM email_sessions WHERE email=?").bind(auth.session.email).run();
+      await env.DB.prepare("DELETE FROM email_accounts WHERE email=?").bind(auth.session.email).run();
+    } else {
+      await env.DB.prepare("DELETE FROM auth_sessions WHERE github_id=?").bind(auth.session.github_id).run();
+      await env.DB.prepare("DELETE FROM auth_users WHERE github_id=?").bind(auth.session.github_id).run();
+    }
     return json({ disconnected: true, credentialsDeleted: true }, 200, { "Set-Cookie": clearCookie(COOKIE, "/", "None") });
   }
   if (path === "/api/github/user" && request.method === "GET") {
