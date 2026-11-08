@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#000000">
 <title>OCode.js CLI Hub — Developer tools</title>
 <meta name="description" content="Khám phá, tìm kiếm và sử dụng các công cụ CLI/TUI dành cho developer và AI agents.">
-<link rel="canonical" href="https://ocodejs.dev/">
+<link rel="canonical" href="https://zskbot.github.io/ocodejs-cli/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="OCode.js CLI Hub">
 <meta property="og:description" content="Developer tools, terminal-first.">
-<meta property="og:url" content="https://ocodejs.dev/">
+<meta property="og:url" content="https://zskbot.github.io/ocodejs-cli/">
 <style>
 :root{color-scheme:dark;--bg:#05070d;--panel:#0a101c;--line:#26364f;--line-strong:#36577f;--fg:#f2f5fb;--muted:#a3afc2;--blue:#347cff;--cyan:#55c8ff;--purple:#a34cff;--yellow:#f3d44e;--pink:#e45ac8;--green:#57d6a2;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
 *{box-sizing:border-box}
@@ -1855,7 +1855,6 @@ authRefresh();
 buildNavigation();$("#nav-search")?.addEventListener("input",buildNavigation);window.addEventListener("popstate",()=>{if(location.hash.startsWith("#library=")){renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);return}view=location.hash.startsWith("#page=")?location.hash.slice(6):"home";render()});
 const CATALOG_SOURCES=[
   new URL("tools.json",document.baseURI).href,
-  "https://ocodejs.dev/tools.json",
   "https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"
 ];
 function renderCatalogError(errors){

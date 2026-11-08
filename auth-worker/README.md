@@ -5,10 +5,10 @@ Free-tier Cloudflare Workers + D1 implementation of the CLI Hub authentication A
 ## Bindings and variables
 
 - D1 binding: `DB` → database `ocodejs-auth-db`
-- Plain variable: `APP_ORIGIN=https://ocodejs.dev`
+- Plain variables: `APP_ORIGIN=https://zskbot.github.io` and `APP_BASE_PATH=/ocodejs-cli/`
 - Secrets: `SESSION_SECRET` (random, 48+ bytes), `TOKEN_ENCRYPTION_KEY` (base64-encoded 32-byte key), `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`.
 
-OAuth callback: `https://auth.ocodejs.dev/auth/github/callback`. Create a dedicated GitHub OAuth App and set this exact callback. Until its client ID and secret are configured, PAT login works and OAuth responds with a clear 503 status.
+OAuth callback: `https://auth.ocodejs.dev/auth/github/callback`. After OAuth, the Worker redirects to `https://zskbot.github.io/ocodejs-cli/?auth=connected` (or `?auth=cancelled`) using `APP_BASE_PATH`. Create a dedicated GitHub OAuth App and set this exact callback. Until its client ID and secret are configured, PAT login works and OAuth responds with a clear 503 status.
 
 ## Security
 
@@ -26,7 +26,7 @@ OAuth callback: `https://auth.ocodejs.dev/auth/github/callback`. Create a dedica
 1. Create the D1 database and apply `migrations/0001_init.sql`.
 2. Upload this module as Worker `ocodejs-auth` with D1 binding `DB`.
 3. Set the variables and secrets listed above through Cloudflare's secret management API/dashboard.
-4. Attach custom domain `auth.ocodejs.dev` to this Worker.
+4. Attach custom domain `auth.ocodejs.dev` to this Worker and set `APP_ORIGIN=https://zskbot.github.io` plus `APP_BASE_PATH=/ocodejs-cli/`.
 5. Verify `GET /health`, `GET /auth/session`, OAuth callback and PAT connection.
 6. Keep the existing `ocodejs-cli` Worker and all `app` / `mcp` DNS records unchanged.
 

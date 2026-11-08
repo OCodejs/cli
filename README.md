@@ -101,17 +101,17 @@ The **Marketplace** page links to the official Visual Studio Code Marketplace, G
 
 ## GitHub Authentication
 
-The CLI Hub frontend has a GitHub login dialog supporting OAuth, PAT connection, session status, logout and credential disconnect. The default production API is `https://auth.ocodejs.dev`.
+The CLI Hub frontend is published at `https://zskbot.github.io/ocodejs-cli/` (route: `#page=home`). Its GitHub login dialog calls the separate API at `https://auth.ocodejs.dev`.
 
 The recommended zero-cost deployment uses a **separate Cloudflare Worker + D1 database on the Free plan**, isolated from the existing `ocodejs-cli` static-assets Worker. The Worker source and D1 migration live in `auth-worker/`. It encrypts GitHub credentials with AES-GCM, hashes session/CSRF identifiers with HMAC, uses Secure HttpOnly cookies, exact-origin CORS, OAuth state validation and per-IP rate limits.
 
 The existing Express/PostgreSQL implementation in `auth-server/` is retained as an optional self-hosted alternative. The public frontend does not depend on it.
 
-**Real login is not active until the separate Worker and D1 database are deployed, the `auth.ocodejs.dev` hostname is attached, and a dedicated GitHub OAuth App's client ID/secret are configured as Cloudflare Worker secrets.** PAT connection can be used after the Worker and its encryption/session secrets are configured. Never commit real credentials or put them in frontend code.
+**Real login requires the separate Worker and D1 database, the `auth.ocodejs.dev` hostname, and a dedicated GitHub OAuth App configured as Worker secrets.** The GitHub Pages origin must be allowed exactly as `https://zskbot.github.io`. Browser third-party-cookie restrictions may prevent cookie-based sessions on some Safari configurations; verify on target browsers before declaring login production-ready. Never commit real credentials or put them in frontend code.
 
 
-## Custom domain: ocodejs.dev
+## GitHub Pages canonical URL
 
-The OCode.js CLI Hub is intended to use **https://ocodejs.dev/** as its canonical public URL. The repository publishes the `CNAME` file at the site root so GitHub Pages can associate the custom domain with this project. The `www.ocodejs.dev` hostname should resolve to the same Pages site and redirect to the apex domain. Keep the existing `app` and `mcp` subdomains on their separate services.
+The canonical website is **https://zskbot.github.io/ocodejs-cli/**. The default home route is `https://zskbot.github.io/ocodejs-cli/#page=home`. GitHub Pages serves this project from the repository subpath `/ocodejs-cli/`; use repository-relative asset URLs and do not configure a root custom-domain `CNAME` for this site.
 
-DNS and Pages ownership must be verified before considering the custom domain live. Do not replace unrelated DNS records or the existing Worker bindings while configuring this domain.
+The separate authentication API remains `https://auth.ocodejs.dev`. Its Cloudflare Worker must allow the exact frontend Origin `https://zskbot.github.io`; the API URL is not the website's canonical domain.
