@@ -112,7 +112,7 @@ async function saveCredential(user, token, kind, scopes, env) {
     await env.DB.prepare("INSERT INTO auth_users(github_id, github_login, token_ciphertext, token_kind, scopes, updated_at) VALUES(?, ?, ?, ?, ?, ?) ON CONFLICT(github_id) DO UPDATE SET github_login=excluded.github_login, token_ciphertext=excluded.token_ciphertext, token_kind=excluded.token_kind, scopes=excluded.scopes, updated_at=excluded.updated_at")
       .bind(String(user.id), user.login, encrypted, kind, JSON.stringify(scopes || []), Date.now()).run();
   } catch (error) {
-    console.error("oauth_credential_persist_failed", { step, name: error instanceof Error ? error.name : "Error", code: error instanceof Error ? error.message : "unknown_error" });
+    console.error("oauth_persist_failed", { step, name: error instanceof Error ? error.name : "Error", code: error instanceof Error ? error.message : "unknown_error" });
     throw new Error("credential_" + step + "_failed");
   }
 }
