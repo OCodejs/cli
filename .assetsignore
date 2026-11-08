@@ -1,0 +1,25 @@
+# Private/server-side source must not be uploaded as public static assets.
+.github/
+ai-control-center/
+auth-server/
+auth-worker/
+scripts/
+secrets/
+tests/
+.venv/
+.wrangler/
+node_modules/
+
+# Repository and deployment metadata.
+.gitignore
+.assetsignore
+README.md
+package.json
+package-lock.json
+bun.lock
+bun.lockb
+wrangler.jsonc
+.env
+.env.*
+*.pem
+*.key
