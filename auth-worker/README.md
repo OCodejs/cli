@@ -31,3 +31,10 @@ OAuth callback: `https://auth.ocodejs.dev/auth/github/callback`. After OAuth, th
 6. Keep the existing `ocodejs-cli` Worker and all `app` / `mcp` DNS records unchanged.
 
 Cloudflare D1 is available on Free and Paid plans. Free-plan daily query limits apply; monitor usage and do not enable paid billing for this project.
+
+
+## Email and password accounts
+
+The CLI Hub also supports email-address accounts through `POST /auth/register` and `POST /auth/login`. Email addresses are normalized to lowercase. Passwords must be 12–128 characters and are stored only as PBKDF2-HMAC-SHA256 hashes (310,000 iterations, unique random salt); plaintext passwords are never stored or logged. Email account sessions use a separate D1 table and the same HttpOnly, Secure, SameSite=None session cookie and CSRF protection.
+
+Apply migration `migrations/0002_email_password.sql` before deploying this version. Email ownership verification and password-reset email delivery are not included in this first release; do not represent an email address as verified. Configure a transactional email provider and verification/reset flows before enabling account recovery or treating email ownership as verified.
