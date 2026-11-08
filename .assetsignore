@@ -1,3 +1,4 @@
+.git/
 # Private/server-side source must not be uploaded as public static assets.
 .github/
 ai-control-center/
