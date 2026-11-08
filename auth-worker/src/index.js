@@ -68,8 +68,8 @@ function githubOAuthConfig(env, requestUrl) {
   const callback = new URL(env.GITHUB_REDIRECT_URI || (requestUrl.origin + "/auth/github/callback"));
   const preview = callback.hostname.endsWith(".workers.dev");
   return preview
-    ? { clientId: env.GITHUB_PREVIEW_CLIENT_ID, clientSecret: env.GITHUB_PREVIEW_CLIENT_SECRET }
-    : { clientId: env.GITHUB_CLIENT_ID, clientSecret: env.GITHUB_CLIENT_SECRET };
+    ? { clientId: env.GITHUB_PREVIEW_CLIENT_ID, clientSecret: env.GITHUB_PREVIEW_CLIENT_SECRET, redirectUri: callback.toString() }
+    : { clientId: env.GITHUB_CLIENT_ID, clientSecret: env.GITHUB_CLIENT_SECRET, redirectUri: callback.toString() };
 }
 function appUrl(env, query = "") {
   const segments = String(env.APP_BASE_PATH || "").split("/").filter(Boolean);
@@ -223,7 +223,7 @@ async function handle(request, env) {
     if (!valid) return stateErrorPage("Yêu cầu đăng nhập đã được sử dụng hoặc hết hạn. Vì lý do bảo mật, mỗi yêu cầu chỉ được dùng một lần.");
     let oauthStage = "token_exchange";
     try {
-      const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: githubOAuthConfig(env, url).clientId, client_secret: githubOAuthConfig(env, url).clientSecret, code }), signal: AbortSignal.timeout(12000) });
+      const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: githubOAuthConfig(env, url).clientId, client_secret: githubOAuthConfig(env, url).clientSecret, code, redirect_uri: githubOAuthConfig(env, url).redirectUri }), signal: AbortSignal.timeout(12000) });
       const payload = await exchange.json();
       if (!exchange.ok || !payload.access_token) return new Response("GitHub OAuth exchange failed", { status: 400, headers });
       oauthStage = "github_profile";
