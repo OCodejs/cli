@@ -1,0 +1,29 @@
+name: Auth Worker Tests
+
+on:
+  pull_request:
+    paths:
+      - "auth-worker/**"
+      - ".github/workflows/auth-worker-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auth-worker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: auth-worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check Worker syntax
+        run: node --check src/index.js
+      - name: Run auth contract and runtime tests
+        run: npm test
