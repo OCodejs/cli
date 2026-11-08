@@ -215,10 +215,11 @@ async function handle(request, env) {
       headers.set("Location", appUrl(env, "?auth=connected#page=home&auth_session=" + encodeURIComponent(session.id)));
       return new Response(null, { status: 302, headers });
     } catch (error) {
-      console.error("oauth_callback_failed", { stage: oauthStage, error: error instanceof Error ? error.message : "unknown_error" });
+      const diagnostic = error instanceof Error && /^credential_(token_encryption|d1_upsert)_failed$/.test(error.message) ? error.message : "internal_error";
+      console.error("oauth_callback_failed", { stage: oauthStage, diagnostic });
       headers.delete("Set-Cookie");
       headers.set("Content-Type", "text/html; charset=utf-8");
-      return new Response("<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>OCode.js sign-in error</title><main style=\"font:16px system-ui;max-width:34rem;margin:12vh auto;padding:24px;color:#eee;background:#111\"><h1>GitHub sign-in failed</h1><p>OCode.js could not complete GitHub authentication.</p><p>Diagnostic stage: <code>" + oauthStage + "</code></p><p><a style=\"color:#9abaff\" href=\"" + appUrl(env) + "\">Return to OCode.js</a></p></main>", { status: 502, headers });
+      return new Response("<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>OCode.js sign-in error</title><main style=\"font:16px system-ui;max-width:34rem;margin:12vh auto;padding:24px;color:#eee;background:#111\"><h1>GitHub sign-in failed</h1><p>OCode.js could not complete GitHub authentication.</p><p>Diagnostic stage: <code>" + oauthStage + "/" + diagnostic + "</code></p><p><a style=\"color:#9abaff\" href=\"" + appUrl(env) + "\">Return to OCode.js</a></p></main>", { status: 502, headers });
     }
   }
   if (path === "/auth/register" && request.method === "POST") {
