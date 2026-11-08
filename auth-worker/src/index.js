@@ -184,22 +184,30 @@ async function handle(request, env) {
   if (path === "/auth/github" && request.method === "GET") {
     if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) return json({ error: "github_oauth_not_configured" }, 503);
     const state = randomToken();
-    await env.DB.prepare("INSERT INTO oauth_states(state_hash, expires_at) VALUES(?, ?)").bind(await sha256(state), Date.now() + 600000).run();
+    const stateCookieName = STATE_COOKIE + "_" + state;
+    // Keep the authorization transaction alive long enough for mobile Safari
+    // app switching, while retaining a strict, one-time server-side state.
+    await env.DB.prepare("INSERT INTO oauth_states(state_hash, expires_at) VALUES(?, ?)").bind(await sha256(state), Date.now() + 900000).run();
     const authorize = new URL("https://github.com/login/oauth/authorize");
     authorize.searchParams.set("client_id", env.GITHUB_CLIENT_ID);
     authorize.searchParams.set("redirect_uri", url.origin + "/auth/github/callback");
     authorize.searchParams.set("scope", "read:user");
     authorize.searchParams.set("state", state);
-    return new Response(null, { status: 302, headers: { Location: authorize.toString(), "Set-Cookie": cookie(STATE_COOKIE, state, 600, "/auth/github/callback"), "Cache-Control": "no-store" } });
+    return new Response(null, { status: 302, headers: { Location: authorize.toString(), "Set-Cookie": cookie(stateCookieName, state, 900, "/auth/github/callback"), "Cache-Control": "no-store" } });
   }
   if (path === "/auth/github/callback" && request.method === "GET") {
     const state = url.searchParams.get("state"), code = url.searchParams.get("code");
-    const stateCookie = cookies(request)[STATE_COOKIE];
-    const headers = new Headers({ "Set-Cookie": clearCookie(STATE_COOKIE, "/auth/github/callback"), "Cache-Control": "no-store" });
+    const stateCookieName = state && /^[A-Za-z0-9_-]{40,64}$/.test(state) ? STATE_COOKIE + "_" + state : STATE_COOKIE;
+    const stateCookie = cookies(request)[stateCookieName];
+    const headers = new Headers({ "Set-Cookie": clearCookie(stateCookieName, "/auth/github/callback"), "Cache-Control": "no-store" });
+    const stateErrorPage = (reason) => new Response(
+      "<!doctype html><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"color-scheme\" content=\"dark\"><title>GitHub sign-in expired</title><main style=\"font:16px system-ui;max-width:36rem;margin:12vh auto;padding:28px;color:#eee;background:#111;border:1px solid #333\"><h1>Phiên GitHub đã hết hạn</h1><p>" + reason + "</p><p>Hãy bắt đầu lại từ OCode.js. Không tải lại trang callback này.</p><p><a style=\"display:inline-block;padding:12px 18px;background:#eee;color:#111;text-decoration:none\" href=\"" + url.origin + "/auth/github\">Thử đăng nhập GitHub lại</a></p><p><a style=\"color:#9abaff\" href=\"" + appUrl(env) + "\">Quay lại OCode.js</a></p></main>",
+      { status: 400, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "Set-Cookie": headers.get("Set-Cookie") } }
+    );
     if (url.searchParams.has("error")) { headers.set("Location", appUrl(env, "?auth=cancelled")); return new Response(null, { status: 302, headers }); }
-    if (!code || !state || !stateCookie || state !== stateCookie) return new Response("OAuth state validation failed", { status: 400, headers });
+    if (!code || !state || !stateCookie || state !== stateCookie) return stateErrorPage("Không thể xác minh yêu cầu đăng nhập. Có thể bạn đã mở nhiều tab hoặc trình duyệt đã xóa cookie xác thực.");
     const valid = await env.DB.prepare("DELETE FROM oauth_states WHERE state_hash=? AND expires_at>? RETURNING state_hash").bind(await sha256(state), Date.now()).first();
-    if (!valid) return new Response("OAuth state expired or already used", { status: 400, headers });
+    if (!valid) return stateErrorPage("Yêu cầu đăng nhập đã được sử dụng hoặc hết hạn. Vì lý do bảo mật, mỗi yêu cầu chỉ được dùng một lần.");
     let oauthStage = "token_exchange";
     try {
       const exchange = await fetch("https://github.com/login/oauth/access_token", { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }), signal: AbortSignal.timeout(12000) });
