@@ -18,7 +18,8 @@
   "previews": {
     "vars": {
       "APP_ORIGIN": "https://zskbot.github.io",
-      "APP_BASE_PATH": "/ocodejs-cli/"
+      "APP_BASE_PATH": "/ocodejs-cli/",
+      "GITHUB_REDIRECT_URI": "https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback"
     },
     "d1_databases": [
       {

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "preview": "wrangler preview",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test": "node --test test/*.test.mjs"
   },
   "devDependencies": {
     "wrangler": "4.158.0"
