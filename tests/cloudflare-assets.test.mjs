@@ -18,6 +18,7 @@ test("Cloudflare static assets exclude server-side source and repository metadat
     "ai-control-center/",
     "auth-server/",
     "auth-worker/",
+    "examples/",
     "scripts/",
     "secrets/",
     "tests/",
