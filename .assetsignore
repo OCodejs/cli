@@ -4,6 +4,7 @@
 ai-control-center/
 auth-server/
 auth-worker/
+examples/
 scripts/
 secrets/
 tests/
