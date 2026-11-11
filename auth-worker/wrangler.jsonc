@@ -1,0 +1,32 @@
+{
+  "$schema": "https://unpkg.com/wrangler@4.158.0/config-schema.json",
+  "name": "ocodejs-auth",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-06",
+  "workers_dev": false,
+  "vars": {
+    "APP_ORIGIN": "https://zskbot.github.io",
+    "APP_BASE_PATH": "/ocodejs-cli/"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ocodejs-auth-db",
+      "database_id": "76be26c4-e956-4d27-ae0b-4f54da86c0b0"
+    }
+  ],
+  "previews": {
+    "vars": {
+      "APP_ORIGIN": "https://zskbot.github.io",
+      "APP_BASE_PATH": "/ocodejs-cli/",
+      "GITHUB_REDIRECT_URI": "https://staging-ocodejs-auth.huynhthuongg2505-f9b.workers.dev/auth/github/callback"
+    },
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "ocodejs-auth-preview-db",
+        "database_id": "9b5553ef-3abb-485a-9de6-f1a41380e346"
+      }
+    ]
+  }
+}

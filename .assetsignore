@@ -1,0 +1,37 @@
+.git/
+# Private/server-side source must not be uploaded as public static assets.
+.github/
+ai-control-center/
+auth-server/
+auth-worker/
+examples/
+scripts/
+secrets/
+tests/
+.venv/
+.wrangler/
+node_modules/
+
+# Repository and deployment metadata.
+.gitignore
+.assetsignore
+README.md
+package.json
+package-lock.json
+bun.lock
+bun.lockb
+wrangler.jsonc
+.env
+.env.*
+*.pem
+*.key
+# Local state, credentials, logs, and backup artifacts.
+config.json
+.npmrc
+.pypirc
+*.log
+*.sqlite
+*.db
+*.dump
+*.bak
+.DS_Store

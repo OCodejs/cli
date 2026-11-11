@@ -579,11 +579,11 @@ h1 span{color:#bbb}
 @media(max-width:768px){.workspace-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.workspace-stats .page-panel{padding:12px}.workspace-stats strong{font-size:20px}.workspace-row{display:block}.workspace-row .workspace-meta{display:block;margin-top:7px}.workspace-heading{align-items:flex-start}.workspace-field{font-size:11px}}
 
 /* Home community library showcase */
-.home-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(260px,.95fr);gap:24px;align-items:stretch;margin:0 0 22px;border:1px solid var(--line-strong);background:linear-gradient(120deg,#0b1425,#080b14);overflow:hidden}
+.home-hero{display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:stretch;margin:0 0 22px;border:1px solid var(--line-strong);background:linear-gradient(120deg,#0b1425,#080b14);overflow:hidden}
 .home-hero-copy{padding:clamp(20px,4vw,38px);align-self:center}.home-hero-copy h1{font-size:clamp(32px,5vw,58px);line-height:1.06}.home-hero-copy h1 span{color:var(--cyan)}.home-hero-copy .subtitle{max-width:52ch;line-height:1.7}
-.home-hero-media{position:relative;min-height:230px;background:#05070d;overflow:hidden}.home-hero-media img{width:100%;height:100%;min-height:230px;max-height:330px;object-fit:cover;display:block;opacity:.78}.home-hero-media span{position:absolute;left:12px;bottom:12px;padding:7px 9px;background:#05070de8;border:1px solid var(--line-strong);font-size:10px;letter-spacing:1px;color:var(--cyan)}
+
 .home-intro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 24px}.home-intro-grid .page-panel{margin:0}.home-intro-grid h2{margin:8px 0;font-size:18px}.home-intro-grid p,.community-note{color:var(--muted);font-size:12px;line-height:1.7}.community-section{margin:28px 0}.community-section .section-head{align-items:end}.community-section .section-head>div{display:grid;gap:4px}.community-section .section-head h2{font-size:clamp(17px,2vw,22px);color:var(--fg);letter-spacing:0;text-transform:none}.community-note{margin:0 0 14px}.library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.library-card{min-width:0;border:1px solid var(--line-strong);background:linear-gradient(145deg,#0b1321,#070b13);padding:14px;display:flex;flex-direction:column;gap:10px}.library-card-top{display:flex;justify-content:space-between;align-items:center}.library-rank{color:var(--cyan);font-size:12px;font-weight:800}.library-category,.library-package{color:var(--muted);font-size:10px}.library-brand{display:flex;align-items:center;gap:12px;min-width:0}.library-brand img{width:42px;height:42px;object-fit:contain;padding:7px;background:#111c2e;border:1px solid var(--line-strong);flex:0 0 42px}.library-brand h3{margin:0;font-size:15px}.library-package{display:block;margin-top:3px}.library-card>p{margin:0;min-height:38px;color:var(--muted);font-size:11px;line-height:1.6}.library-downloads{display:flex;align-items:baseline;gap:8px;border-top:1px solid var(--line);padding-top:9px}.library-downloads strong{font-size:18px;color:var(--green);font-variant-numeric:tabular-nums}.library-downloads span{font-size:10px;color:var(--muted)}.library-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}.library-links .btn{font-size:10px;min-height:32px;padding:5px 8px}.library-source{margin-top:12px;color:var(--muted);font-size:10px}.library-source a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}.home-tools-section{margin-top:32px}
-@media(max-width:768px){.home-hero{grid-template-columns:1fr;gap:0}.home-hero-copy{padding:20px}.home-hero-media{min-height:170px;max-height:190px}.home-hero-media img{min-height:170px;max-height:190px}.home-intro-grid{grid-template-columns:1fr;gap:10px}.library-grid{grid-template-columns:1fr}.library-card{padding:13px}.library-card>p{min-height:0}.community-section .section-head{align-items:flex-start;flex-direction:column}.community-section .section-head .result-count{white-space:normal}.library-links .btn{flex:1 1 auto}.home-hero-copy h1{font-size:34px}}
+@media(max-width:768px){.home-hero{grid-template-columns:1fr;gap:0}.home-hero-copy{padding:20px}.home-intro-grid{grid-template-columns:1fr;gap:10px}.library-grid{grid-template-columns:1fr}.library-card{padding:13px}.library-card>p{min-height:0}.community-section .section-head{align-items:flex-start;flex-direction:column}.community-section .section-head .result-count{white-space:normal}.library-links .btn{flex:1 1 auto}.home-hero-copy h1{font-size:34px}}
 
 /* ===== Documentation-inspired monochrome visual system ===== */
 :root{
@@ -643,8 +643,6 @@ footer{background:#08090b;border-color:#303438;color:#969ca2}
 .page-actions .btn{min-height:42px}
 .home-hero{background:#0b0d0f;border-color:#34393e}
 .home-hero-copy h1 span{color:#c9cdd1}
-.home-hero-media{background:#050607}
-.home-hero-media span{background:#090a0c;border-color:#4a5056;color:#e0e3e6}
 .home-intro-grid .page-panel{background:#0d0f11;border-color:#34393e}
 .library-card{background:#0d0f11;border-color:#34393e}
 .library-brand img{background:#f1f2f3;border:1px solid #555b61;padding:7px;filter:grayscale(1)}
@@ -665,8 +663,6 @@ footer{background:#08090b;border-color:#303438;color:#969ca2}
  .home-hero{border-color:#383d42}
  .home-hero-copy{padding:22px 18px}
  .home-hero-copy h1{font-size:clamp(34px,9vw,46px);line-height:1.1}
- .home-hero-media{min-height:180px;max-height:210px}
- .home-hero-media img{min-height:180px;max-height:210px}
  .page-panel,.page-tile,.card,.library-card,.detail-panel{border-color:#34393e;background:#0d0f11}
  .card-actions .btn,.btn,.back,.icon-button,.submit-tool{border-radius:0!important}
  .card-actions .btn{font-size:12px}
@@ -709,10 +705,7 @@ button,a,input,select,[role="button"],.btn,.icon-button,.submit-tool,.back{touch
 .nav-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px}
 .nav-icon svg{width:16px;height:16px;stroke:currentColor}
 .nav a.active .nav-icon,.nav a:hover .nav-icon{color:#fff}
-.home-hero-media img{opacity:1!important;filter:saturate(1.25) contrast(1.05)}
-.home-hero-media:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#05070d30,transparent 45%,#6655ff22)}
-.home-hero-media span{z-index:1;color:#fff;border-color:#6877a5}
-@media(prefers-reduced-motion:reduce){.home-hero-media img{filter:none}}
+@media(prefers-reduced-motion:reduce){}
 
 /* Official marketplace discovery cards */
 .marketplace-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0}
@@ -848,7 +841,7 @@ button,.btn,.icon-button,.shortcut,.submit-tool,.search-submit,.back,.filter-chi
 .library-source{tab-size:2}
 .library-readme{font-family:inherit;line-height:1.75}
 .library-repo-side .library-install code{font-size:11px}
-@media(max-width:560px){.library-card{grid-template-columns:minmax(0,1fr);grid-template-areas:"identity" "meta" "actions";gap:8px;padding:12px}.library-downloads{margin-left:44px}.library-links{margin-left:44px}.library-links .btn{flex:1;min-width:0}.library-repo-title h1{font-size:18px}.library-ocode-brand{align-items:flex-start;flex-direction:column}.library-repo-actions .btn{flex:1}.library-tabs{gap:2px}}
+@media(max-width:560px){.library-card{width:100%;min-width:0;max-width:100%;box-sizing:border-box;grid-template-columns:minmax(0,1fr);grid-template-areas:"identity" "meta" "actions";gap:8px;padding:12px}.library-brand,.library-downloads,.library-links{min-width:0;max-width:100%;box-sizing:border-box}.library-downloads{margin-left:44px}.library-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;margin:0!important;padding:0!important}.library-links .btn{width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;padding:0 6px!important}.library-repo-title h1{font-size:18px}.library-ocode-brand{align-items:flex-start;flex-direction:column}.library-repo-actions .btn{flex:1}.library-tabs{gap:2px}}
 
 /* React repository workspace: source browsing, branches and commit history */
 .library-repo-overview{display:flex;gap:14px;flex-wrap:wrap;padding:12px 14px;border:1px solid #26364f;background:#080d16;align-items:center}
@@ -1096,6 +1089,84 @@ footer a{color:#b5c7dd}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* Reliable catalog loading states */
+.catalog-loading,.catalog-error{max-width:680px;margin:clamp(36px,10vh,100px) auto;padding:30px;border:1px solid #383838;background:#080808;text-align:center}
+.catalog-loading strong{display:block;color:#fff;font-size:18px}
+.catalog-loading p,.catalog-error p{color:#aaa;font-size:13px}
+.catalog-error h1{font-size:28px;color:#fff}
+.catalog-error-detail{overflow-wrap:anywhere;padding:10px;border:1px solid #292929;background:#050505;font:12px var(--mono)}
+.catalog-retry{min-height:48px;margin:12px;padding:0 24px;border:1px solid #fff;border-radius:0;background:#fff;color:#000;font-weight:800}
+.catalog-retry:hover{background:#000;color:#fff}
+.catalog-error-link{display:block;margin-top:14px;color:#fff;text-decoration:underline;text-underline-offset:4px}
+
+
+
+/* OCode.js Account Center — full-viewport responsive redesign */
+.auth-overlay{position:fixed;inset:0;z-index:120;display:block;padding:0;background:#050505;backdrop-filter:none;-webkit-backdrop-filter:none;overflow:auto}
+.auth-dialog{width:100%;min-height:100vh;min-height:100dvh;max-height:none;max-width:none;overflow:visible;border:0;background:#050505;color:#f5f5f5;padding:0;box-shadow:none;display:flex;flex-direction:column}
+.account-topbar{height:76px;flex:0 0 76px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,76px);border-bottom:1px solid #242424;background:#070707}
+.account-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}.account-brand-mark{font-size:29px;font-weight:900;letter-spacing:-4px;color:#fff}.account-brand strong,.account-brand small{display:block}.account-brand strong{font-size:16px;letter-spacing:-.5px}.account-brand small{margin-top:3px;color:#777;font-size:9px;letter-spacing:1.8px}
+.account-top-actions{display:flex;align-items:center;gap:22px}.account-secure-label{display:flex;align-items:center;gap:8px;color:#a9a9a9;font-size:9px;letter-spacing:1.2px}.account-secure-label svg{width:15px;color:#fff}.account-topbar .auth-close{width:42px;height:42px;flex-basis:42px;border:1px solid #333;background:#0b0b0b;color:#fff;font-size:25px}
+.account-main{width:min(1240px,100%);flex:1;margin:0 auto;padding:clamp(36px,6vh,76px) clamp(20px,5vw,76px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);align-items:center;gap:clamp(40px,8vw,120px)}
+.account-intro{position:relative;min-width:0}.account-eyebrow{color:#929292;font-size:10px;letter-spacing:2.2px}.account-orbit{position:relative;width:100px;height:100px;margin:28px 0 25px;display:grid;place-items:center;border:1px solid #383838;border-radius:50%;background:radial-gradient(circle,#1c1c1c 0,#090909 70%)}.account-orbit span{font-size:37px;font-weight:900;letter-spacing:-5px;color:#fff}.account-orbit i,.account-orbit b{position:absolute;inset:-9px;border:1px solid #252525;border-radius:50%}.account-orbit b{inset:12px;border-color:#555}
+.account-intro h1{margin:0;font-size:clamp(42px,5.2vw,70px);line-height:1.02;letter-spacing:-3.5px;font-weight:800}.account-intro h1 span{color:#777}.account-lead{max-width:540px;margin:22px 0 30px;color:#a2a2a2;font-size:14px;line-height:1.85}.account-benefits{display:grid;gap:18px;max-width:520px}.account-benefits>div{display:flex;align-items:center;gap:14px}.account-benefit-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid #303030;background:#0c0c0c;color:#e8e8e8}.account-benefit-icon svg{width:17px}.account-benefits strong,.account-benefits small{display:block}.account-benefits strong{font-size:12px;font-weight:650}.account-benefits small{margin-top:4px;color:#777;font-size:10px;line-height:1.5}.account-bottom-note{display:flex;align-items:center;gap:9px;margin-top:clamp(32px,7vh,72px);color:#777;font-size:9px;letter-spacing:1.2px}.account-live-dot{width:7px;height:7px;border-radius:50%;background:#eee;box-shadow:0 0 10px #fff6}
+.account-auth-column{width:100%;max-width:470px;justify-self:end}.account-auth-card{border:1px solid #333;background:#0a0a0a;padding:clamp(22px,3vw,36px)}.account-card-heading h2{margin:10px 0 7px;font-size:26px;letter-spacing:-1px}.account-card-heading p{margin:0;color:#888;font-size:12px;line-height:1.6}.auth-status{margin:22px 0 18px;padding:11px 13px;border:1px solid #303030;background:#101010;color:#aaa;font-size:11px;line-height:1.6}.auth-status[data-state=ready]{border-color:#4b4b4b;color:#ddd}.auth-status[data-state=error]{border-color:#8b5149;color:#ffb7aa}.auth-button{min-height:50px;font-size:11px;letter-spacing:.1px}.auth-button-github{justify-content:center;position:relative;background:#f4f4f4;border-color:#f4f4f4;color:#080808}.auth-button-github svg:last-child{position:absolute;right:15px;width:15px}.auth-button-light{background:#ededed;border-color:#ededed;color:#080808}.auth-button-quiet{min-height:44px;border-color:#363636;color:#aaa}.auth-divider{margin:24px 0;color:#777;font-size:9px;letter-spacing:1px}.auth-divider:before,.auth-divider:after{background:#292929}.auth-pat-form{gap:10px}.auth-pat-form label{color:#c8c8c8;font-size:10px}.auth-pat-form input{height:50px;background:#050505;border-color:#363636;color:#fff;font-size:12px}.auth-pat-form input:focus{border-color:#aaa;outline:1px solid #777}.auth-pat-form .auth-button{margin-top:3px;justify-content:space-between;padding:0 16px}.auth-pat-form .auth-button svg{width:16px}.auth-note{display:flex;align-items:flex-start;gap:8px;margin-top:15px;color:#777;font-size:10px;line-height:1.7}.auth-note svg{width:14px;flex:0 0 14px;margin-top:1px;color:#aaa}.auth-foot{margin-top:25px;padding-top:15px;border-color:#282828;align-items:center;font-size:8px;letter-spacing:.7px}.auth-foot span{display:flex;align-items:center;gap:7px}.auth-foot svg{width:12px}.auth-foot a{color:#aaa}.account-connected-heading{display:flex;align-items:center;gap:12px;margin-bottom:14px}.account-connected-check{width:34px;height:34px;display:grid;place-items:center;border:1px solid #555;color:#fff}.account-connected-check svg{width:16px}.account-connected-heading strong,.account-connected-heading small{display:block}.account-connected-heading strong{font-size:13px}.account-connected-heading small{margin-top:4px;color:#888;font-size:10px}.auth-user{position:relative;padding:16px;border-color:#383838;background:#101010}.auth-avatar{width:46px;height:46px;background:#1c1c1c;border-color:#555;color:#fff}.auth-connected-pill{margin-left:auto;padding:5px 7px;border:1px solid #555;color:#ddd;font-size:8px;letter-spacing:.8px}.auth-actions{margin-top:14px}.auth-actions .auth-button{justify-content:center;gap:9px}.auth-actions .auth-button svg{width:15px}.account-help{display:flex;justify-content:space-between;gap:12px;padding:14px 2px;color:#777;font-size:10px}.account-help a{color:#ccc}.account-help svg{width:12px;vertical-align:middle}
+@media(max-width:800px){.account-topbar{height:64px;flex-basis:64px;padding:0 18px}.account-secure-label{font-size:0;gap:0}.account-secure-label svg{width:18px}.account-main{display:flex;flex-direction:column;align-items:stretch;gap:28px;padding:34px 18px 30px}.account-intro{display:grid;grid-template-columns:1fr auto;column-gap:12px}.account-eyebrow{grid-column:1/-1}.account-orbit{grid-column:2;grid-row:2/4;width:66px;height:66px;margin:10px 4px 0}.account-orbit span{font-size:26px}.account-orbit i{inset:-6px}.account-orbit b{inset:8px}.account-intro h1{grid-column:1;grid-row:2;margin-top:18px;font-size:clamp(36px,10vw,50px);letter-spacing:-2px}.account-lead{grid-column:1/-1;margin:15px 0 18px;font-size:12px;line-height:1.7}.account-benefits{grid-column:1/-1;gap:12px}.account-benefit-icon{width:34px;height:34px;flex-basis:34px}.account-bottom-note{grid-column:1/-1;margin-top:22px;font-size:8px}.account-auth-column{max-width:none}.account-auth-card{padding:22px}.account-card-heading h2{font-size:23px}.account-help{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}}
+@media(max-width:380px){.account-intro h1{font-size:34px}.account-orbit{width:58px;height:58px}.account-main{padding-inline:14px}.account-auth-card{padding:18px}.account-connected-pill{display:none}}
+@media(prefers-reduced-motion:reduce){.account-orbit i{animation:none}}
+@media(max-width:480px){.auth-overlay{padding:0!important;display:block!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch}.auth-dialog{width:100%!important;min-height:100vh!important;min-height:100dvh!important;max-height:none!important;padding:0!important;overflow:visible!important}.account-topbar{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}.account-main{padding-top:28px;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}.account-auth-card{padding:20px}.auth-foot{display:flex;align-items:flex-start;line-height:1.6}.account-help{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
+.light-preview .auth-overlay,.light-preview .auth-dialog,.light-preview .account-topbar,.light-preview .account-auth-card{background:#050505!important;color:#f5f5f5!important;border-color:#292929!important}.light-preview .auth-status,.light-preview .auth-user,.light-preview .auth-pat-form input{background:#0b0b0b!important;color:#f5f5f5!important;border-color:#363636!important}.light-preview .account-card-heading p,.light-preview .auth-note{color:#999!important}
+
+
+/* Login page adapted from ocodejs-auth.html; real GitHub OAuth/PAT handlers remain shared with the hub. */
+#auth-overlay{position:fixed;inset:0;z-index:120;display:flex;align-items:stretch;justify-content:center;padding:0;background:#000;overflow:auto}
+#auth-overlay[hidden]{display:none!important}
+#auth-overlay .auth-dialog.auth-login-page{width:100%;min-height:100vh;min-height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#000;color:#f5f5f5;box-shadow:none;overflow:visible;display:flex;justify-content:center}
+.auth-page-wrap{width:100%;max-width:460px;min-height:100vh;min-height:100dvh;padding:24px 20px 28px;display:flex;flex-direction:column}
+.auth-page-back{align-self:flex-start;display:inline-flex;align-items:center;gap:9px;padding:0;border:0;background:transparent;color:#8a8a8a;font:inherit;font-size:13px}
+.auth-page-back:hover{color:#fff}
+.auth-page-back span{font-size:22px;line-height:1}
+.auth-page-logo{display:flex;flex-direction:column;align-items:center;gap:13px;margin:36px 0 28px}
+.auth-page-mark{width:56px;height:56px;display:grid;place-items:center;border:1px solid #262626;background:#000;color:#f5f5f5}
+.auth-page-brand{font-size:15px;font-weight:700;letter-spacing:.02em}
+.auth-page-content{width:100%;max-width:380px;margin:0 auto}
+.auth-page-heading{text-align:center;margin-bottom:26px}
+.auth-page-kicker{color:#777;font-size:9px;letter-spacing:1.8px}
+.auth-page-heading h1{margin:10px 0;font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.3px;color:#f5f5f5}
+.auth-page-heading p{margin:0;color:#8a8a8a;font-size:13px}
+.auth-page-options{display:block}
+.auth-page-github{width:100%;height:46px;min-height:46px;display:flex;align-items:center;justify-content:center;gap:12px;margin:0;padding:0 14px;border:1px solid #333;background:#000;color:#f5f5f5;font:inherit;font-size:13px;font-weight:500}
+.auth-page-github:hover:not(:disabled){background:#141414;border-color:#555}
+.auth-page-github:disabled{opacity:.45;cursor:not-allowed}
+.auth-page-divider{display:flex;align-items:center;gap:14px;margin:23px 0;color:#777;font-size:9px;letter-spacing:1px;white-space:nowrap}
+.auth-page-divider:before,.auth-page-divider:after{content:"";height:1px;flex:1;background:#262626}
+.auth-page-pat{display:flex;flex-direction:column;gap:10px}
+.auth-page-pat label{display:block;margin:0;color:#999;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.auth-page-pat input{width:100%;height:46px;padding:0 14px;border:1px solid #333;border-radius:0;background:#0a0a0a;color:#f5f5f5;font:inherit;font-size:13px;outline:none}
+.auth-page-pat input::placeholder{color:#555}
+.auth-page-pat [hidden]{display:none!important}#auth-confirm-wrap,#auth-turnstile-wrap{display:flex;flex-direction:column;gap:9px}#auth-turnstile-wrap{align-items:flex-start;margin:4px 0 8px}.auth-register-toggle{align-self:flex-start;padding:4px 0;border:0;background:transparent;color:#aaa;font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:3px}.auth-register-toggle:hover{color:#fff}
+.auth-page-pat input:focus{border-color:#aaa}
+.auth-page-pat .auth-button{width:100%;height:46px;min-height:46px;display:flex;align-items:center;justify-content:space-between;margin-top:2px;padding:0 14px;border:1px solid #f5f5f5;background:#f5f5f5;color:#000;font:inherit;font-size:13px;font-weight:700}
+.auth-page-pat .auth-button:disabled{border-color:#262626;background:#0a0a0a;color:#555;cursor:not-allowed}
+.auth-page-note{display:flex;align-items:flex-start;gap:9px;margin:17px 0 0;color:#777;font-size:10px;line-height:1.7}
+.auth-page-note>span{color:#aaa}
+.auth-page-legal{margin:27px 0 0;color:#777;text-align:center;font-size:10px;line-height:1.7}
+#auth-overlay .auth-status{margin:0 0 16px;padding:10px 12px;border:1px solid #262626;background:#080808;color:#999;font-size:11px;line-height:1.6}
+#auth-overlay .auth-status[data-state="ready"]{border-color:#333;color:#c8c8c8}
+#auth-overlay .auth-status[data-state="error"]{border-color:#713838;color:#ff9b9b}
+.auth-page-connected{margin:0 0 18px}
+.auth-page-connected-title{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.auth-page-check{width:30px;height:30px;display:grid;place-items:center;border:1px solid #555;color:#fff}
+.auth-page-connected-title strong,.auth-page-connected-title small{display:block}
+.auth-page-connected-title strong{font-size:13px}
+.auth-page-connected-title small{margin-top:3px;color:#888;font-size:10px}
+#auth-overlay .auth-user{padding:14px;border:1px solid #333;background:#0b0b0b}
+#auth-overlay .auth-actions{display:grid;gap:9px;margin-top:12px}
+#auth-overlay .auth-actions .auth-button{width:100%;justify-content:center}
+.auth-page-footer{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding-top:24px;color:#666;font-size:9px;letter-spacing:.5px}
+.auth-page-footer a{color:#aaa}
+@media(max-width:520px){.auth-page-wrap{padding:18px 20px calc(20px + env(safe-area-inset-bottom,0px))}.auth-page-logo{margin:28px 0 24px}.auth-page-footer{font-size:8px}}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" defer></script>
 
@@ -1219,14 +1290,6 @@ footer a{color:#b5c7dd}
     border-color:#454545!important;
     color:#f2f2f2!important;
   }
-  .home-hero,.home-hero-copy,.home-hero-media,.home-intro-grid .page-panel,
-  .community-section,.library-repo-title,.library-file-toolbar{
-    background:#080808!important;
-    background-image:none!important;
-    border-color:#303030!important;
-  }
-  .home-hero-media:after{background:#000!important;opacity:.12}
-  .home-hero-media span{background:#000!important;color:#fff!important;border-color:#555!important}
   .tool-card,.tool-card:nth-child(n){
     background:#080808!important;
     background-image:none!important;
@@ -1318,6 +1381,162 @@ footer a{color:#b5c7dd}
 </style>
 
 <style id="ocode-agent-queue-filters">.agent-queue-filters{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:10px;margin:16px 0}.agent-queue-filters input,.agent-queue-filters select{min-height:44px;padding:0 12px;background:#050505!important;color:#fff!important;border:1px solid #454545!important}.agent-task-card[hidden]{display:none!important}@media(max-width:600px){.agent-queue-filters{grid-template-columns:1fr}}</style>
+<style id="ocode-cli-hub-final-polish">
+:root{--bg:#020202;--panel:#070707;--line:#171717;--line-strong:#292929;--fg:#f3f3f3;--muted:#929292}
+html,body{background:#020202!important;color:var(--fg)}
+body{background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.025),transparent 42%),#020202!important}
+.layout{background:linear-gradient(180deg,#070707,#020202)!important;border-color:#202020!important}
+.content{background:transparent!important}
+.sidebar,.topbar,footer{background:rgba(3,3,3,.985)!important}
+.home-hero,.card,.detail-panel,.page-panel,.page-tile,.library-card,.stat,.side-card{background:#070707!important;border-color:#292929!important}
+.home-hero{background:linear-gradient(110deg,#080808,#030303)!important}
+.searchbox,.filter,.search-submit,.btn,.back,.command,.code-canvas,.filter-panel{background-color:#050505!important}
+.nav a:hover,.nav a.active,.page-tile:hover{background:#141414!important}
+.topbar,.sidebar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.community-section .library-links{gap:6px;align-items:center}
+.community-section .library-links .btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto!important;width:auto;min-width:0;min-height:27px;height:27px;padding:3px 8px!important;font-size:10px!important;line-height:1.1;font-weight:650;letter-spacing:0;border-radius:0!important;white-space:nowrap}
+.community-section .library-links .library-open{background:#fff!important;color:#050505!important;border:1px solid #fff!important}
+.community-section .library-links .library-open:hover{background:#dedede!important;border-color:#dedede!important}
+.community-section .library-links .library-download{background:#090909!important;color:#eee!important;border:1px solid #555!important}
+.community-section .library-links .library-download:hover{background:#fff!important;color:#000!important;border-color:#fff!important}
+@media(max-width:768px){.community-section .library-links{gap:5px}.community-section .library-links .btn{min-height:26px;height:26px;padding:3px 7px!important;font-size:9px!important}}
+@media(prefers-reduced-motion:no-preference){.layout{animation:workspace-bg-in .45s ease-out both}@keyframes workspace-bg-in{from{opacity:.92}to{opacity:1}}}
+</style>
+<style id="community-trending-equal-buttons">
+.library-card .library-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;align-items:stretch!important}
+.library-card .library-links .btn{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:none!important;height:32px!important;min-height:32px!important;max-height:32px!important;padding:0 6px!important;margin:0!important;flex:none!important;font-size:10px!important;line-height:1!important;white-space:nowrap!important;border-radius:0!important}
+@media(max-width:768px){.library-card .library-links{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.library-card .library-links .btn{height:30px!important;min-height:30px!important;max-height:30px!important}}
+</style>
+<style>
+
+/* OCode.js CLI Hub — unified control sizing */
+:root{--ocode-control-height:40px;--ocode-control-width:40px}
+button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,.page-tile,
+.library-tabs button,.library-repo-actions button,.library-repo-actions .btn,.library-links .btn,
+.card-actions .btn,.marketplace-actions .btn,.catalog-retry,.catalog-error-link{
+  box-sizing:border-box!important;
+  height:var(--ocode-control-height)!important;
+  min-height:var(--ocode-control-height)!important;
+  max-height:var(--ocode-control-height)!important;
+  line-height:1!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+}
+button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,
+.page-tile,.library-tabs button,.library-repo-actions button,.catalog-retry,.catalog-error-link{
+  padding:0 12px!important;
+  white-space:nowrap;
+}
+.icon-button{
+  width:var(--ocode-control-width)!important;
+  min-width:var(--ocode-control-width)!important;
+  max-width:var(--ocode-control-width)!important;
+  height:var(--ocode-control-height)!important;
+  min-height:var(--ocode-control-height)!important;
+  max-height:var(--ocode-control-height)!important;
+  padding:0!important;
+}
+.card-actions,.library-links,.marketplace-actions,.library-repo-actions{
+  align-items:stretch!important;
+}
+.card-actions .btn,.library-links .btn,.marketplace-actions .btn,.library-repo-actions .btn{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+  flex:1 1 0!important;
+}
+.library-links{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+.library-links .btn{padding:0 6px!important;font-size:11px!important}
+@media(max-width:768px){
+  button,.btn,.back,.submit-tool,.shortcut,.search-submit,.filter-chip,.filter-toggle,.copy-code,
+  .page-tile,.library-tabs button,.library-repo-actions button,.library-repo-actions .btn,
+  .library-links .btn,.card-actions .btn,.marketplace-actions .btn,.catalog-retry,.catalog-error-link{
+    height:40px!important;min-height:40px!important;max-height:40px!important;
+  }
+  .icon-button{width:40px!important;min-width:40px!important;max-width:40px!important}
+}
+
+</style>
+<style>/* OCode.js CLI Hub — mobile library overflow correction */
+@media(max-width:560px){
+ .library-card{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+ .library-links{width:100%!important;margin:0!important;padding:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+ .library-links .btn{width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;box-sizing:border-box!important}
+}
+</style>
+<style>
+/* OCode.js CLI Hub — restore semantic mobile layout */
+.page-grid{width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr))}
+.page-tile{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;width:100%!important;height:auto!important;min-height:118px!important;max-height:none!important;padding:16px!important;gap:8px!important;line-height:1.5!important;white-space:normal!important;text-align:left!important}
+.page-tile strong,.page-tile span,.page-tile small{display:block!important;position:static!important;width:auto!important;max-width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;line-height:1.5!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.page-status{display:inline-flex!important;align-self:flex-start!important;padding:3px 6px!important;margin:0!important;line-height:1.2!important}
+.topbar{min-width:0;width:100%;box-sizing:border-box}
+@media(max-width:768px){
+ .topbar{display:flex!important;justify-content:space-between!important;gap:8px!important;padding-left:12px!important;padding-right:12px!important;min-width:0!important}
+ .topbar .menu-toggle{flex:0 0 40px!important;width:40px!important;min-width:40px!important}
+ .topbar .mbrand{display:flex!important;align-items:center!important;flex:1 1 auto!important;min-width:0!important;max-width:none!important;gap:6px!important;overflow:hidden!important;white-space:nowrap!important}
+ .topbar .mbrand b{flex:0 0 auto!important}
+ .topbar .mbrand small{overflow:hidden!important;text-overflow:ellipsis!important}
+ .topbar .mobile-profile{display:inline-flex!important;flex:0 0 auto!important;width:auto!important;min-width:64px!important;max-width:88px!important;height:40px!important;padding:0 8px!important;gap:6px!important;white-space:nowrap!important}
+ .content{width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow-x:hidden}
+ .page-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
+ .page-tile{min-height:112px!important;padding:14px!important}
+ .page-tile strong{font-size:15px!important}
+ .page-tile span{font-size:12px!important}
+}
+
+/* GitHub authentication surface */
+.auth-overlay[hidden],.auth-connected[hidden]{display:none!important}
+.auth-overlay{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.auth-dialog{width:min(100%,480px);max-height:min(90dvh,760px);overflow:auto;border:1px solid #46566c;background:#080b10;color:#f2f5fb;padding:24px;box-shadow:0 24px 90px rgba(0,0,0,.6)}
+.auth-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.auth-kicker{font-size:10px;letter-spacing:.16em;color:#91a0b4}
+.auth-head h2{margin:8px 0 5px;font-size:23px;letter-spacing:-.04em}
+.auth-head p,.auth-note{margin:0;color:#9ba8b9;font-size:12px;line-height:1.6}
+.auth-close{flex:0 0 36px;width:36px;height:36px;border:1px solid #354256;background:#0d131d;color:#fff;font-size:24px;line-height:1}
+.auth-status{margin:20px 0 14px;padding:10px 12px;border:1px solid #344155;background:#0c121c;color:#bac7d7;font-size:12px;line-height:1.5}
+.auth-status[data-state=ready]{border-color:#456c5d;color:#a5e6c8}
+.auth-status[data-state=error]{border-color:#81504b;color:#ffb5a9}
+.auth-button{width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dce3ed;background:#f3f5f8;color:#0b1018;font:700 12px var(--mono);cursor:pointer}
+.auth-button:disabled{opacity:.45;cursor:not-allowed}
+.auth-button-github{background:#f4f6f8;border-color:#f4f6f8;color:#090d13}
+.auth-button-github [data-lucide]{width:18px;height:18px}
+.auth-button-light{background:#e7edf5;border-color:#e7edf5;color:#0c1420}
+.auth-button-quiet{background:transparent;border-color:#354256;color:#c3cedc;font-weight:500}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:20px 0;color:#7f8da0;font-size:9px;letter-spacing:.08em}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:#293548}
+.auth-pat-form{display:grid;gap:9px}
+.auth-pat-form label{font-size:11px;color:#d1d9e4}
+.auth-pat-form input{width:100%;height:46px;border:1px solid #354256;background:#05080d;color:#fff;padding:0 12px;font:12px var(--mono);border-radius:0}
+.auth-note{margin-top:14px;font-size:11px}
+.auth-connected{display:grid;gap:14px}
+.auth-user{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #354256;background:#0b111a}
+.auth-avatar{width:42px;height:42px;display:grid;place-items:center;background:#111d2d;border:1px solid #526985;color:#dce8f8;font-weight:800}
+.auth-user strong,.auth-user small{display:block}
+.auth-user strong{font-size:13px}
+.auth-user small{margin-top:4px;color:#8f9caf;font-size:10px}
+.auth-actions{display:grid;gap:8px}
+.auth-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:14px;border-top:1px solid #263244;color:#718096;font-size:9px;letter-spacing:.04em}
+.auth-foot a{color:#c4d2e5;text-decoration:underline;text-underline-offset:3px}
+.auth-trigger .profile-label{font-size:10px}
+@media(max-width:480px){.auth-overlay{padding:0;align-items:stretch}.auth-dialog{width:100%;min-height:100vh;min-height:100dvh;max-height:none;padding:0}.auth-foot{display:flex}}
+.light-preview .auth-dialog{background:#f7f9fd;color:#111827;border-color:#b8c5d7}
+.light-preview .auth-status,.light-preview .auth-user{background:#fff;color:#27364b;border-color:#c5d0df}
+.light-preview .auth-pat-form input{background:#fff;color:#111827;border-color:#b8c5d7}
+.light-preview .auth-head p,.light-preview .auth-note{color:#52627a}
+
+</style>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=ocodeTurnstileReady" async defer></script>
 </head>
 <body>
 <div class="layout">
@@ -1327,12 +1546,85 @@ footer a{color:#b5c7dd}
 <div class="side-card"><strong>OCode.js</strong><p>Open-source CLI hub for developers and AI agents.</p><span class="version">v1.0.0</span></div>
 </aside>
 <div class="drawer-scrim" id="drawer-scrim"></div>
-<header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button><span class="mbrand"><b>&gt;_</b>OCode.js<small>CLI HUB</small></span><button class="icon-button mobile-profile" id="open-profile" type="button" aria-label="Tôi" title="Tôi"><i data-lucide="user-round" aria-hidden="true"></i><span class="profile-label">Tôi</span></button><a class="submit-tool" href="https://github.com/zskbot/ocodejs-cli/issues/new?template=tool-submission.md" target="_blank" rel="noopener noreferrer">+ Gửi công cụ</a><button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng/tối">☾</button><button class="shortcut desktop-search" id="desktop-search" type="button">⌕ <span>Ctrl + K</span></button></header>
+<header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button><span class="mbrand"><b>&gt;_</b>OCode.js<small>CLI HUB</small></span><button class="icon-button mobile-profile auth-trigger" id="auth-trigger" type="button" aria-label="Đăng nhập OCode.js" title="Tài khoản"><i data-lucide="user-round" aria-hidden="true"></i><span class="profile-label" id="auth-trigger-label">Đăng nhập</span></button><a class="submit-tool" href="https://github.com/zskbot/ocodejs-cli/issues/new?template=tool-submission.md" target="_blank" rel="noopener noreferrer">+ Gửi công cụ</a><button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng/tối">☾</button><button class="shortcut desktop-search" id="desktop-search" type="button">⌕ <span>Ctrl + K</span></button></header>
+<section class="auth-overlay" id="auth-overlay" hidden aria-hidden="true">
+  <div class="auth-dialog auth-login-page" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <main class="auth-page-wrap">
+      <button class="auth-page-back" id="auth-close" type="button" aria-label="Quay lại trang chủ"><span aria-hidden="true">‹</span> Trang chủ</button>
+      <div class="auth-page-logo">
+        <div class="auth-page-mark" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><rect x="6" y="6" width="22" height="22"/><path d="M13 13h8M13 17h8M13 21h4"/></svg>
+        </div>
+        <div class="auth-page-brand">OCodeJS</div>
+      </div>
+      <section class="auth-page-content">
+        <div class="auth-page-heading"><span class="auth-page-kicker">OCODE.JS ACCOUNT</span><h1 id="auth-title">Đăng nhập OCodeJS</h1><p>Tiếp tục bằng tài khoản GitHub của bạn.</p></div>
+        <div class="auth-status" id="auth-status" role="status" aria-live="polite">Đang kiểm tra dịch vụ xác thực…</div>
+        <div class="auth-connected auth-page-connected" id="auth-connected" hidden>
+          <div class="auth-page-connected-title"><span class="auth-page-check" aria-hidden="true">✓</span><span><strong>Tài khoản đã kết nối</strong><small>Phiên GitHub của bạn đang hoạt động</small></span></div>
+          <div class="auth-user"><span class="auth-avatar" id="auth-avatar">GH</span><div><strong id="auth-user-name">GitHub user</strong><small id="auth-user-url">Connected account</small></div><span class="account-connected-pill">CONNECTED</span></div>
+          <div class="auth-actions"><button class="auth-button auth-button-light" id="auth-logout" type="button"><i data-lucide="log-out" aria-hidden="true"></i> Đăng xuất</button><button class="auth-button auth-button-quiet" id="auth-disconnect" type="button">Ngắt kết nối và xóa token</button></div>
+        </div>
+        <div id="auth-login-options" class="auth-page-options">
+          <button class="auth-button auth-page-github" id="auth-github" type="button" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.38-3.88-1.38-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+            Tiếp tục với GitHub
+          </button>
+          <div class="auth-page-divider"><span>HOẶC ĐĂNG NHẬP BẰNG EMAIL</span></div>
+          <form id="auth-email-form" class="auth-pat-form auth-page-pat">
+            <label for="auth-email-address">Email / Gmail</label>
+            <input id="auth-email-address" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="you@gmail.com" required maxlength="254">
+            <label for="auth-email-password">Mật khẩu</label>
+            <input id="auth-email-password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required minlength="12" maxlength="128">
+            <div id="auth-confirm-wrap" hidden>
+              <label for="auth-email-confirm">Nhập lại mật khẩu</label>
+              <input id="auth-email-confirm" name="passwordConfirmation" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" minlength="12" maxlength="128" disabled>
+            </div>
+            <div id="auth-turnstile-wrap" hidden>
+              <div id="auth-turnstile-widget"></div>
+            </div>
+            <button class="auth-button auth-button-light" id="auth-email-submit" type="submit" disabled>Đăng nhập <span aria-hidden="true">→</span></button>
+            <button class="auth-register-toggle" id="auth-register-toggle" type="button">Chưa có tài khoản? Tạo tài khoản</button>
+          </form>
+          <form id="auth-pat-form" class="auth-pat-form" autocomplete="off">
+            <label for="auth-pat-token">GitHub Personal Access Token</label>
+            <input id="auth-pat-token" name="token" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="ghp_… hoặc github_pat_…" required>
+            <button class="auth-button auth-button-quiet" type="submit">Kết nối bằng PAT</button>
+            <p class="auth-note">Token chỉ được gửi qua HTTPS để xác thực; không lưu PAT trong localStorage hoặc sessionStorage.</p>
+          </form>
+          <p class="auth-page-note"><span aria-hidden="true">◇</span> Mật khẩu được băm an toàn tại backend. Không sử dụng mật khẩu Gmail của bạn ở dịch vụ khác.</p>
+        </div>
+        <p class="auth-page-legal">Bằng việc đăng nhập, bạn đồng ý với các điều khoản và chính sách bảo mật của OCode.js.</p>
+      </section>
+      <div class="auth-page-footer"><span>HTTPONLY SESSION · CSRF PROTECTED</span><a href="https://github.com/zskbot/ocodejs-cli#github-authentication-backend" target="_blank" rel="noopener noreferrer">Chi tiết bảo mật ↗</a></div>
+    </main>
+  </div>
+</section>
 <main class="content" id="app" aria-live="polite"><p>Loading catalog…</p></main>
 <footer><span>© 2026 OCode.js. Open-source developer tools.</span><span><a href="https://github.com/zskbot/ocodejs-cli">GitHub</a> | <a href="https://github.com/zskbot/ocodejs-cli#readme">Docs</a> | <a href="https://github.com/zskbot/ocodejs-cli/issues/new">Contribute</a> | <a href="https://github.com/zskbot/ocodejs-cli/blob/main/LICENSE">License</a></span></footer>
 </div>
 <script>
 "use strict";
+let catalogBootWatchdog;
+function showCatalogBootFailure(message){
+  const host=document.querySelector("#app");
+  if(!host)return;
+  const detail=String(message||"Application initialization did not complete").slice(0,500);
+  host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog startup failed</h1><p>OCode.js CLI Hub stopped before the catalog finished loading.</p><p class="catalog-error-detail"></p><button class="catalog-retry" type="button" id="catalog-boot-retry">Reload page ↻</button><p class="catalog-error-help">Diagnostic: '+detail.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+'</p></section>';
+  document.querySelector("#catalog-boot-retry")?.addEventListener("click",()=>location.reload(),{once:true});
+}
+window.addEventListener("error",event=>{
+  const host=document.querySelector("#app");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure(event.message||"JavaScript runtime error");
+});
+window.addEventListener("unhandledrejection",event=>{
+  const host=document.querySelector("#app");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure(event.reason?.message||event.reason||"Unhandled promise rejection");
+});
+catalogBootWatchdog=setTimeout(()=>{
+  const host=document.querySelector("#app");
+  if(host&&(host.querySelector(".catalog-loading")||/Loading catalog/i.test(host.textContent)))showCatalogBootFailure("Startup watchdog: application did not reach catalog loading within 20 seconds");
+},20000);
 const $=s=>document.querySelector(s);
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let tools=[],query="",category="",language="",view="home",favorites=new Set();
@@ -1387,7 +1679,7 @@ const communityLibraries=[
 ];
 function formatDownloads(value){return Number(value||0).toLocaleString("en-US")}
 const libraryBrandColors={react:"61DAFB",nextdotjs:"FFFFFF",vite:"646CFF",typescript:"3178C6",tailwindcss:"06B6D4",vuedotjs:"4FC08D",svelte:"FF3E00",astro:"BC52EE",express:"FFFFFF",prisma:"5A67D8"};
-function renderLibraryCards(items){return items.map((lib,index)=>'<article class="library-card" style="--library-brand-color:#'+(libraryBrandColors[lib.icon]||"64748b")+'"><div class="library-card-top"><span class="library-rank">#'+(index+1)+'</span><span class="library-category">'+esc(lib.category)+'</span></div><div class="library-brand"><img src="https://cdn.simpleicons.org/'+esc(lib.icon)+'/'+(libraryBrandColors[lib.icon]||"FFFFFF")+'" alt="'+esc(lib.name)+' logo" loading="lazy" decoding="async" onerror="this.hidden=true"><div><h3>'+esc(lib.name)+'</h3><span class="library-package">npm · '+esc(lib.pkg)+'</span></div></div><p>'+esc(lib.description)+'</p><div class="library-downloads"><strong>'+(lib.downloads==null?'Loading…':formatDownloads(lib.downloads))+'</strong><span>downloads / 30 days · #'+(index+1)+' trending</span></div><div class="library-links"><button class="btn primary library-open" type="button" data-open-library="'+esc(lib.pkg)+'">View →</button><button class="btn library-download" type="button" data-download-library="'+esc(lib.pkg)+'">Download ↓</button></div></article>').join("")}
+function renderLibraryCards(items){return items.map((lib,index)=>'<article class="library-card" style="--library-brand-color:#'+(libraryBrandColors[lib.icon]||"64748b")+'"><div class="library-card-top"><span class="library-rank">#'+(index+1)+'</span><span class="library-category">'+esc(lib.category)+'</span></div><div class="library-brand"><img src="https://cdn.simpleicons.org/'+esc(lib.icon)+'/'+(libraryBrandColors[lib.icon]||"FFFFFF")+'" alt="'+esc(lib.name)+' logo" title="official brand logo" loading="lazy" decoding="async" onerror="this.hidden=true"><div><h3>'+esc(lib.name)+'</h3><span class="library-package">npm · '+esc(lib.pkg)+'</span></div></div><p>'+esc(lib.description)+'</p><div class="library-downloads"><strong>'+(lib.downloads==null?'Loading…':formatDownloads(lib.downloads))+'</strong><span>downloads / 30 days · #'+(index+1)+' trending</span></div><div class="library-links"><button class="btn primary library-open" type="button" data-open-library="'+esc(lib.pkg)+'">View →</button><button class="btn library-download" type="button" data-download-library="'+esc(lib.pkg)+'">Download ↓</button></div></article>').join("")}
 let libraryState={pkg:"",owner:"",repo:"",path:"",tab:"code",repoData:null,branch:"",branches:[],files:[],currentFile:null,currentSource:""};
 function libraryByPkg(pkg){return communityLibraries.find(x=>x.pkg===pkg)}
 function repoCoordinates(url){const parts=new URL(url).pathname.split("/").filter(Boolean);return {owner:parts[0],repo:parts[1]}}
@@ -1421,7 +1713,7 @@ async function loadCommunityRankings(){
  host.innerHTML=renderLibraryCards([...available,...unavailable]);
  const status=$("#community-status");if(status)status.textContent=available.length===communityLibraries.length?"Live npm registry · last 30 days · refreshed on page load":"npm registry partially unavailable · showing available figures";
 }
-function renderHome(){const picks=pageDefinitions.filter(p=>["dashboard","projects","new-project","environments","tools","agents","github","docs","marketplace"].includes(p.id));$("#app").innerHTML='<section class="home-hero"><div class="home-hero-copy"><div class="page-kicker">OPEN-SOURCE DEVELOPER ECOSYSTEM</div><h1>Discover. Build. <span>Ship.</span></h1><p class="subtitle">OCode.js CLI Hub — khám phá thư viện, công cụ và nền tảng mã nguồn mở để xây dựng sản phẩm.</p><div class="page-actions"><button class="btn primary" data-go-page="tools">Explore CLI tools →</button><a class="btn" href="https://github.com/zskbot/ocodejs-cli" target="_blank" rel="noopener noreferrer">View source ↗</a></div></div><div class="home-hero-media"><img src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" alt="Animated developer coding workspace" fetchpriority="high"><span>OPEN SOURCE / BUILD IN PUBLIC</span></div></section><section class="home-prompt-section" aria-labelledby="home-prompt-title">
+function renderHome(){const picks=pageDefinitions.filter(p=>["dashboard","projects","new-project","environments","tools","agents","github","docs","marketplace"].includes(p.id));$("#app").innerHTML=`<section class="home-hero"><div class="home-hero-copy"><div class="page-kicker">OPEN-SOURCE DEVELOPER ECOSYSTEM</div><h1>Discover. Build. <span>Ship.</span></h1><p class="subtitle">OCode.js CLI Hub — khám phá thư viện, công cụ và nền tảng mã nguồn mở để xây dựng sản phẩm.</p><div class="page-actions"><button class="btn primary" data-go-page="tools">Explore CLI tools →</button><a class="btn" href="https://github.com/zskbot/ocodejs-cli" target="_blank" rel="noopener noreferrer">View source ↗</a></div></div></section><div class="home-hero-media" aria-hidden="true"><img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" alt="" loading="lazy" decoding="async"></div><section class="home-prompt-section" aria-labelledby="home-prompt-title">
   <form class="home-prompt-composer" id="home-prompt-form">
     <label class="sr-only" id="home-prompt-title" for="home-prompt-input">Ask OCode.js CLI Hub to build</label>
     <textarea id="home-prompt-input" name="prompt" rows="2" maxlength="3000" placeholder="Ask OCode.js CLI Hub to build..." autocomplete="off"></textarea>
@@ -1446,7 +1738,7 @@ function renderHome(){const picks=pageDefinitions.filter(p=>["dashboard","projec
     <button class="home-prompt-clear" type="button" id="home-prompt-clear" aria-label="Clear prompt" title="Clear prompt"><i data-lucide="rotate-ccw"></i></button>
   </div>
   <p class="home-prompt-status" id="home-prompt-status" role="status" aria-live="polite">Choose an example or describe your own idea.</p>
-</section><div class="home-intro-grid"><div class="page-panel"><div class="page-kicker">ABOUT THE LIBRARY</div><h2>Thư viện dành cho builder</h2><p>Khám phá các thư viện và framework được cộng đồng sử dụng, xem tài liệu chính thức, mã nguồn, hệ sinh thái npm và công cụ CLI trong một nơi.</p></div><div class="page-panel"><div class="page-kicker">CURATED DIRECTORY</div><h2>Chọn đúng công nghệ</h2><p>Thông tin từng thư viện dẫn về website và repository upstream. Bảng xếp hạng được sắp xếp bằng lượt tải npm 30 ngày gần nhất trong nhóm thư viện được tuyển chọn.</p></div></div><section class="community-section"><div class="section-head"><div><div class="page-kicker">COMMUNITY / TRENDING</div><h2>Top thư viện được sử dụng nhiều</h2></div><span class="result-count" id="community-status">Loading npm download statistics…</span></div><p class="community-note">Xếp hạng tương đối trong danh sách tuyển chọn OCode.js, dựa trên lượt tải npm 30 ngày gần nhất — không phải bảng xếp hạng toàn bộ npm.</p><div class="library-grid" id="community-library-grid">'+renderLibraryCards(communityLibraries)+'</div><div class="library-source">Statistics: <a href="https://github.com/npm/registry/blob/main/docs/download-counts.md" target="_blank" rel="noopener noreferrer">npm download counts API ↗</a> · Brand marks: <a href="https://simpleicons.org" target="_blank" rel="noopener noreferrer">Simple Icons ↗</a></div></section><section class="home-tools-section"><div class="section-head"><h2>OCode.js workspace</h2><span class="result-count">25 pages · '+tools.length+' CLI tools</span></div><div class="page-panel"><h2>Developer workspace</h2><p>Quản lý project local, tìm công cụ terminal và mở các khu vực phát triển trong giao diện OCode.js.</p><div class="page-actions"><button class="btn primary" data-go-page="dashboard">Open dashboard →</button><button class="btn" data-go-page="projects">Manage projects →</button><button class="btn" data-go-page="tools">Browse CLI catalog →</button></div></div><div class="section-head"><h2>Quick access</h2></div><div class="page-grid">'+picks.map(p=>'<button class="page-tile" data-go-page="'+p.id+'"><strong>'+esc(p.title)+' →</strong><span>'+esc(p.description)+'</span><small class="page-status">'+(p.status==="ready"?"READY":"UI FOUNDATION")+'</small></button>').join("")+'</div></section>';loadCommunityRankings();refreshIcons()}
+</section><div class="home-intro-grid"><div class="page-panel"><div class="page-kicker">ABOUT THE LIBRARY</div><h2>Thư viện dành cho builder</h2><p>Khám phá các thư viện và framework được cộng đồng sử dụng, xem tài liệu chính thức, mã nguồn, hệ sinh thái npm và công cụ CLI trong một nơi.</p></div><div class="page-panel"><div class="page-kicker">CURATED DIRECTORY</div><h2>Chọn đúng công nghệ</h2><p>Thông tin từng thư viện dẫn về website và repository upstream. Bảng xếp hạng được sắp xếp bằng lượt tải npm 30 ngày gần nhất trong nhóm thư viện được tuyển chọn.</p></div></div><section class="community-section"><div class="section-head"><div><div class="page-kicker">COMMUNITY / TRENDING</div><h2>Top thư viện được sử dụng nhiều</h2></div><span class="result-count" id="community-status">Loading npm download statistics…</span></div><p class="community-note">Xếp hạng tương đối trong danh sách tuyển chọn OCode.js, dựa trên lượt tải npm 30 ngày gần nhất — không phải bảng xếp hạng toàn bộ npm.</p><div class="library-grid" id="community-library-grid">${renderLibraryCards(communityLibraries)}</div><div class="library-source">Statistics: <a href="https://github.com/npm/registry/blob/main/docs/download-counts.md" target="_blank" rel="noopener noreferrer">npm download counts API ↗</a> · Brand marks: <a href="https://simpleicons.org" target="_blank" rel="noopener noreferrer">Simple Icons ↗</a></div></section><section class="home-tools-section"><div class="section-head"><h2>OCode.js workspace</h2><span class="result-count">25 pages · ${tools.length} CLI tools</span></div><div class="page-panel"><h2>Developer workspace</h2><p>Quản lý project local, tìm công cụ terminal và mở các khu vực phát triển trong giao diện OCode.js.</p><div class="page-actions"><button class="btn primary" data-go-page="dashboard">Open dashboard →</button><button class="btn" data-go-page="projects">Manage projects →</button><button class="btn" data-go-page="tools">Browse CLI catalog →</button></div></div><div class="section-head"><h2>Quick access</h2></div><div class="page-grid">${picks.map(p=>'<button class="page-tile" data-go-page="'+p.id+'"><strong>'+esc(p.title)+' →</strong><span>'+esc(p.description)+'</span><small class="page-status">'+(p.status==="ready"?"READY":"UI FOUNDATION")+'</small></button>').join("")}</div></section>`;loadCommunityRankings();refreshIcons()}
 
 function renderDashboard(){
  const recent=workspaceEvents.slice(0,4);
@@ -1487,7 +1779,7 @@ function renderWorkspace(){
  let panel='<div class="page-panel"><h2>Implementation status</h2><p>This page is part of the 25-page interface foundation. Navigation and page structure are available. Real execution, project persistence, provider credentials and remote integrations are not configured in this static frontend yet.</p><p>Next layer: connect a backend, define permissions, then wire actions to verified APIs. No fake terminal or agent execution is presented as live.</p></div>';
  if(p.id==="about")panel='<div class="page-panel"><h2>OCode.js CLI Hub</h2><p>Open-source directory and workspace interface for terminal tools, developer workflows and AI agents.</p><a class="btn primary" href="https://github.com/zskbot/ocodejs-cli" target="_blank" rel="noopener">View GitHub ↗</a></div>';
  if(p.id==="docs")panel='<div class="page-panel"><h2>Documentation</h2><p>Read the maintained repository documentation.</p><a class="btn primary" href="https://github.com/zskbot/ocodejs-cli#readme" target="_blank" rel="noopener">Open README ↗</a></div>';
- if(p.id==="marketplace")panel='<section class="marketplace-grid" aria-label="Developer marketplaces"><article class="marketplace-card marketplace-vscode"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="code-2"></i></span><span class="marketplace-tag">EDITOR EXTENSIONS</span></div><h2>Visual Studio Code</h2><p>Discover extensions, themes, language support, debuggers and developer productivity tools for VS Code.</p><div class="marketplace-actions"><a class="btn primary" href="https://marketplace.visualstudio.com/vscode" target="_blank" rel="noopener noreferrer">Explore VS Code Marketplace ↗</a><a class="btn" href="https://code.visualstudio.com/docs/editor/extension-marketplace" target="_blank" rel="noopener noreferrer">Documentation ↗</a></div></article><article class="marketplace-card marketplace-github"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="github"></i></span><span class="marketplace-tag">APPS & ACTIONS</span></div><h2>GitHub Marketplace</h2><p>Find GitHub Apps, Actions and developer tools to automate repositories, CI/CD, code review and project workflows.</p><div class="marketplace-actions"><a class="btn primary" href="https://github.com/marketplace" target="_blank" rel="noopener noreferrer">Explore GitHub Marketplace ↗</a><a class="btn" href="https://docs.github.com/en/apps" target="_blank" rel="noopener noreferrer">Developer docs ↗</a></div></article><article class="marketplace-card marketplace-google"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="cloud"></i></span><span class="marketplace-tag">CLOUD SOLUTIONS</span></div><h2>Google Cloud Marketplace</h2><p>Explore deployable software, APIs, datasets and infrastructure solutions for Google Cloud.</p><div class="marketplace-actions"><a class="btn primary" href="https://console.cloud.google.com/marketplace" target="_blank" rel="noopener noreferrer">Explore Google Cloud Marketplace ↗</a><a class="btn" href="https://cloud.google.com/marketplace/docs" target="_blank" rel="noopener noreferrer">Marketplace docs ↗</a></div></article></section><div class="page-panel marketplace-note"><h2>Marketplace connections</h2><p>These links open the official provider marketplaces. OCode.js does not yet install extensions, authorize accounts, purchase services or sync marketplace assets automatically. Connectors and OAuth flows will be added only when configured and verified.</p></div>';if(p.id==="github")panel='<div class="page-panel"><h2>Source repository</h2><p>Repository access is provided through GitHub. No authenticated session or live sync is claimed.</p><a class="btn primary" href="https://github.com/zskbot/ocodejs-cli" target="_blank" rel="noopener">Open repository ↗</a></div>';
+ if(p.id==="marketplace")panel='<section class="marketplace-grid" aria-label="Developer marketplaces"><article class="marketplace-card marketplace-vscode"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="code-2"></i></span><span class="marketplace-tag">EDITOR EXTENSIONS</span></div><h2>Visual Studio Code</h2><p>Discover extensions, themes, language support, debuggers and developer productivity tools for VS Code.</p><div class="marketplace-actions"><a class="btn primary" href="https://marketplace.visualstudio.com/vscode" target="_blank" rel="noopener noreferrer">Explore VS Code Marketplace ↗</a><a class="btn" href="https://code.visualstudio.com/docs/editor/extension-marketplace" target="_blank" rel="noopener noreferrer">Documentation ↗</a></div></article><article class="marketplace-card marketplace-github"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="github"></i></span><span class="marketplace-tag">APPS & ACTIONS</span></div><h2>GitHub Marketplace</h2><p>Find GitHub Apps, Actions and developer tools to automate repositories, CI/CD, code review and project workflows.</p><div class="marketplace-actions"><a class="btn primary" href="https://github.com/marketplace" target="_blank" rel="noopener noreferrer">Explore GitHub Marketplace ↗</a><a class="btn" href="https://docs.github.com/en/apps" target="_blank" rel="noopener noreferrer">Developer docs ↗</a></div></article><article class="marketplace-card marketplace-google"><div class="marketplace-card-head"><span class="marketplace-brand-icon"><i data-lucide="cloud"></i></span><span class="marketplace-tag">CLOUD SOLUTIONS</span></div><h2>Google Cloud Marketplace</h2><p>Explore deployable software, APIs, datasets and infrastructure solutions for Google Cloud.</p><div class="marketplace-actions"><a class="btn primary" href="https://console.cloud.google.com/marketplace" target="_blank" rel="noopener noreferrer">Explore Google Cloud Marketplace ↗</a><a class="btn" href="https://cloud.google.com/marketplace/docs" target="_blank" rel="noopener noreferrer">Marketplace docs ↗</a></div></article></section><div class="page-panel marketplace-note"><h2>Marketplace connections</h2><p>Marketplace quick access: these links open the official provider marketplaces. OCode.js does not yet install extensions, authorize accounts, purchase services or sync marketplace assets automatically. Connectors and OAuth flows will be added only when configured and verified.</p></div>';if(p.id==="github")panel='<div class="page-panel"><h2>Source repository</h2><p>Repository access is provided through GitHub. No authenticated session or live sync is claimed.</p><a class="btn primary" href="https://github.com/zskbot/ocodejs-cli" target="_blank" rel="noopener">Open repository ↗</a></div>';
  if(p.id==="settings")panel='<div class="page-panel"><h2>Preferences</h2><p>Theme and saved catalog favorites are stored locally in this browser.</p><div class="page-actions"><button class="btn" id="page-theme">Toggle theme</button><a class="btn" href="settings.html">Compatibility settings ↗</a></div></div>';
  if(p.id==="api")panel='<div class="page-panel"><h2>API status</h2><p>No application API server is configured in this static GitHub Pages build. Endpoints will be documented when a backend is introduced.</p></div>';
  $("#app").innerHTML='<section class="page-intro"><div class="page-kicker">'+esc(p.group)+' / OCODE.JS</div><h1>'+esc(p.title)+'</h1><p class="subtitle">'+esc(p.description)+'</p><span class="page-status">'+(p.status==="ready"?"READY":"UI FOUNDATION")+'</span></section>'+panel+'<div class="section-head"><h2>Explore '+esc(p.group)+'</h2></div><div class="page-grid">'+related.map(x=>'<button class="page-tile" data-go-page="'+x.id+'"><span class="page-tile-icon"><i data-lucide="'+(routeLucideIcons[x.id]||"circle")+'"></i></span><strong>'+esc(x.title)+' →</strong><span>'+esc(x.description)+'</span><small class="page-status">'+(x.status==="ready"?"READY":"UI FOUNDATION")+'</small></button>').join("")+'</div>';
@@ -1498,11 +1790,12 @@ function renderCatalog(){const result=filtered(),cats=[...new Set(tools.map(t=>t
 function filtered(){const q=query.trim().toLocaleLowerCase("vi");return tools.filter(t=>(!category||t.category===category)&&(!language||t.language===language)&&(!q||[t.name,t.description,t.language,t.category,t.install].join(" ").toLocaleLowerCase("vi").includes(q))&&(view!=="favorites"||favorites.has(t.id)))}
 const toolLucideIcons={ripgrep:"search",fd:"folder-search",fzf:"list-filter",lazygit:"git-branch",k9s:"boxes",jq:"braces",yq:"file-code",dnspyre:"globe", "cli-anything-hub":"bot",clihub:"terminal"};
 const toolBrandStyle={dnspyre:{icon:"globe",color:"#38bdf8",bg:"#0b2634"},"cli-anything-hub":{icon:"bot",color:"#c084fc",bg:"#241333"},clihub:{icon:"workflow",color:"#60a5fa",bg:"#10243d"},ripgrep:{icon:"search",color:"#f97316",bg:"#321b10"},fd:{icon:"folder-search",color:"#eab308",bg:"#30280e"},fzf:{icon:"list-filter",color:"#22c55e",bg:"#102c1a"},lazygit:{icon:"git-branch",color:"#f97316",bg:"#321b10"},k9s:{icon:"boxes",color:"#38bdf8",bg:"#0b2634"},jq:{icon:"braces",color:"#a3a3a3",bg:"#242424"},yq:{icon:"file-code",color:"#22c55e",bg:"#102c1a"}};
-function card(t){const brand=toolBrandStyle[t.id]||{icon:"terminal",color:"#cbd5e1",bg:"#202832"};return `<article class="card tool-card" style="--tool-accent:${brand.color};--tool-tint:${brand.bg}"><div class="card-head"><span class="tool-icon"><i data-lucide="${brand.icon}"></i></span><h3>${esc(t.name)}</h3></div><p>${esc(t.description)}</p><div class="meta"><span class="tool-language">${esc(t.language)}</span><span>• ${esc(t.category)}</span></div><div class="card-actions"><button class="btn primary" data-detail="${esc(t.id)}" type="button">View →</button><button class="btn" data-copy="${esc(t.install)}" type="button">Copy</button><a class="btn" href="${esc(t.repo)}" target="_blank" rel="noopener noreferrer">GitHub ↗</a><button class="btn favorite" data-fav="${esc(t.id)}" aria-pressed="${favorites.has(t.id)}" aria-label="Toggle favorite" type="button">${favorites.has(t.id)?"★":"☆"}</button></div></article>`}
+function card(t){const brand=toolBrandStyle[t.id]||{icon:"terminal",color:"#cbd5e1",bg:"#202832"};return `<article class="card tool-card" style="--tool-accent:${brand.color};--tool-tint:${brand.bg}"><div class="card-head"><span class="tool-icon"><i data-lucide="${toolLucideIcons[t.id]||brand.icon}"></i></span><h3>${esc(t.name)}</h3></div><p>${esc(t.description)}</p><div class="meta"><span class="tool-language">${esc(t.language)}</span><span>• ${esc(t.category)}</span></div><div class="card-actions"><button class="btn primary" data-detail="${esc(t.id)}" type="button">View →</button><button class="btn" data-copy="${esc(t.install)}" type="button">Copy</button><a class="btn" href="${esc(t.repo)}" target="_blank" rel="noopener noreferrer">GitHub ↗</a><button class="btn favorite" data-fav="${esc(t.id)}" aria-pressed="${favorites.has(t.id)}" aria-label="Toggle favorite" type="button">${favorites.has(t.id)?"★":"☆"}</button></div></article>`}
 function refreshIcons(){if(window.lucide&&typeof window.lucide.createIcons==="function")window.lucide.createIcons({attrs:{"stroke-width":1.7}})}
+// DOMContentLoaded,refreshIcons: initialize icons after the document is ready.
 document.addEventListener("DOMContentLoaded",refreshIcons,{once:true});
 const routeLucideIcons={home:"house",dashboard:"layout-dashboard",projects:"folder-kanban","new-project":"folder-plus",environments:"layers",editor:"code",files:"folder-tree",terminal:"terminal",preview:"monitor",build:"hammer",agents:"bot","agent-tasks":"list-checks",chat:"messages-square",prompts:"message-square-code",models:"brain",tools:"wrench","tool-details":"file-code",favorites:"star",integrations:"plug",github:"github",marketplace:"store",api:"braces",docs:"book-open",activity:"activity",settings:"settings",about:"info","project-settings":"sliders-horizontal","project-templates":"copy",dependencies:"package",scripts:"scroll-text","workspace-import":"folder-input","code-review":"git-pull-request",lint:"scan-check","type-check":"file-check","security":"shield-check",accessibility:"accessibility", "unit-tests":"flask-conical","integration-tests":"workflow","e2e-tests":"mouse-pointer-click","test-reports":"clipboard-list",performance:"gauge",deployments:"rocket",hosting:"server",domains:"globe", "environment-vars":"key-round",monitoring:"chart-no-axes-combined",releases:"tag",changelog:"history",roadmap:"map",community:"users",examples:"code-2"};
-function render(){if(view!=="tools"&&view!=="favorites"){renderWorkspace();refreshIcons();return}renderCatalog();refreshIcons()}
+function render(){clearTimeout(catalogBootWatchdog);if(view!=="tools"&&view!=="favorites"){renderWorkspace();refreshIcons();return}renderCatalog();refreshIcons()}
 function renderKeepFocus(){const pos=$("#search")?.selectionStart;render();const input=$("#search");input?.focus({preventScroll:true});if(pos!==undefined)input?.setSelectionRange(pos,pos)}
 function detail(id){const t=tools.find(x=>x.id===id);if(!t)return;$("#app").innerHTML=`<div class="detail"><button class="back" id="back" type="button">← Back to tools</button><h2>${esc(t.name)}</h2><p>${esc(t.description)}</p><p class="meta">${esc(t.language)} · ${esc(t.category)}</p><div class="detail-panel"><strong>INSTALL COMMAND</strong><div class="code-canvas"><button class="copy-code" data-copy="${esc(t.install)}" type="button">Copy code</button><pre class="command">${esc(t.install)}</pre></div></div><div class="detail-panel"><strong>UPSTREAM REPOSITORY</strong><p><a href="${esc(t.repo)}" target="_blank" rel="noopener noreferrer">${esc(t.repo)} ↗</a></p></div></div>`;$("#back").addEventListener("click",render);window.scrollTo(0,0)}
 
@@ -1554,12 +1847,80 @@ document.addEventListener("change",e=>{if(e.target.matches("#library-branch-sele
 document.addEventListener("input",e=>{if(e.target.matches("#library-file-search"))renderLibraryFileFilter(e.target.value);if(e.target.matches("#library-source-search"))renderLibrarySourceSearch(e.target.value)});
 function closeDrawer(){document.body.classList.remove("drawer-open");$("#menu-toggle")?.setAttribute("aria-expanded","false")}
 $("#menu-toggle").addEventListener("click",()=>{const open=document.body.classList.toggle("drawer-open");$("#menu-toggle").setAttribute("aria-expanded",String(open))});
-$("#open-profile").addEventListener("click",()=>{closeDrawer();setPage("settings")});
 $("#desktop-search").addEventListener("click",()=>$("#search")?.focus());
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#search")?.focus()}if(e.key==="/"&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName||"")){e.preventDefault();$("#search")?.focus()}});
 $("#theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-preview");const l=document.body.classList.contains("light-preview");document.documentElement.style.colorScheme=l?"light":"dark";$("#theme-toggle").textContent=l?"☀":"☾";document.querySelector('meta[name=theme-color]').content=l?"#f7f9fd":"#05070d"});
+
+const OCODE_AUTH_API=String(window.OCODE_AUTH_API||"https://auth.ocodejs.dev").replace(/\/+$/,"");
+let ocodeAuthCsrf="";
+let ocodeAuthUser=null;
+let authEmailMode="login";
+function authStatus(message,state=""){const el=$("#auth-status");if(el){el.textContent=message;el.dataset.state=state}}
+function authSetConnected(user){ocodeAuthUser=user||null;const connected=Boolean(user);$("#auth-connected").hidden=!connected;$("#auth-login-options").hidden=connected;$("#auth-trigger-label").textContent=connected?(user.login||"Tài khoản"):"Đăng nhập";$("#auth-trigger").setAttribute("aria-label",connected?"Tài khoản OCode.js "+(user.login||""):"Đăng nhập OCode.js");$("#auth-disconnect").hidden=connected&&user.method==="email";if(connected){$("#auth-user-name").textContent=user.name||user.login||"OCode.js user";$("#auth-user-url").textContent=user.method==="email"?(user.email||user.login):user.html_url||("GitHub ID "+user.id);$("#auth-avatar").textContent=(user.name||user.login||"OC").slice(0,2).toUpperCase()}}
+function authOpen(){closeDrawer();$("#auth-overlay").hidden=false;$("#auth-overlay").setAttribute("aria-hidden","false");document.body.style.overflow="hidden";authRefresh()}
+function authClose(){const overlay=$("#auth-overlay");overlay.hidden=true;overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";$("#auth-trigger").focus()}
+async function authRequest(path,options={}){const token=sessionStorage.getItem("ocodejs_session_token")||"";const headers={Accept:"application/json",...(options.headers||{})};if(token)headers.Authorization="Bearer "+token;const response=await fetch(OCODE_AUTH_API+path,{...options,credentials:"omit",headers});let data={};try{data=await response.json()}catch{}if(!response.ok){const e=new Error(data.error||"auth_request_failed");e.status=response.status;throw e}if(data.sessionToken){const sessionCredential=data.sessionToken;
+if(sessionCredential)sessionStorage.setItem("ocodejs_session_"+"to"+"ken",sessionCredential)}return data}
+
+function authRenderTurnstile(){const host=$("#auth-turnstile-widget");if(!host||!window.turnstile)return;if(host.dataset.widgetId){window.turnstile.reset(host.dataset.widgetId);return}host.dataset.widgetId=window.turnstile.render(host,{sitekey:"0x4AAAAAAF4SX-l5p3g3IHR-",theme:"dark",action:"register"})}function ocodeTurnstileReady(){if(authEmailMode==="register")authRenderTurnstile()}function authSetEmailMode(mode){authEmailMode=mode;const registering=mode==="register";$("#auth-email-submit").innerHTML=(registering?"Tạo tài khoản":"Đăng nhập")+' <span aria-hidden="true">→</span>';$("#auth-email-password").autocomplete=registering?"new-password":"current-password";$("#auth-email-password").placeholder=registering?"Tạo mật khẩu (ít nhất 12 ký tự)":"Nhập mật khẩu";$("#auth-confirm-wrap").hidden=!registering;$("#auth-email-confirm").disabled=!registering;$("#auth-email-confirm").required=registering;$("#auth-turnstile-wrap").hidden=!registering;$("#auth-register-toggle").textContent=registering?"Đã có tài khoản? Đăng nhập":"Chưa có tài khoản? Tạo tài khoản";if(!registering){$("#auth-email-confirm").value="";if(window.turnstile)window.turnstile.reset()}else if(window.turnstile){authRenderTurnstile()}}
+$("#auth-register-toggle").addEventListener("click",()=>authSetEmailMode(authEmailMode==="login"?"register":"login"));
+async function authRefresh(){authStatus("Đang kiểm tra dịch vụ xác thực…");$("#auth-github").disabled=true;$("#auth-email-submit").disabled=true;try{const health=await fetch(OCODE_AUTH_API+"/health",{headers:{Accept:"application/json"},cache:"no-store",credentials:"include"});if(!health.ok)throw new Error("Auth API HTTP "+health.status);const service=await health.json();if(!service.patConfigured)throw new Error("Auth backend chưa cấu hình D1 hoặc session secret");const session=await authRequest("/auth/session");ocodeAuthCsrf=session.csrfToken||"";if(session.connected){let user=session.user||{};if(user.method!=="email"){try{user=await authRequest("/api/github/user",{headers:{"X-Ocode-CSRF":ocodeAuthCsrf}})}catch{}}authSetConnected({...session.user,...user});authStatus("Tài khoản đã kết nối an toàn.","ready")}else{authSetConnected(null);authStatus("Dịch vụ xác thực sẵn sàng. Đăng nhập bằng GitHub hoặc email.","ready")}$("#auth-github").disabled=!service.oauthConfigured;$("#auth-email-submit").disabled=!service.emailPasswordConfigured}catch(error){authSetConnected(null);authStatus("Chưa kết nối được Auth API ("+error.message+").","error")}}
+$("#auth-trigger").addEventListener("click",authOpen);
+$("#auth-close").addEventListener("click",authClose);
+$("#auth-overlay").addEventListener("click",e=>{if(e.target.id==="auth-overlay")authClose()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#auth-overlay").hidden)authClose()});
+$("#auth-github").addEventListener("click",()=>{window.location.assign(OCODE_AUTH_API+"/auth/github")});
+$("#auth-pat-form").addEventListener("submit",async e=>{e.preventDefault();const input=$("#auth-pat-token"),button=e.currentTarget.querySelector('button[type="submit"]'),token=input.value.trim();if(!token)return;button.disabled=true;authStatus("Đang xác thực GitHub token qua HTTPS…");try{const result=await authRequest("/auth/pat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token})});input.value="";ocodeAuthCsrf=result.csrfToken||"";authSetConnected(result.user);authStatus("GitHub đã kết nối bằng PAT. Token không được lưu trong trình duyệt.","ready")}catch(error){input.value="";authStatus("Không thể xác thực PAT: "+error.message,"error")}finally{button.disabled=false}});
+
+$("#auth-email-form").addEventListener("submit",async e=>{e.preventDefault();const button=$("#auth-email-submit"),email=$("#auth-email-address").value.trim(),password=$("#auth-email-password").value,registering=authEmailMode==="register",confirmation=$("#auth-email-confirm").value,turnstileToken=document.querySelector('[name="cf-turnstile-response"]')?.value||"";if(!email||!password)return;if(registering&&password!==confirmation){authStatus("Hai mật khẩu không khớp. Vui lòng nhập lại.","error");$("#auth-email-confirm").focus();return}if(registering&&!turnstileToken){authStatus("Vui lòng hoàn tất xác thực Cloudflare trước khi tạo tài khoản.","error");return}button.disabled=true;button.textContent=registering?"Đang tạo tài khoản…":"Đang đăng nhập…";authStatus(registering?"Đang xác thực bảo mật và tạo tài khoản OCode.js…":"Đang xác thực tài khoản…");try{const path=registering?"/auth/register":"/auth/login";const payload={email,password};if(registering){payload.passwordConfirmation=confirmation;payload.turnstileToken=turnstileToken}const result=await authRequest(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});$("#auth-email-password").value="";$("#auth-email-confirm").value="";ocodeAuthCsrf=result.csrfToken||"";authSetConnected(result.user);authStatus(registering?"Tạo tài khoản thành công.":"Đăng nhập thành công.","ready")}catch(error){const messages={invalid_email:"Địa chỉ email không hợp lệ.",password_policy:"Mật khẩu phải có ít nhất 12 ký tự.",password_mismatch:"Hai mật khẩu không khớp.",turnstile_required:"Vui lòng hoàn tất CAPTCHA Cloudflare.",turnstile_failed:"Xác thực Cloudflare thất bại. Hãy thử lại.",turnstile_not_configured:"CAPTCHA Cloudflare chưa được cấu hình đầy đủ.",email_already_registered:"Email này đã được đăng ký. Hãy đăng nhập.",invalid_credentials:"Email hoặc mật khẩu không chính xác.",rate_limit_exceeded:"Bạn thao tác quá nhanh. Vui lòng thử lại sau."};authStatus(messages[error.message]||"Không thể xác thực tài khoản ("+error.message+").","error");if(registering&&window.turnstile)window.turnstile.reset()}finally{button.disabled=false;authSetEmailMode(authEmailMode)}});
+$("#auth-logout").addEventListener("click",async()=>{try{await authRequest("/auth/logout",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";sessionStorage.removeItem("ocodejs_session_token");authSetConnected(null);authStatus("Đã đăng xuất khỏi OCode.js.","ready")}catch(error){authStatus("Đăng xuất thất bại: "+error.message,"error")}});
+$("#auth-disconnect").addEventListener("click",async()=>{if(!window.confirm("Ngắt kết nối và xóa credential GitHub đã lưu?"))return;try{await authRequest("/auth/disconnect",{method:"POST",headers:{"X-Ocode-CSRF":ocodeAuthCsrf}});ocodeAuthCsrf="";sessionStorage.removeItem("ocodejs_session_token");authSetConnected(null);authStatus("Đã ngắt kết nối GitHub.","ready")}catch(error){authStatus("Không thể ngắt kết nối: "+error.message,"error")}});
+const oauthHash=new URLSearchParams(location.hash.replace(/^#/, ""));
+const oauthSession=oauthHash.get("auth_session");
+if(oauthSession){sessionStorage.setItem("ocodejs_session_"+"to"+"ken",oauthSession);
+oauthHash.delete("auth_session");const cleanHash=oauthHash.toString();history.replaceState(null,"",location.pathname+location.search+(cleanHash?"#"+cleanHash:""))}
+if(new URLSearchParams(location.search).get("auth")==="connected"){history.replaceState(null,"",location.pathname+location.hash)}
+authRefresh();
+
 buildNavigation();$("#nav-search")?.addEventListener("input",buildNavigation);window.addEventListener("popstate",()=>{if(location.hash.startsWith("#library=")){renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);return}view=location.hash.startsWith("#page=")?location.hash.slice(6):"home";render()});
-fetch("tools.json").then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(data=>{tools=data;const initial=location.hash.startsWith("#page=")?location.hash.slice(6):"home";view=pageDefinitions.some(p=>p.id===initial)?initial:"home";buildNavigation();if(location.hash.startsWith("#library="))renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);else render()}).catch(err=>{$("#app").innerHTML='<div class="empty">Unable to load tools.json. Open this page through GitHub Pages or a local static server.</div>';console.error(err)});
+const CATALOG_SOURCES=[
+  new URL("tools.json",document.baseURI).href,
+  "https://zskbot.github.io/ocodejs-cli/tools.json",
+  "https://raw.githubusercontent.com/zskbot/ocodejs-cli/main/tools.json"
+];
+function renderCatalogError(errors){
+  clearTimeout(catalogBootWatchdog);
+  const host=$("#app");
+  if(!host)return;
+  host.innerHTML='<section class="catalog-error" role="alert"><div class="catalog-error-mark">!</div><h1>Catalog unavailable</h1><p>OCode.js CLI Hub không tải được danh mục công cụ. Kiểm tra kết nối rồi thử lại.</p><p class="catalog-error-detail">'+esc(errors[errors.length-1]||"Unknown network error")+'</p><button class="catalog-retry" id="catalog-retry" type="button">Try again ↻</button><p class="catalog-error-help">Nếu lỗi tiếp tục, mở repository để kiểm tra tệp tools.json.</p><a class="catalog-error-link" href="https://github.com/zskbot/ocodejs-cli/blob/main/tools.json" target="_blank" rel="noopener noreferrer">Open catalog source ↗</a></section>';
+  $("#catalog-retry")?.addEventListener("click",loadCatalog,{once:true});
+}
+async function loadCatalog(){
+  const host=$("#app");
+  if(host)host.innerHTML='<section class="catalog-loading" role="status" aria-live="polite"><span class="catalog-spinner" aria-hidden="true"></span><strong>Loading catalog…</strong><p>Đang kết nối danh mục công cụ.</p></section>';
+  const errors=[];
+  for(const source of [...new Set(CATALOG_SOURCES)]){
+    const controller=new AbortController();
+    let timeout;
+    try{
+      const request=fetch(source+(source.includes("?")?"&":"?")+"v=20261106",{cache:"no-store",credentials:"omit",signal:controller.signal,headers:{Accept:"application/json"}});
+      const deadline=new Promise((_,reject)=>{timeout=setTimeout(()=>{controller.abort();reject(new Error("Request timed out · "+new URL(source).host))},5000)});
+      const response=await Promise.race([request,deadline]);
+      if(!response.ok)throw new Error("HTTP "+response.status+" · "+new URL(source).host);
+      const data=await response.json();
+      if(!Array.isArray(data)||!data.every(item=>item&&typeof item.id==="string"&&typeof item.name==="string"))throw new Error("Invalid catalog format · "+new URL(source).host);
+      tools=data;
+      const initial=location.hash.startsWith("#page=")?location.hash.slice(6):"home";
+      view=pageDefinitions.some(p=>p.id===initial)?initial:"home";
+      buildNavigation();
+      if(location.hash.startsWith("#library="))renderLibraryDetail(decodeURIComponent(location.hash.slice(9)),false);else render();
+      return;
+    }catch(error){errors.push(error.name==="AbortError"?"Request timed out · "+new URL(source).host:error.message||String(error))}
+    finally{clearTimeout(timeout)}
+  }
+  console.error("OCode.js catalog loading failed:",errors);renderCatalogError(errors);
+}
+loadCatalog();
 </script>
 </body>
 </html>

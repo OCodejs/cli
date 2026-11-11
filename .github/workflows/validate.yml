@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
   validate:
     name: Validate catalog and tests
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -26,7 +26,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install authentication server dependencies
+        run: npm install --prefix auth-server --no-audit --no-fund
+      - name: Install Cloudflare Worker dependencies
+        run: npm install --prefix auth-worker --no-audit --no-fund
       - name: Validate tool catalog
         run: npm run validate
       - name: Run unit tests
         run: npm test
+      - name: Run authentication security tests
+        run: npm run auth:test
+      - name: Validate Cloudflare auth Worker
+        run: npm run auth:worker:test
